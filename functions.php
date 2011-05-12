@@ -67,16 +67,17 @@ function onapp_get_arg($string, $method='') {
     switch($method) {
         case "get":
         case "GET":
-            return $_GET[$string];
+            return array_key_exists($string, $_GET) ? $_GET[$string] : NULL;
             break;
         case "post":
         case "POST":
-            return $_POST[$string];
+            return array_key_exists($string, $_POST) ? $_POST[$string] : NULL;
             break;
         default :
-            return isset($_GET[$string]) ?
-                $_GET[$string] :
-                $_POST[$string];
+            $value_post = onapp_get_arg($string,"POST");
+            $value_get = onapp_get_arg($string,"GET");
+
+            return $value_post ? $value_post : $value_get;
             break;
     }
 }
@@ -208,7 +209,7 @@ function decryptData($value){
  * TODO add description
  * TODO delete functions decryptData and encryptData
  */
-function cryptData($value, $type) {
+function onapp_cryptData($value, $type) {
    $key = onapp_get_config_option('SECRET_KEY');
    $text = $value;
    $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
@@ -237,18 +238,17 @@ function cryptData($value, $type) {
  * @return void
  *
  */
-function redirect($url){
-    if (!headers_sent())    //If headers not sent yet... then do php redirect
-        header('Location: '.$url);
-    else                    //If headers are sent... do java redirect... if java disabled, do html redirect.
+function onapp_redirect($url){
+    if (!headers_sent()){    //If headers not sent yet... then do php redirect
+        header('Location: '.$url); exit;
+    }else{                    //If headers are sent... do java redirect... if java disabled, do html redirect.
         echo '<script type="text/javascript">';
         echo 'window.location.href="'.$url.'";';
         echo '</script>';
         echo '<noscript>';
         echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
-        echo '</noscript>';
- 
-    exit;
+        echo '</noscript>'; exit;
+    }
 }
 
 /**
@@ -258,7 +258,7 @@ function redirect($url){
  * @return void
  *
  */
-function check_configs()
+function onapp_check_configs()
 {
 
     session_start();
@@ -270,7 +270,6 @@ function check_configs()
 
         // Checking of necessary configuration options
         $config_options = array(
-            'CHARSET',
             'SECRET_KEY',
             'SESSION_LIFETIME'
         );
@@ -278,14 +277,25 @@ function check_configs()
         foreach($config_options as $option)
             onapp_get_config_option ($option);
 
+        // Checking of necessary fuctions
+        $necessary_fuctions = array(
+            'encryptData',
+            'decryptData',
+        );
+
+        foreach($necessary_fuctions as $function_name)
+           if(!function_exists($function_name))
+               die("Function $function_name not found");
+
         // Checking of necessary PHP extensions
+
+        // Including manuals
 
         $enabled_extensions = get_loaded_extensions();
         $require_extensions = array( 'mcrypt' );
 
         foreach( $require_extensions as $extension_name)
             if( ! in_array($extension_name, $enabled_extensions)) {
-                // Including manuals
                 include('manuals/mcrypt.php');
                 exit();
             }
@@ -302,7 +312,7 @@ function check_configs()
  * @return void
  *
  */
-function startSession($time = '3600', $ses = 'MYSES') {
+function onapp_startSession($time = '3600', $ses = 'MYSES') {
     session_set_cookie_params($time);
     session_name($ses);
     session_start();
@@ -310,6 +320,20 @@ function startSession($time = '3600', $ses = 'MYSES') {
     // Reset the expiration time upon page load
     if (isset($_COOKIE[$ses]))
       setcookie($ses, $_COOKIE[$ses], time() + $time, "/");
+}
+
+// TODO add desctiption
+function onapp_is_auth()
+{
+//    if( ! isset($_SESSION) )
+//        session_start();
+
+    $is_auth = isset($_SESSION["login"])
+        && isset($_SESSION["password"])
+        && isset($_SESSION["host"])
+        && isset($_SESSION["id"]);
+
+    return $is_auth;
 }
 
 // TODO add desctiption
