@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<menu>
+    <screen class="Base" method="login" alias="login" />
+<!--
+    <screen title="Virtual Machines" class="Virtual_Machines" method="view" alias="virtual_machines" access="access" />
+-->
+    <screen title="Logout" class="Base" method="logout" alias="logout" />
+</menu>
