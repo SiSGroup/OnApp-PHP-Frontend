@@ -5,7 +5,7 @@ class Base {
     function login() {
         if( isset($_POST["login"])
             && isset($_POST["password"])
-            && isset($_POST["language"])
+            && isset($_POST["lang"])
             && isset($_POST["host"])) {
 
                 require_once "libs/wrapper/Factory.php";
@@ -56,7 +56,7 @@ class Base {
         $_SESSION['password'] = encryptData($_POST["password"]);
 //        $_SESSION['version']  = $onapp->instance->_version;
         $_SESSION['id']       =  session_id();
-        $_SESSION['language'] = $_POST["language"];
+        $_SESSION['lang'] = $_POST["lang"];
     }
 
 };

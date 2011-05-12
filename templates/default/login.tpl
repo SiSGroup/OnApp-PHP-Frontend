@@ -23,9 +23,9 @@
     <input type="text" name="host" value="109.123.105.162"/><br />
     {/if}
     <input type="hidden" name="action" value="login" />
-    Select language:<br />
-    <select name="language">
-            {html_options values=$languages output=$languages selected='DEFAULT_LANGUAGE'|onapp_get_config_option}
+    Select lang:<br />
+    <select name="lang">
+            {html_options values=$langs output=$langs selected='DEFAULT_LANGUAGE'|onapp_get_config_option}
      </select><br /><br />
     <input type="submit" name="submit" value="Login" />
     
