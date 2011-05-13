@@ -3,10 +3,10 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset={'CHARSET'|onapp_get_config_option}" />
 <link rel="stylesheet" href="templates/{'TEMPLATE'|onapp_get_config_option}/css/style.css" type="text/css" />
-<title>{$title}</title>
+<title></title>
 </head>
 <body bgcolor="#ffffff">
-<div style="display:{$error_display};" id="error">{$error_message}</div>
+<div style="display:{if isset($error_display)}{$error_display}{/if};" id="error">{if isset($error_message)}{$error_message}{/if}</div>
 
 <div id="login">
      <form action="{$_ALIASES.login}" method="post">
