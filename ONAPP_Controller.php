@@ -8,10 +8,12 @@ Class ONAPP_Controller
     {
         global $_SCREEN_IDS;
         global $_ALIASES;
-        if ( ! onapp_is_auth() && $_SCREEN_IDS[onapp_get_arg('route')]["alias"] != "login" ) {
+        if ( ! onapp_is_auth() && $_SCREEN_IDS[onapp_get_arg('route')]["alias"] != "login" )
+        {
             //TODO save url before redirection for future redirection back after sucess login
             onapp_redirect( $_ALIASES["login"] );
-        };
+        }
+        
     }
 
     public function access() {

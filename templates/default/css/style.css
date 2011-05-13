@@ -1,0 +1,125 @@
+/*CSS document*/
+
+/*Layout styles*/
+html,body{margin:0;padding:0;}
+body{font: 76% arial,sans-serif;text-align:center;/*background:url('../images/bg.png')*/}
+p{margin:0 10px 10px}
+i{font-weight:normal;}
+a{display:block;color: #981793}
+div#header {height:80px;line-height:80px;margin:0;
+padding:10px;background:url('../images/bg.png');color: #79B30B}
+div#container{text-align:left}
+div#content p{line-height:1.4}
+div#navigation{background:#B9CAFF}
+div#navigation ul{list-style-type: none; list-style-position: outside}
+
+div#navigation ul li{width:200px; height:10px; }
+div#navigation ul li a:link, div#navigation ul li a:hover, div#navigation ul li a:visited 
+{
+     width:230px; text-decoration:none; color:#000000;
+}
+
+div#extra{background:#FF8539}
+div#footer{background: #333;color: #FFF}
+div#footer p{margin:0;padding:5px 10px}
+div#container{width:1000px;margin:0 auto}
+div#content{float:right;width:740px; padding:5px}
+div#navigation{float:left;width:250px}
+div#extra{float:left;clear:left;width:250px}
+div#footer{clear:both;width:100%}
+/*Layout styles end*/
+
+#login
+{  
+    height:300px;
+    border:1px solid #cccccc;
+    width:550px;
+    margin:0 auto;
+    margin-top:20px;
+    padding-left:10px;
+    background:#f6f6f6;
+   
+}
+#error
+{
+    width:98%;
+    height:10px;
+    border-bottom: 3px solid #F5B0B3;
+    display:none;
+    /*color: #ffffff;*/
+    background:#FBE3E4;
+    padding:10px 10px;
+}
+
+#onapp_error
+{
+    width:98%;
+    height:10px;
+    border-bottom: 3px solid #F5B0B3;
+    display:none;
+    /*color: #ffffff;*/
+    background:#FBE3E4;
+    padding:10px 10px;    
+}
+
+#onapp_msg
+{
+    width:98%;
+    height:10px;
+    border-bottom: 3px solid #B6CC6E;
+    display:none;
+    /*color: #ffffff;*/
+    background:#E6EFC2;
+    padding:10px 10px;
+}
+
+div#login_info
+{
+    background:url('../images/bg.png');
+    margin:0;
+    height:20px;
+    color:#ffffff;
+    font-weight:bold;
+    
+
+}
+
+a:link, a:visited, a:hover
+{
+    color:#000000;
+    font-weight:bold;
+    margin-left:0;
+}
+div#navigation a
+{
+  margin-bottom:5px;
+  width:100px;
+  height:15px;
+  padding:2px;
+  float:right;
+}
+div#login_info a
+{
+  margin-bottom:5px;
+  width:100px;
+  height:15px;
+  padding:2px;
+  float:right;
+  color:#ffffff;
+}
+
+.li_1 {padding-left: 10px;}
+.li_2 {padding-left: 20px;}
+.li_3 {padding-left: 30px;}
+
+.li_1 a, .li_2 a, .li_3 a{font-weight:normal;}
+
+
+
+.table_my {background:#f6f6f6; border:1px solid #c2c2c2; margin-top: 5px}
+.table_my tr td{font-weight:normal}
+.table_my th td{font-weight:bold}
+
+input[type=submit] {border:1px solid #464646; background:#cccccc; padding: 5px; color:#464646; cursor: pointer; margin-top:10px }
+.instructions{background:#F5EC93; padding:10px; margin-top:10px;}
+.table_my td {font-weight:bold;}

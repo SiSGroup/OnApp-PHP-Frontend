@@ -21,23 +21,17 @@ class Base {
                     $this->_start_session();
 
                     //or redirect on previos URL saved in SESSION
-                    onapp_show_template( 'index', $params);
+                    onapp_show_template( 'index');
                 } else {
                     $params = array(
-                        error_display => 'block',
-                        error_message => 'Login, password or hostname incorect!',
+                        'error_display' => 'block',
+                        'error_message' => 'Login, password or hostname incorect!',
                     );
 
-                    onapp_show_template( 'login', $params );
+                    onapp_show_template( 'login', $params);
                 }
             } else 
-                onapp_show_template( 
-                    'login',
-                     array(
-                         error_display => 'block',
-                         error_message => 'All fields are required!'
-                     )
-                );
+                onapp_show_template('login');
     }
 
     function logout() {
@@ -48,7 +42,7 @@ class Base {
     }
 
     function _start_session() {
-        session_start();
+        //session_start();
 //        startSession(onapp_get_config_option("SESSION_LIFETIME"));
 
         $_SESSION['host']     = $_POST["host"];

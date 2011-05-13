@@ -6,10 +6,10 @@
  *
  */
 function onapp_get_languageList(){
-    $languages = scandir('language');
+    $languages = scandir('lang');
 
     foreach( $languages as $language )
-        if (! is_dir($language) && ! is_file("language/$language") )
+        if (! is_dir($language) && ! is_file("lang/$language") )
             $result[] = $language;
 
     return $result;
@@ -111,7 +111,7 @@ function onapp_show_template($view, $params = array())
     $smarty->force_compile = true;
     $smarty->assign('_session_data', $_SESSION);
     $smarty->assign('navigation', $_SCREEN_IDS);
-    $smarty->assign('languages', onapp_get_languageList());
+    $smarty->assign('langs', onapp_get_languageList());
     $smarty->assign( '_ALIASES', $_ALIASES );
 
     if(is_array($params))
@@ -136,8 +136,8 @@ function onapp_load_language($lang) {
         $language = $_SESSION["language"];
     else
         $language = $lang;
-    if(file_exists('language/'.$language.'/strings.ini'))
-        $_LANG = parse_ini_file('language/'.$language.'/strings.ini');
+    if(file_exists('lang/'.$language.'/strings.ini'))
+        $_LANG = parse_ini_file('lang/'.$language.'/strings.ini');
     else
         die( 'Language file not found' );
 }

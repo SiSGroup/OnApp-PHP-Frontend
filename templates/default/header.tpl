@@ -6,17 +6,19 @@
 <title>{$title|onapp_get_string}</title>
 </head> 
 <body bgcolor="#ffffff">
-<div style="display:{$error_display};" id="error">{$error_message}</div>
+<div style="display:{$error_display};" id="error">
+    {if isset($error_message)}
+        {$error_message}
+    {/if}
+</div>
 <div id="container">
 <div style="display:{$logout_display}" id="login_info">{'HELLO_'|onapp_get_string} {$_session_data["login"]}<a href="{$_ALIASES.logout}">logout</a></div>
 
-<div id="header"><img src="images/OnApp.png" /></div>
+<div id="header"><img src="templates/{'TEMPLATE'|onapp_get_config_option}/images/OnApp.png" /></div>
 
 <div id="wrapper">
     <div id="content">
-        <div style="display:{if $_GET["error"] != ''}block{/if}" id="onapp_msg" id="onapp_error">{'error'|onapp_get_arg}</div>
-        
-        
+        <div style="display:{if $_GET["error"] != ''}block{/if}" id="onapp_msg" id="onapp_error">{'error'|onapp_get_arg}</div>    
         <div style="display:{if 'msg'|onapp_get_arg!=''}block{/if}" id="onapp_msg">{'msg'|onapp_get_arg}</div>
         
          

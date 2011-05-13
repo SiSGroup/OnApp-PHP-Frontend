@@ -12,15 +12,15 @@
      <form action="{$_ALIASES.login}" method="post">
      
     Login:<br />
-    <input type="text" name="login" value="admin"  /><br />
+    <input type="text" name="login" value=""  /><br />
     Password:<br />
-    <input type="password" name="password" value="dev6dot162" /><br />
+    <input type="password" name="password" value="" /><br />
     Host: <br />
     {if 'HOSTNAME'|onapp_get_config_option != ''}
     <input type="text" name="host" value="{'HOSTNAME'|onapp_get_config_option}" disabled="true" /><br />
     <input type="hidden" name="host" value="{'HOSTNAME'|onapp_get_config_option}" />
     {else}
-    <input type="text" name="host" value="109.123.105.162"/><br />
+    <input type="text" name="host" value=""/><br />
     {/if}
     <input type="hidden" name="action" value="login" />
     Select lang:<br />
