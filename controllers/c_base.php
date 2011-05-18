@@ -1,58 +1,73 @@
 <?php
 
+if ( ! defined('BASEURL')) exit('No direct script access allowed');
+
 class Base {
 
     function login() {
-        if( isset($_POST["login"])
-            && isset($_POST["password"])
-            && isset($_POST["lang"])
-            && isset($_POST["host"])) {
+        global $_ALIASES;
 
-                require_once "libs/wrapper/Factory.php";
+        $login    = onapp_get_arg('login');
+        $password = onapp_get_arg('password');
+        $host     = onapp_get_arg('host');
 
-                $onapp = new ONAPP_Factory(
-                    $_POST["host"],
-                    $_POST["login"],
-                    $_POST["password"]
+        $params = array();
+
+        if( ! is_null($login) &&
+            ! is_null($password) &&
+            ! is_null($host)
+        ) {
+            require_once "wrapper/Factory.php";
+
+            $onapp = new ONAPP_Factory(
+                $host,
+                $login,
+                $password
+            );
+
+            if( $onapp->instance->_version && $onapp->instance->_version != '' ) {
+                $this->_start_session();
+                $this->_load_profile($onapp);
+
+                // TODO redirect on previous called URL
+                $redirect_url = BASEURL.'/'.$_ALIASES[onapp_config('DEFAULT_ALIAS')];
+
+                onapp_redirect($redirect_url);
+            }
+            else
+                $params = array(
+                    'error_message' => onapp_string('ERORR_WRONG_LOGIN_DATA'),
                 );
+       }
 
-                if( $onapp->instance->_version && $onapp->instance->_version != '' )
-                {
-                    $this->_start_session();
-
-                    //or redirect on previos URL saved in SESSION
-                    onapp_show_template( 'index');
-                } else {
-                    $params = array(
-                        'error_display' => 'block',
-                        'error_message' => 'Login, password or hostname incorect!',
-                    );
-
-                    onapp_show_template( 'login', $params);
-                }
-            } else 
-                onapp_show_template('login');
+       onapp_show_template('login', $params);
     }
 
     function logout() {
         global $_ALIASES;
 
         session_destroy();
+
         onapp_redirect( $_ALIASES["login"] );
     }
 
-    function _start_session() {
-        //session_start();
-//        startSession(onapp_get_config_option("SESSION_LIFETIME"));
-
-        $_SESSION['host']     = $_POST["host"];
-        $_SESSION['login']    = $_POST["login"];
-        $_SESSION['password'] = encryptData($_POST["password"]);
-//        $_SESSION['version']  = $onapp->instance->_version;
+    private function _start_session() {
         $_SESSION['id']       =  session_id();
-        $_SESSION['lang'] = $_POST["lang"];
+
+        $_SESSION['host']     = onapp_get_arg('host');
+        $_SESSION['lang']     = onapp_get_arg('lang');
+        $_SESSION['login']    = onapp_get_arg('login');
+        $_SESSION['password'] = onapp_cryptData(
+            onapp_get_arg('password'),
+            'encrypt'
+        );
     }
 
-};
+    private function _load_profile($onapp) {
+        $profile = $onapp->factory('Profile');
 
-?>
+        $profile_obj = $profile->load();
+
+        $_SESSION['profile_obj'] = $profile_obj;
+    }
+}

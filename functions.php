@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Returns available language list
  *
  * @return array Language packages available
  *
  */
-function onapp_get_languageList(){
+function onapp_get_languageList() {
     $languages = scandir('lang');
 
     foreach( $languages as $language )
@@ -23,7 +24,7 @@ function onapp_get_languageList(){
  * @return string language package string value
  *
  */
-function onapp_get_string($string) {
+function onapp_string($string) {
     global $_LANG;
 
     return isset($_LANG[$string]) ?
@@ -39,7 +40,7 @@ function onapp_get_string($string) {
  * @return string Configuration option value
  *
  */
-function onapp_get_config_option($option) {
+function onapp_config($option) {
     global $_CONF;
 
     if (! isset($_CONF) || is_null($_CONF) )
@@ -73,10 +74,13 @@ function onapp_get_arg($string, $method='') {
         case "POST":
             return array_key_exists($string, $_POST) ? $_POST[$string] : NULL;
             break;
+       case "session":
+       case "SESSION":
+            return $_SESSION;
+            break;
         default :
             $value_post = onapp_get_arg($string,"POST");
             $value_get = onapp_get_arg($string,"GET");
-
             return $value_post ? $value_post : $value_get;
             break;
     }
@@ -98,27 +102,31 @@ function onapp_get_arg($string, $method='') {
  * @return void
  *
  */
-function onapp_show_template($view, $params = array())
-{
+function onapp_show_template($view, $params = array()) {
     global $_ALIASES, $_SCREEN_IDS;
+
+    $template = onapp_config('TEMPLATE').DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl';
+
+    $globals = array(
+        '_session_data' => $_SESSION,
+        'navigation'    => $_SCREEN_IDS,
+        '_ALIASES'      => $_ALIASES,
+        'langs'         => onapp_get_languageList()
+    );
+
+    $smarty_params = is_array($params)
+        ? array_merge($params, $globals)
+        : $globals;
 
     require_once "libs/smarty/Smarty.class.php";
 
-    onapp_load_language(onapp_get_config_option('DEFAULT_LANGUAGE'));
-
-    $template = onapp_get_config_option('TEMPLATE');
     $smarty = new Smarty;
     $smarty->force_compile = true;
-    $smarty->assign('_session_data', $_SESSION);
-    $smarty->assign('navigation', $_SCREEN_IDS);
-    $smarty->assign('langs', onapp_get_languageList());
-    $smarty->assign( '_ALIASES', $_ALIASES );
 
-    if(is_array($params))
-        foreach($params as $key => $value)
-            $smarty->assign("$key",$value);
+    foreach($smarty_params as $key => $value)
+        $smarty->assign("$key",$value);
 
-    $smarty->display($template.DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl');
+    $smarty->display($template);
 }
 
 /**
@@ -130,14 +138,16 @@ function onapp_show_template($view, $params = array())
  * @return void
  *
  */
-function onapp_load_language($lang) {
+function onapp_load_language($lang = '') {
     global $_LANG;
+
     if(isset($_SESSION["language"]) && $_SESSION["language"] != '')
         $language = $_SESSION["language"];
     else
         $language = $lang;
-    if(file_exists('lang/'.$language.'/strings.ini'))
-        $_LANG = parse_ini_file('lang/'.$language.'/strings.ini');
+
+    if(file_exists('lang/'.$language.'/strings.php'))
+        include 'lang/'.$language.'/strings.php';
     else
         die( 'Language file not found' );
 }
@@ -148,12 +158,14 @@ function onapp_load_language($lang) {
  * @return void
  *
  */
-function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '')
-{
+function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
     global $_SCREEN_IDS, $_ALIASES;
 
     if(is_null($SimpleXMLElement))
-        $SimpleXMLElement = simplexml_load_file('menu.xml');
+        if(file_exists('menu.xml'))
+            $SimpleXMLElement = simplexml_load_file('menu.xml');
+        else
+            die('Could not find file menu.xml');
 
     for($id = 1; $id < count($SimpleXMLElement)+1; $id++) {
         $current_id = $parrent_id != '' ? "$parrent_id.$id" : $id;
@@ -168,59 +180,27 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '')
 }
 
 /**
- * Encrypts data with Mcrypt php extension
+ * Encrypts and Decrypts data with Mcrypt php extension
  *
- * @param string $value input data to encrypt
+ * @param string $value data to be processed with onapp_cryptData function
  *
- * @return string encrypted
+ * @param string $action action to do with data [encrypt|decrypt]
  *
- *
- *
- */
-function encryptData($value){
-   $key = onapp_get_config_option('SECRET_KEY');
-   $text = $value;
-   $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-   $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-   $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_ECB, $iv);
-   return $crypttext;
-}
-
-/**
- * Decrypts data with Mcrypt php extension
- *
- * @param string $value encrypted data with encryptData function
- *
- * @return string decrypted
- *
- *
+ * @return string processed data
  *
  */
-function decryptData($value){
-   $key = onapp_get_config_option('SECRET_KEY');
-   $crypttext = $value;
-   $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-   $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-   $decrypttext = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext, MCRYPT_MODE_ECB, $iv);
-   return trim($decrypttext);
-}
-
-/*
- * TODO add description
- * TODO delete functions decryptData and encryptData
- */
-function onapp_cryptData($value, $type) {
-   $key = onapp_get_config_option('SECRET_KEY');
+function onapp_cryptData($value, $action) {
+   $key = onapp_config('SECRET_KEY');
    $text = $value;
    $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 
-   switch($type) {
-      case "encrypt": 
+   switch($action) {
+      case "encrypt":
                $text = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_ECB, $iv);
           break;
       case "decrypt":
-               $text = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext, MCRYPT_MODE_ECB, $iv));
+               $text = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_ECB, $iv));
           break;
       default:
               die("Wrong crypt data type $type");
@@ -238,7 +218,7 @@ function onapp_cryptData($value, $type) {
  * @return void
  *
  */
-function onapp_redirect($url){
+function onapp_redirect($url) {
     if (!headers_sent()){    //If headers not sent yet... then do php redirect
         header('Location: '.$url); exit;
     }else{                    //If headers are sent... do java redirect... if java disabled, do html redirect.
@@ -258,10 +238,11 @@ function onapp_redirect($url){
  * @return void
  *
  */
-function onapp_check_configs()
-{
+function onapp_check_configs() {
+    require_once "wrapper/Profile.php";
 
     session_start();
+
     if(!$_SESSION)
     {
        // Cheching PHP version
@@ -271,17 +252,15 @@ function onapp_check_configs()
         // Checking of necessary configuration options
         $config_options = array(
             'SECRET_KEY',
-            'SESSION_LIFETIME'
         );
 
         foreach($config_options as $option)
-            onapp_get_config_option ($option);
+            onapp_config ($option);
 
         // Checking of necessary fuctions
         $necessary_fuctions = array(
-            'encryptData',
-            'decryptData',
-        );
+            'onapp_cryptData'
+            );
 
         foreach($necessary_fuctions as $function_name)
            if(!function_exists($function_name))
@@ -313,6 +292,7 @@ function onapp_check_configs()
  *
  */
 function onapp_startSession($time = '3600', $ses = 'MYSES') {
+/*
     session_set_cookie_params($time);
     session_name($ses);
     session_start();
@@ -320,25 +300,36 @@ function onapp_startSession($time = '3600', $ses = 'MYSES') {
     // Reset the expiration time upon page load
     if (isset($_COOKIE[$ses]))
       setcookie($ses, $_COOKIE[$ses], time() + $time, "/");
+*/
 }
 
-// TODO add desctiption
-function onapp_is_auth()
-{
-//    if( ! isset($_SESSION) )
-//        session_start();
-
-    $is_auth = isset($_SESSION["login"])
+/**
+ *
+ * Verifies whether user is authorithed
+ *
+ * @return void
+ *
+ */
+function onapp_is_auth() {
+    $is_auth = isset($_SESSION)
+        && isset($_SESSION["login"])
         && isset($_SESSION["password"])
         && isset($_SESSION["host"])
         && isset($_SESSION["id"]);
 
     return $is_auth;
 }
-
-// TODO add desctiption
-function onapp_access()
-{
+/**
+ *
+ * Not in use yet
+ *
+ * @return void
+ *
+ * @todo realize function
+ *
+ */
+function onapp_access() {
+/*
      // Load profile object
       $profile = $this->onapp->factory('Profile');
       $profile_obj = $profile->load();
@@ -351,4 +342,5 @@ function onapp_access()
                     else
                         ;
       return $access;
+*/
 }
