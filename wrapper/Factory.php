@@ -52,9 +52,9 @@ class ONAPP_Factory{
 
         $file_name  = dirname(__FILE__)."/".str_replace("_","/",$name).".php";
 
-        if (!class_exists($class_name) && file_exists($file_name) )
+        if (! class_exists($class_name) && file_exists($file_name) )
             require_once $file_name;
-        else
+        elseif (! file_exists($file_name) )
             die("File $file_name doesn't exist\n");
 
         if ( class_exists($class_name) ) {
