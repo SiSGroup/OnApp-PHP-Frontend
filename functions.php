@@ -48,29 +48,6 @@ function onapp_string($string) {
 }
 
 /**
- * Returns config option value
- *
- * @param string $option Name of config option
- *
- * @return string Configuration option value
- *
- */
-function onapp_config($option) {
-    global $_CONF;
-## TODO add debug_log
-    if (! isset($_CONF) || is_null($_CONF) )
-        if (file_exists('config.ini') )
-            $_CONF = parse_ini_file('config.ini');
-        else
-            die('Config file not found');
-
-    if (isset($_CONF[$option])) {
-        return $_CONF[$option];
-    } else
-        die("Config option $option not found");
-}
-
-/**
  * Returns a value of particular variable from global GET or POST array.
  *
  * @param string $string variable name
@@ -130,7 +107,7 @@ function onapp_show_template($view, $params = array()) {
     onapp_debug("Show templates");
     onapp_debug("onapp_show_template: view => $view, params => " . print_r($params, true));
 
-    $template = onapp_config('TEMPLATE').DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl';
+    $template = ONAPP_TEMPLATE.DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl';
 
     $globals = array(
         '_session_data' => $_SESSION,
@@ -203,15 +180,18 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
             $_SCREEN_IDS["$current_id"][$k] = (String)$v;
 
         if(isset($_SCREEN_IDS["$current_id"]['title'])){
-            $file_path = 'controllers/c_'.strtolower($_SCREEN_IDS["$current_id"]['class']).'.php';
-            if(file_exists($file_path))
-            {
-                require_once $file_path;
+
+// TODO move on onapp_show_template function
+//            $file_path = 'controllers/c_'.strtolower($_SCREEN_IDS["$current_id"]['class']).'.php';
+//            if(file_exists($file_path))
+//            {
+//                require_once $file_path;
                     //todo verify if exists class and function
-                $_SCREEN_IDS["$current_id"]['show'] = call_user_func(array($_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access']));
-            }
-            else
-                die('File '.$file_path.' doesn\'t exists');
+//                $_SCREEN_IDS["$current_id"]['show'] = call_user_func(array($_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access']));
+                $_SCREEN_IDS["$current_id"]['show'] = true;
+//            }
+//            else
+//                die('File '.$file_path.' doesn\'t exists');
 
         }
         $_ALIASES[$_SCREEN_IDS["$current_id"]["alias"]] = $current_id;
@@ -231,7 +211,7 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
  *
  */
 function onapp_cryptData($value, $action) {
-   $key = onapp_config('SECRET_KEY');
+   $key = ONAPP_SECRET_KEY;
    $text = $value;
    $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
@@ -274,6 +254,22 @@ function onapp_redirect($url) {
     }
 }
 
+/*
+ * TODO add description
+ */
+
+function init_config() {
+    if (! isset($_CONF) || is_null($_CONF) )
+        if (file_exists('config.ini') )
+            $config = parse_ini_file('config.ini');
+        else
+            die('Config file not found');
+
+    foreach( $config as $key => $value) {
+        define('ONAPP_'.strtoupper($key), $value);
+    }
+}
+
 /**
  *
  * Checks PHP version, config options, functions and PHP extenssions
@@ -295,11 +291,12 @@ function onapp_check_configs() {
 
         // Checking of necessary configuration options
         $config_options = array(
-            'SECRET_KEY',
+            'ONAPP_SECRET_KEY',
         );
 
         foreach($config_options as $option)
-            onapp_config ($option);
+            if (! defined($option) )
+                die("Config option $option not found");
 
         // Checking of necessary fuctions
         $necessary_fuctions = array(
@@ -336,7 +333,7 @@ function onapp_check_configs() {
  *
  */
 function onapp_startSession($ses = 'MYSES') { 
-    $time =  onapp_config('SESSION_LIFETIME');
+    $time =  ONAPP_SESSION_LIFETIME;
     session_set_cookie_params($time);
     session_name($ses);
     session_start();
@@ -377,7 +374,7 @@ function onapp_is_auth() {
  *
  */
 function onapp_file_write($type, $content) {
-    $log_directory = 'logs';
+    $log_directory = ONAPP_LOG_DIRECTORY;
 
     switch ($type) {
         case 'frontend':
@@ -391,7 +388,8 @@ function onapp_file_write($type, $content) {
             $filename = "$log_directory/third.log";
             break;
         case 'error':
-            $filename = "$log_directory/errors/error_".$_SESSION['log_id'].'.log';
+            onapp_file_write('frontend', $content);
+            $filename = "$log_directory/error_".$_SESSION['log_id'].'.log';
             break;
         default:
             return;
@@ -400,13 +398,13 @@ function onapp_file_write($type, $content) {
 
     if (!$handle = fopen($filename, 'a+'))
     {
-         echo "Cannot open file ($filename)in file ".__FILE__.' line '.__LINE__;
+         echo "Cannot open file $filename in file ".__FILE__.' line '.__LINE__;
          exit;
     }
 
     if (fwrite($handle, $content."\n") === FALSE)
     {
-        echo "Cannot write to file ($filename)";
+        echo "Cannot write to file $filename";
         exit;
     }
 
@@ -453,7 +451,7 @@ function onapp_debug( $message )
 {
     global $_LOG_LEVELS;
 
-    if( onapp_config('LOG_LEVEL') < $_LOG_LEVELS['DEBUG'] || ! isset( $_SESSION['log_id'] ) )
+    if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['DEBUG'] || ! isset( $_SESSION['log_id'] ) )
         return;
 
     $msg = $_SESSION['log_id']." : [DEBUG] $message";
@@ -475,7 +473,7 @@ function onapp_info( $message )
 {
     global $_LOG_LEVELS;
 
-    if( onapp_config('LOG_LEVEL') < $_LOG_LEVELS['INFO'] )
+    if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['INFO'] )
         return;
 
     $msg = $_SESSION['log_id']." : [INFO] $message";
@@ -495,16 +493,12 @@ function onapp_warn( $message )
 {
     global $_LOG_LEVELS;
 
-    if( onapp_config('LOG_LEVEL') < $_LOG_LEVELS['WARN'])
+    if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['WARN'])
         return;
 
     $msg = $_SESSION['log_id']." : [WARN] $message";
 
-    onapp_file_write('error', $msg);
-
-    die('WARNING');
-
-//    onapp_redirect(BASEURL.'/errors/error500.php?log_id='.$_SESSION['log_id']);
+    onapp_file_write('frontend', $msg);
 }
 
 /**
@@ -515,24 +509,23 @@ function onapp_warn( $message )
  * @return void
  *
  */
-function onapp_error( $message )
-{
-    global $_ALIASES, $_LOG_LEVELS;
+function onapp_error( $type, $message, $file = NULL, $line = NULL ) {
+    global $_LOG_LEVELS;
 
-    if( onapp_config('LOG_LEVEL') < $_LOG_LEVELS['ERROR'] )
+    if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['ERROR'] )
         return;
 
-    $msg = $_SESSION['log_id']." : [ERROR] $message";
+    if( is_null($file) && is_null($line) )
+        $msg_title = $_SESSION['log_id']." : [ERROR] ";
+    else
+        $msg_title = $_SESSION['log_id']." : [$type] in $file on line $line ";
 
-    onapp_file_write('error', $msg);
+    $errors = error_get_last( );
 
-    die('ERROR');
+    if( $errors !== NULL )
+        onapp_file_write('error', "$msg_title : " . print_r($errors, true));
 
-//    onapp_redirect(BASEURL.'/'
-//                   .($_ALIASES['profile'])
-//                   .'?error=ERROR ID - '
-//                   .$_SESSION['log_id']
-//                   .'&no_error_translate=true');
+## TODO redirect on error page
 }
 
 /**
@@ -543,20 +536,24 @@ function onapp_error( $message )
  * @return void
  *
  */
-function onapp_fatal($message)
+function onapp_fatal( $type, $message, $file = NULL, $line = NULL )
 {
     global $_LOG_LEVELS;
 
-    if( onapp_config('LOG_LEVEL') < $_LOG_LEVELS['FATAL'] )
+    if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['FATAL'] )
             return;
 
-    $msg = $_SESSION['log_id']." : [FATAL] $message";
+    if( is_null($file) && is_null($line) )
+        $msg_title = $_SESSION['log_id']." : [FATAL] ";
+    else
+        $msg_title = $_SESSION['log_id']." : [$type] in $file on line $line ";
 
-    onapp_file_write('error', $msg);
+    $errors = error_get_last( );
 
-    die('FATAL');
+    if( $errors !== NULL )
+        onapp_file_write('error', "$msg_title : " . print_r($errors, true));
 
-//    onapp_redirect(BASEURL.'/errors/error500.php?log_id='.$_SESSION['log_id']);
+## TODO show error page with error log file path
 }
 
 /**
