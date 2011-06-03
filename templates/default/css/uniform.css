@@ -2,95 +2,106 @@
 input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
 margin-bottom: 14px;
 padding: 4px 4px 5px 9px;
-padding-top: 4px;
-padding-right: 4px;
-padding-bottom: 5px;
-padding-left: 9px;
 border: 2px solid #78AED9;
-border-top-width: 2px;
-border-right-width: 2px;
-border-bottom-width: 2px;
-border-left-width: 2px;
-border-top-style: solid;
-border-right-style: solid;
-border-bottom-style: solid;
-border-left-style: solid;
-border-top-color: #78AED9;
-border-right-color: #78AED9;
-border-bottom-color: #78AED9;
-border-left-color: #78AED9;
 }
 input[type="text"], input[type="file"], input[type="password"], select, textarea {
 color: #505050;
 font: bold 15px helvetica, arial, sans-serif;
-background: white url(/images/form/field-bg.png) repeat-x scroll top center;
-background-image: url(http://109.123.105.162/images/form/field-bg.png);
-background-repeat-x: repeat;
-background-repeat-y: no-repeat;
-background-attachment: scroll;
-background-position-x: 50%;
-background-position-y: 0%;
-background-origin: initial;
-background-clip: initial;
-background-color: white;
+background: white url(../images/field-bg.png) repeat-x scroll top center;
+
 margin-top: 1px;
 margin-bottom: 15px;
 padding: 5px 5px 5px 10px;
-padding-top: 5px;
-padding-right: 5px;
-padding-bottom: 5px;
-padding-left: 10px;
 border: 1px solid #C1C1C1;
-border-top-width: 1px;
-border-right-width: 1px;
-border-bottom-width: 1px;
-border-left-width: 1px;
-border-top-style: solid;
-border-right-style: solid;
-border-bottom-style: solid;
-border-left-style: solid;
-border-top-color: #C1C1C1;
-border-right-color: #C1C1C1;
-border-bottom-color: #C1C1C1;
-border-left-color: #C1C1C1;
 border-radius: 5px;
 -moz-border-radius: 5px;
 -webkit-border-radius: 5px;
-border-top-left-radius: 5px 5px;
-border-top-right-radius: 5px 5px;
-border-bottom-right-radius: 5px 5px;
-border-bottom-left-radius: 5px 5px;
 width: 310px;
 }
 
-:focus {
-outline: none;
+:focus 
+{
+    outline: none;
+}
+
+select
+{
+    width:327px;
 }
 
 
 
-element.style {
-opacity: 0;
-}
-Matched CSS Rules
+/*
 div.checker input {
-opacity: 0;
-display: inline-block;
-background: none;
-left: 5px;
-position: relative;
-top: 8px;
+    width: 26px;
+    height: 26px;
 }
-div.checker input {
-width: 26px;
-height: 26px;
-}
-input[type="checkbox"], input[type="radio"], input.checkbox, input.radio {
-float: left;
-}
-.selector, .radio, .checker, .uploader, .selector *, .radio *, .checker *, .uploader * {
-margin: 0;
-padding: 0;
+input[type="checkbox"], input[type="radio"], input.checkbox, input.radio
+{
+    float: left;
 }
 
+input[type="checkbox"] 
+{
+    opacity: 0;
+    display: inline-block;
+    background: none;
+    left: 5px;
+    position: relative;
+    top: 8px;
+}
+
+div.selector span 
+{
+    display: block;
+    float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #505050;
+    font: bold 15px helvetica,arial,sans-serif;
+    width: 293px;
+    text-shadow: 0 1px 0 white;
+}
+div.selector span {
+    padding: 8px 25px 0 0;
+    cursor: pointer;
+}
+div.selector span {
+    background-position: right 0;
+    height: 34px;
+    line-height: 34px;
+}
+div.selector, div.selector span, div.checker span, div.radio span, div.uploader, div.uploader span.action {
+    background-image: url(../images/uniform-sprite.png);
+    background-repeat: no-repeat;
+}
+
+
+
+
+
+
+div.selector
+{
+    position: relative;
+    padding-left: 10px;
+    overflow: hidden;
+}
+div.selector 
+{
+    margin-bottom: 14px;
+    width: 325px;
+    background-position: -483px -170px;
+    line-height: 34px;
+    height: 34px;
+}
+*/
+
+
+.selector, .radio, .checker, .uploader, .selector *, .radio *, .checker *, .uploader * 
+{
+    margin: 0;
+    padding: 0;
+}
 

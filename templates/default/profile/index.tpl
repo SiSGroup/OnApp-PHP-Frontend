@@ -1,50 +1,52 @@
 {include file="default/header.tpl"}
 
 
-<div class="instructions"><b>{'YOUR_PROFILE'|onapp_string}</b><br />
-    {'YOUR_PROFILE_INFORMATION'|onapp_string}
+<div class="info">
+    <div class="info_title">{'YOUR_PROFILE'|onapp_string}</div>
+    <div class="info_body">{'YOUR_PROFILE_INFORMATION'|onapp_string}</div>
+    <div class="info_bottom"></div>
 </div>
-<h1>{'USER_DETAILS'|onapp_string}</h1>
-<table width="100%" class="table_my" cellpadding="5" cellspacing="5" border="0">
-    <tr>
-        <td>{'FULL_NAME'|onapp_string}</td>
-        <td>{$_session_data["profile_obj"]->_first_name} {$_session_data["profile_obj"]->_last_name}</td>
-    </tr>
+<h1>{'USER_DETAILS'|onapp_string}&nbsp;</h1>
+<div class="div_page">
+    <dl>
+        <dt>{'FULL_NAME'|onapp_string}&nbsp;</dt>
+        <dd>{$_session_data["profile_obj"]->_first_name} {$_session_data["profile_obj"]->_last_name}&nbsp;</dd>
+    </dl>
 
-    <tr>
-        <td>{'LOGIN_'|onapp_string}</td>
-        <td>{$_session_data["profile_obj"]->_login}</td>
-    </tr>
+    <dl>
+        <dt>{'LOGIN_'|onapp_string}&nbsp;</dt>
+        <dd>{$_session_data["profile_obj"]->_login}&nbsp;</dd>
+    </dl>
 
-    <tr>
-        <td>{'E_MAIL'|onapp_string}</td>
-        <td>{$_session_data["profile_obj"]->_email}</td>
-    </tr>
+    <dl>
+        <dt>{'E_MAIL'|onapp_string}&nbsp;</dt>
+        <dd>{$_session_data["profile_obj"]->_email}&nbsp;</dd>
+    </dl>
 
-    <tr>
-        <td>{'TIME_ZONE'|onapp_string}</td>
-        <td>{$_session_data["profile_obj"]->_time_zone}</td>
-    </tr>
+    <dl>
+        <dt>{'TIME_ZONE'|onapp_string}&nbsp;</dt>
+        <dd>{$_session_data["profile_obj"]->_time_zone}&nbsp;</dd>
+    </dl>
 
-    <tr>
-        <td>{'LOCALE_'|onapp_string}</td>
-        <td>{$_session_data["profile_obj"]->_locale}</td>
-    </tr>
+    <dl>
+        <dt>{'LOCALE_'|onapp_string}&nbsp;</dt>
+        <dd>{$_session_data["profile_obj"]->_locale}&nbsp;</dd>
+    </dl>
 
-</table>
+</div>
 
-<h1>{'USER_ROLES'|onapp_string}</h1>
+<h1>{'USER_ROLES'|onapp_string}&nbsp;</h1>
 
-<table width="100%" class="table_my" cellpadding="5" cellspacing="5" border="0">
-    <tr>
-        <td>
+<div class="div_page">
+    <dl>
+        <dt>
             {foreach from=$_session_data["profile_obj"]->_roles item=role}
                 {$role->_label}<br />
             {/foreach}
-        </td>
-    </tr>
+        </dt>
+    </dl>
 
-</table>
+</div>
 
 {include file="default/navigation.tpl"}
 {include file="default/footer.tpl"}
