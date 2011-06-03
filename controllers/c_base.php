@@ -1,7 +1,5 @@
 <?php
 
-if ( ! defined('BASEURL')) exit('No direct script access allowed');
-
 class Base {
 
     function login() {
@@ -30,7 +28,7 @@ class Base {
                 $this->_load_profile($onapp);
 
                 // TODO redirect on previous called URL
-                $redirect_url = BASEURL.'/'.$_ALIASES[onapp_config('DEFAULT_ALIAS')];
+                $redirect_url = ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS];
 
                 onapp_redirect($redirect_url);
             }

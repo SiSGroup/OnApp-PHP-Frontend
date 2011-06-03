@@ -1,7 +1,5 @@
 <?php
 
-if ( ! defined('BASEURL')) exit('No direct script access allowed');
-
 class Profile
 {
     public function view()
