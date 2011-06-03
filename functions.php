@@ -7,7 +7,6 @@
  *
  */
 function onapp_get_languageList() {
-
     onapp_debug("Get languages list");
 
     $languages = scandir('lang');
@@ -17,7 +16,7 @@ function onapp_get_languageList() {
             $result[] = $language;
 
     onapp_debug("onapp_get_languageList:\nreturn => " . var_export($result, true) );
-    
+
     return $result;
 }
 
@@ -57,8 +56,7 @@ function onapp_string($string) {
  * @return mixed variable value
  */
 function onapp_get_arg($string, $method='') {
-
-    onapp_debug("Get arguments" );
+    onapp_debug('Get arguments');
 
     switch($method) {
         case "get":
@@ -80,7 +78,7 @@ function onapp_get_arg($string, $method='') {
             break;
     }
 
-    onapp_debug("onapp_get_arg: string => $string, method => $method, return => $return" );
+    onapp_debug("onapp_get_arg: string => $string, method => $method, return => $return");
 
     return $return;
 }
@@ -104,7 +102,7 @@ function onapp_get_arg($string, $method='') {
 function onapp_show_template($view, $params = array()) {
     global $_ALIASES, $_SCREEN_IDS;
 
-    onapp_debug("Show templates");
+    onapp_debug('Show templates');
     onapp_debug("onapp_show_template: view => $view, params => " . print_r($params, true));
 
     $template = ONAPP_TEMPLATE.DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl';
@@ -130,7 +128,7 @@ function onapp_show_template($view, $params = array()) {
 
     $smarty->display($template);
 
-    onapp_debug("Display Smarty Template");
+    onapp_debug('Display Smarty Template');
 }
 
 /**
@@ -152,10 +150,13 @@ function onapp_load_language($lang = '') {
     else
         $language = $lang;
 
-    if(file_exists('lang/'.$language.'/strings.php'))
-        include 'lang/'.$language.'/strings.php';
-    else
-        die( 'Language file not found' );
+    $file = 'lang/'.$language.'/strings.php';
+
+    if(file_exists($file))
+        include $file;
+    else {
+        onapp_error("Language file $file not found");
+    }
 }
 
 /**
@@ -171,7 +172,7 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
         if(file_exists('menu.xml'))
             $SimpleXMLElement = simplexml_load_file('menu.xml');
         else
-            die('Could not find file menu.xml');
+            onapp_error('Could not find file menu.xml');
 
     for($id = 1; $id < count($SimpleXMLElement)+1; $id++) {
         $current_id = $parrent_id != '' ? "$parrent_id.$id" : $id;
@@ -201,6 +202,20 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
 }
 
 /**
+ *
+ */
+function onapp_init_screen_ids() {
+    global $_ALIASES, $_SCREEN_IDS;
+
+    onapp_debug('Load Screen IDs');
+
+    onapp_load_screen_ids();
+
+    onapp_debug(print_r($_ALIASES, true));
+    onapp_debug(print_r($_SCREEN_IDS, true));
+}
+
+/**
  * Encrypts and Decrypts data with Mcrypt php extension
  *
  * @param string $value data to be processed with onapp_cryptData function
@@ -224,7 +239,7 @@ function onapp_cryptData($value, $action) {
                $text = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_ECB, $iv));
           break;
       default:
-              die("Wrong crypt data type $type");
+              onapp_error("Wrong crypt data type $type");
           break;
    };
 
@@ -242,9 +257,9 @@ function onapp_cryptData($value, $action) {
 function onapp_redirect($url) {
     onapp_debug("Redirect: url => '$url'");
 
-    if (!headers_sent()){    //If headers not sent yet... then do php redirect
+    if (!headers_sent()) {
         header('Location: '.$url); exit;
-    }else{                    //If headers are sent... do java redirect... if java disabled, do html redirect.
+    } else {
         echo '<script type="text/javascript">';
         echo 'window.location.href="'.$url.'";';
         echo '</script>';
@@ -258,16 +273,15 @@ function onapp_redirect($url) {
  * TODO add description
  */
 
-function init_config() {
+function onapp_init_config() {
     if (! isset($_CONF) || is_null($_CONF) )
         if (file_exists('config.ini') )
             $config = parse_ini_file('config.ini');
         else
-            die('Config file not found');
+            onapp_error('Config file not found');
 
-    foreach( $config as $key => $value) {
+    foreach( $config as $key => $value)
         define('ONAPP_'.strtoupper($key), $value);
-    }
 }
 
 /**
@@ -278,13 +292,14 @@ function init_config() {
  *
  */
 function onapp_check_configs() {
+
     require_once "wrapper/Profile.php";
+
     onapp_startSession();
 
-    onapp_debug("Check configs");
+    onapp_debug('Check configs');
 
-    if(!$_SESSION)
-    {
+    if ( ! $_SESSION ) {
        // Cheching PHP version
        if (version_compare(PHP_VERSION, '5.0.0', '<'))
           die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
@@ -332,13 +347,13 @@ function onapp_check_configs() {
  * @return void
  *
  */
-function onapp_startSession($ses = 'MYSES') { 
+function onapp_startSession($ses = 'MYSES') {
     $time =  ONAPP_SESSION_LIFETIME;
     session_set_cookie_params($time);
     session_name($ses);
     session_start();
 
-    onapp_debug("Start SESSION");
+    onapp_debug('Start SESSION');
 
     // Reset the expiration time upon page load
     if (isset($_COOKIE[$ses]))
@@ -388,8 +403,10 @@ function onapp_file_write($type, $content) {
             $filename = "$log_directory/third.log";
             break;
         case 'error':
-            onapp_file_write('frontend', $content);
-            $filename = "$log_directory/error_".$_SESSION['log_id'].'.log';
+            if( isset($_SESSION['log_id']) )
+                $filename = "$log_directory/error_".$_SESSION['log_id'].'.log';
+            else
+                return;
             break;
         default:
             return;
@@ -397,16 +414,10 @@ function onapp_file_write($type, $content) {
     }
 
     if (!$handle = fopen($filename, 'a+'))
-    {
-         echo "Cannot open file $filename in file ".__FILE__.' line '.__LINE__;
-         exit;
-    }
+         die("Cannot create file $filename in file ".__FILE__.' line '.__LINE__);
 
     if (fwrite($handle, $content."\n") === FALSE)
-    {
-        echo "Cannot write to file $filename";
-        exit;
-    }
+        die("Cannot write to file $filename");
 
     fclose($handle);
 }
@@ -420,9 +431,8 @@ function onapp_file_write($type, $content) {
  * @return void
  *
  */
-function onapp_init_log()
-{
-    global $_LOG_LEVELS;
+function onapp_init_log() {
+    global $_LOG_LEVELS, $_PHP_ERROR_LEVELS;
 
     $_SESSION['log_id'] = substr(md5($_SESSION['id'] . date('d-m-Y H-i-s') ), -10);
 
@@ -434,7 +444,26 @@ function onapp_init_log()
         'DEBUG' => 5
     );
 
-    onapp_debug("Initialise frontend loger");
+    $_PHP_ERROR_LEVELS = array(
+        30719 => 'E_ALL',
+        16384 => 'E_USER_DEPRECATED',
+        8192  => 'E_DEPRECATED',
+        4096  => 'E_RECOVERABLE_ERROR',
+        2048  => 'E_STRICT',
+        1024  => 'E_USER_NOTICE',
+        512   => 'E_USER_WARNING',
+        256   => 'E_USER_ERROR',
+        128   => 'E_COMPILE_WARNING',
+        64    => 'E_COMPILE_ERROR',
+        32    => 'E_CORE_WARNING',
+        16    => 'E_CORE_ERROR',
+        8     => 'E_NOTICE',
+        4     => 'E_PARSE',
+        2     => 'E_WARNING',
+        1     => 'E_ERROR'
+    );
+
+    onapp_debug('Initialise frontend loger');
 }
 
 /**
@@ -454,7 +483,7 @@ function onapp_debug( $message )
     if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['DEBUG'] || ! isset( $_SESSION['log_id'] ) )
         return;
 
-    $msg = $_SESSION['log_id']." : [DEBUG] $message";
+    $msg = '['.$_SESSION['log_id']."] : [DEBUG] $message";
 
     onapp_file_write('frontend', $msg);
 }
@@ -476,7 +505,7 @@ function onapp_info( $message )
     if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['INFO'] )
         return;
 
-    $msg = $_SESSION['log_id']." : [INFO] $message";
+    $msg = '['.$_SESSION['log_id']."] : [INFO] $message";
 
     onapp_file_write('frontend', $msg);
 }
@@ -496,9 +525,28 @@ function onapp_warn( $message )
     if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['WARN'])
         return;
 
-    $msg = $_SESSION['log_id']." : [WARN] $message";
+    $msg = '['.$_SESSION['log_id']."] : [WARN] $message";
 
     onapp_file_write('frontend', $msg);
+}
+
+/**
+ * TODO add description
+ */
+function onapp_error_handler( $type, $message, $file = NULL, $line = NULL, $context = NULL ) {
+    global $_LOG_LEVELS, $_PHP_ERROR_LEVELS;
+
+    if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['ERROR'] )
+        return;
+    if ( isset($_SESSION['log_id']) && ! is_null($_PHP_ERROR_LEVELS) ) {
+        $error_type = in_array($type, array_keys($_PHP_ERROR_LEVELS) ) ? $_PHP_ERROR_LEVELS[$type] : "ERROR ID ".$type;
+        $msg = '['.$_SESSION['log_id']."] : [ERROR] [$error_type] in " . $file . ' on line ' . $line .' \''. $message . '\'';
+
+        onapp_file_write('frontend', "$msg");
+        onapp_file_write('error',    "$msg");
+    }
+
+    onapp_error_reporting('ERROR');
 }
 
 /**
@@ -509,24 +557,21 @@ function onapp_warn( $message )
  * @return void
  *
  */
-function onapp_error( $type, $message, $file = NULL, $line = NULL ) {
+function onapp_error( $message ) {
     global $_LOG_LEVELS;
 
     if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['ERROR'] )
         return;
 
-    if( is_null($file) && is_null($line) )
-        $msg_title = $_SESSION['log_id']." : [ERROR] ";
-    else
-        $msg_title = $_SESSION['log_id']." : [$type] in $file on line $line ";
+    $msg = '['.$_SESSION['log_id']."] : [ERROR] $message";
 
-    $errors = error_get_last( );
+    onapp_file_write('frontend', "$msg");
+    onapp_file_write('error',    "$msg");
 
-    if( $errors !== NULL )
-        onapp_file_write('error', "$msg_title : " . print_r($errors, true));
-
+    die();
 ## TODO redirect on error page
 }
+
 
 /**
  * Adds onapp fatal message.
@@ -536,24 +581,36 @@ function onapp_error( $type, $message, $file = NULL, $line = NULL ) {
  * @return void
  *
  */
-function onapp_fatal( $type, $message, $file = NULL, $line = NULL )
+function onapp_fatal( $msg = NULL )
 {
-    global $_LOG_LEVELS;
+    global $_LOG_LEVELS, $_PHP_ERROR_LEVELS;
 
     if( ONAPP_LOG_LEVEL_FRONTEND < $_LOG_LEVELS['FATAL'] )
-            return;
+        return;
 
-    if( is_null($file) && is_null($line) )
-        $msg_title = $_SESSION['log_id']." : [FATAL] ";
-    else
-        $msg_title = $_SESSION['log_id']." : [$type] in $file on line $line ";
+    $error = error_get_last( );
 
-    $errors = error_get_last( );
+    onapp_error_reporting('FATAL');
 
-    if( $errors !== NULL )
-        onapp_file_write('error', "$msg_title : " . print_r($errors, true));
-
+    die();
 ## TODO show error page with error log file path
+}
+
+/**
+ * TODO add description
+ */
+function onapp_error_reporting($type) {
+    global $_PHP_ERROR_LEVELS;
+
+    $error = error_get_last( );
+
+    if( $error !== NULL && isset($_SESSION['log_id']) && ! is_null($_PHP_ERROR_LEVELS) ) {
+        $error_type = in_array($error['type'], array_keys($_PHP_ERROR_LEVELS) ) ? $_PHP_ERROR_LEVELS[$error['type']] : "ERROR ID ".$error['type'];
+        $msg = '['.$_SESSION['log_id']."] : [$type] [$error_type] in " . $error['file'] . ' on line ' . $error['line'] .' \''. $error['message'] . '\'';
+
+        onapp_file_write('frontend', "$msg");
+        onapp_file_write('error',    "$msg");
+    }
 }
 
 /**
