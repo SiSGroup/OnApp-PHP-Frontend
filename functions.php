@@ -106,9 +106,9 @@ function onapp_show_template($view, $params = array()) {
     onapp_debug("onapp_show_template: view => $view, params => " . print_r($params, true));
 
     $template = ONAPP_TEMPLATE.DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl';
+// TODO check if template exist
 
     $globals = array(
-
         'navigation'    => $_SCREEN_IDS,
         '_ALIASES'      => $_ALIASES,
         'langs'         => onapp_get_languageList()
@@ -121,6 +121,15 @@ function onapp_show_template($view, $params = array()) {
     require_once "libs/smarty/Smarty.class.php";
 
     $smarty = new Smarty;
+
+// TODO move into config.ini
+//    $smarty->template_dir = $INC . "templates" ;
+//    $smarty->compile_dir = '/exp/smarty/templates_c';
+//    $smarty->cache_dir = '/exp/smarty/cache';
+//    $smarty->config_dir = '/exp/smarty/configs';
+//    $smarty->caching = 2;
+//    $smarty->cache_lifetime =1;
+//    $smarty->compile_check = true;
     $smarty->force_compile = true;
 
     foreach($smarty_params as $key => $value)
