@@ -168,6 +168,8 @@ function onapp_die( $message )
 
     onapp_file_write('error', $msg);
 
+    onapp_error_handler(E_ERROR, $message);
+
     die($message);
 }
 
@@ -240,7 +242,10 @@ function onapp_error_reporting($error) {
     $error_type = in_array($error['type'], array_keys($error_levels) ) ? $error_levels[$error['type']] : "ERROR ID ".$error['type'];
 
     if( $error !== NULL ) {
-        $msg = '['.$_SESSION['log_id']."] : [$error_type] in " . $error['file'] . ' on line ' . $error['line'] .' \''. $error['message'] . '\'';
+        if ( is_null($error['file']) && is_null($error['line']) )
+            $msg = '['.$_SESSION['log_id'] . "] : [$error_type] : " . $error['message'] ;
+        else
+            $msg = '['.$_SESSION['log_id']."] : [$error_type] in " . $error['file'] . ' on line ' . $error['line'] .' \''. $error['message'] . '\'';
 
         onapp_file_write('frontend', "$msg");
         onapp_file_write('error',    "$msg");

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'functions.php';
+require_once 'error_log.php';
 
 Class ONAPP_Controller
 {
@@ -45,7 +46,7 @@ Class ONAPP_Controller
         if(file_exists($file_path))
             require_once "$file_path";
         else
-            onapp_error("Could not find file $file_path");
+            onapp_die("Could not find file $file_path");
 
         onapp_debug("ONAPP_Controller->run: args => " . print_r(
             array(
