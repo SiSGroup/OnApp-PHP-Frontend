@@ -80,9 +80,9 @@ $_LANG['VIRTUAL_MACHINES_DEFAULT_INFO'] = ' The virtual machines in your cloud.
                                             Use the On/Off buttons to change Power status.
                                             Use the icons on the right to manage backups and see VM resource utilization.
                                             Add new VMs with the Add Virtual Machine button.';
-$_LANG['VIRTUAL_MACHINES_DETAILS_INFO'] = ' The On/Off buttons change this virtual machine\'s power status. 
-                                            The Actions tools let you perform common tasks. 
-                                            The activity log shows VM transactions and lets you cancel pending tasks. 
+$_LANG['VIRTUAL_MACHINES_DETAILS_INFO'] = ' The On/Off buttons change this virtual machine\'s power status.
+                                            The Actions tools let you perform common tasks.
+                                            The activity log shows VM transactions and lets you cancel pending tasks.
                                             Use the navigation at the top of the screen to explore different aspects of this virtual machine.';
 $_LANG['VIRTUAL_MACHINES_NEW_INFO_2'] = ' Your virtual machine will be sent for processing immediately.
                                           You will be redirected to your VM\'s information screen with details of the build process.';
@@ -102,28 +102,28 @@ $_LANG['PARENT_SCREEN_ALIAS'] = 'Parent Screen Alias';
 $_LANG['SCREENS_INFO_INFO'] = 'Insert screen id and click the view button to see details.';
 $_LANG['LOGS_SETTINGS'] = 'Logs Settings';
 $_LANG['LOGS_SETTINGS_INFO'] = 'Make necessary changes and click save button';
-$_LANG['LOG_LEVEL'] = 'Log Level';
+$_LANG['LOG_LEVEL_PHP'] = 'Log Level PHP';
 $_LANG['SAVE_'] = 'Save';
-$_LANG['ENABLE_THIRD_PART_PRODUCT_REPORT'] = 'Enable third part product report';
 $_LANG['ENABLE_DEBUG_LOG_IN_PROBLEM_REPORT'] = 'Enable debug log in problem report';
 $_LANG['ENABLE_WRAPPER_LOG_REPORT'] = 'Enable wrapper log report';
 $_LANG['COULD_NOT_UPDATE_CONFIG_FILE'] = 'Couldn\'t update config file';
 $_LANG['CONFIGURATIONS_HAVE_BEEN_UPDATED'] = 'Configurations have been updated';
-$_LANG['HYPERVISORS_INFO'] = 'Hypervisors provide CPU, 
-                              RAM and network resources for your virtual machines.
-                              Click a hypervisor label to show the virtual machines running on it.';
+$_LANG['HYPERVISORS_INFO'] = 'Hypervisors provide CPU,
+      RAM and network resources for your virtual machines.
+      Click a hypervisor label to show the virtual machines running on it.';
 $_LANG['HYPERVISOR_DETAILS_INFO'] = 'The virtual machines on %s hypervisor.
-                              The On/Off buttons change virtual machine Power status. 
+                              The On/Off buttons change virtual machine Power status.
                               The icons on the right let you manage
                               VM Backup status and see resource utilization charts.';
 $_LANG['HYPERVISOR_DETAILS'] = 'Hypervisors Details';
 $_LANG['CPU_USAGE_FOR_THIS_VM'] = 'CPU usage for this virtual machine';
-$_LANG['CPU_USAGE_FOR_THIS_VM_INFO'] = 'This chart shows hourly 
-                                         utilization for the period up to three months. You can zoom into a 
+$_LANG['CPU_USAGE_FOR_THIS_VM_INFO'] = 'This chart shows hourly
+                                         utilization for the period up to three months. You can zoom into a
                                          specific time period by clicking and dragging in a chart.';
+$_LANG['LOG_LEVEL_FRONTEND'] = 'Log Level Frontend';
+$_LANG['THIRD_PART_PRODUCT_REPORT_ENABLE']= 'Enable Third Part Product Report';
 
-
-
-                              
-
-
+$_LANG['PROBLEM_REPORT_DEBUG_LOG_ENABLE']= 'Enable Debug Log Report';
+$_LANG['WRAPPER_LOG_REPORT_ENABLE']= 'Enable Wrapper Log Report';
+$_LANG['LOG_ROTATION_DAYS']= 'Log Rotation Days';
+$_LANG['LOG_ROTATION_SIZE']= 'Log Rotation Size';
