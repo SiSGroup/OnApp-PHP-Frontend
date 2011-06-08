@@ -62,10 +62,14 @@ class Base {
     }
 
     private function _load_profile($onapp) {
+        onapp_debug("Load OnApp user profile");
+
         $profile = $onapp->factory('Profile');
 
         $profile_obj = $profile->load();
 
         $_SESSION['profile_obj'] = $profile_obj;
+
+        onapp_debug("_load_profile: profile => " . print_r($profile_obj ,true));
     }
 }
