@@ -25,25 +25,28 @@ define('ONAPP_E_DEBUG', 16);
  *
  */
 function onapp_file_write($type, $content) {
-    $log_directory = ONAPP_LOG_DIRECTORY;
+    if ( dirname(ONAPP_LOG_DIRECTORY) == '.' )
+        $log_directory = ONAPP_PATH.ONAPP_DS.ONAPP_LOG_DIRECTORY.ONAPP_DS;
+    else
+        $log_directory = ONAPP_LOG_DIRECTORY.ONAPP_DS;
 
     if (! isset($_SESSION['log_id'] ) )
         return;
 
     switch ($type) {
         case 'frontend':
-            $filename = "$log_directory/frontend.log";
+            $filename = $log_directory.'frontend.log';
             break;
         case 'wrapper':
-        case 'onapp':
-            $filename = "$log_directory/wrapper.log";
+        case 'onapp'  :
+            $filename = $log_directory.'wrapper.log';
             break;
         case 'third':
-            $filename = "$log_directory/third.log";
+            $filename = $log_directory.'third.log';
             break;
         case 'error':
             if( isset($_SESSION['log_id']) )
-                $filename = "$log_directory/error_".$_SESSION['log_id'].'.log';
+                $filename = $log_directory.'error_'.$_SESSION['log_id'].'.log';
             else
                 return;
             break;
