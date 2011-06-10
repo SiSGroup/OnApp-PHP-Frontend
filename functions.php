@@ -303,46 +303,52 @@ function onapp_check_configs() {
 
     require_once "wrapper/Profile.php";
 
-    onapp_startSession();
+   // onapp_startSession();
 
     onapp_debug('Check configs');
 
-    if ( ! $_SESSION ) {
-       // Cheching PHP version
-       if (version_compare(PHP_VERSION, '5.0.0', '<'))
-          die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
+    // Cheching PHP version
+    if (version_compare(PHP_VERSION, '5.0.0', '<'))
+        die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
 
-        // Checking of necessary configuration options
-        $config_options = array(
-            'ONAPP_SECRET_KEY',
-        );
+    // Checking of necessary configuration options
+    $config_options = array(
+        'ONAPP_SECRET_KEY',
+    );
 
-        foreach($config_options as $option)
-            if (! defined($option) )
-                die("Config option $option not found");
+    foreach($config_options as $option)
+        if (! defined($option) )
+            die("Config option $option not found");
 
-        // Checking of necessary fuctions
-        $necessary_fuctions = array(
-            'onapp_cryptData'
-            );
+    // Checking of necessary fuctions
+    $necessary_fuctions = array(
+        'onapp_cryptData'
+    );
 
-        foreach($necessary_fuctions as $function_name)
-           if(!function_exists($function_name))
-               die("Function $function_name not found");
+    foreach($necessary_fuctions as $function_name)
+       if(!function_exists($function_name))
+           die("Function $function_name not found");
 
-        // Checking of necessary PHP extensions
+    // Checking of necessary PHP extensions
 
-        // Including manuals
+    // Including manuals
 
-        $enabled_extensions = get_loaded_extensions();
-        $require_extensions = array( 'mcrypt' );
+    $enabled_extensions = get_loaded_extensions();
+    $require_extensions = array(
+        'mcrypt' => 'mcrypt.php'
+    );
 
-        foreach( $require_extensions as $extension_name)
-            if( ! in_array($extension_name, $enabled_extensions)) {
-                include('manuals/mcrypt.php');
-                exit();
-            }
-    }
+    foreach( $require_extensions as $extension_name => $manual )
+        if( ! in_array($extension_name, $enabled_extensions)) {
+            $file = ONAPP_PATH.ONAPP_DS."manuals/$manual";
+
+            if ( file_exists($file) )
+                include($file);
+            else
+                die("File $file does'n file");
+
+            exit(1);
+        }
 }
 
 /**
