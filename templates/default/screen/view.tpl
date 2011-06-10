@@ -1,5 +1,13 @@
 {include file="default/header.tpl"}
 
+{if isset($error)}
+    <div id="onapp_error">
+            {$error|onapp_string}
+    </div>
+{/if}
+
+<div style="clear:both;"></div>
+
 <div class="info">
 
        <div class="info_title">
@@ -21,17 +29,18 @@
         <tr>
             <td class="label">{'SCREEN_ID'|onapp_string}</td>
             <td>
-                <input type="text" name="screen_id" />
+                <input type="text" name="screen_id" value="{$screen_id}" />
             </td>
         </tr>
 
     </table>
 
-    <input type="hidden" name="action" value="screen_info" />
+    <input type="hidden" name="action" value="info" />
 
     <input type="submit" name="submit" value="{'VIEW_'|onapp_string}" />
 
 </form>
+
 {include file="default/navigation.tpl"}
+
 {include file="default/footer.tpl"}
- 
