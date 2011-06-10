@@ -88,7 +88,7 @@ $_LANG['VIRTUAL_MACHINES_NEW_INFO_2'] = ' Your virtual machine will be sent for 
                                           You will be redirected to your VM\'s information screen with details of the build process.';
 $_LANG['CONFIGURATION_'] = 'Configuration';
 $_LANG['SCREENS_'] = 'Screens';
-$_LANG['LOGS_SETTINGS'] = 'Logs Settings';
+$_LANG['LOG_SETTINGS'] = 'Log Settings';
 $_LANG['SCREEN_ID'] = 'Screen Id';
 $_LANG['VIEW_'] = 'View';
 $_LANG['THERE_IS_NO_SUCH_SCREEN'] = 'There is no such screen';
@@ -100,8 +100,7 @@ $_LANG['SCREEN_INFO'] = 'Screen Info';
 
 $_LANG['PARENT_SCREEN_ALIAS'] = 'Parent Screen Alias';
 $_LANG['SCREENS_INFO_INFO'] = 'Insert screen id and click the view button to see details.';
-$_LANG['LOGS_SETTINGS'] = 'Logs Settings';
-$_LANG['LOGS_SETTINGS_INFO'] = 'Make necessary changes and click save button';
+$_LANG['LOG_SETTINGS_INFO'] = 'Press edit button to make changes';
 $_LANG['LOG_LEVEL_PHP'] = 'Log Level PHP';
 $_LANG['SAVE_'] = 'Save';
 $_LANG['ENABLE_DEBUG_LOG_IN_PROBLEM_REPORT'] = 'Enable debug log in problem report';
@@ -109,8 +108,8 @@ $_LANG['ENABLE_WRAPPER_LOG_REPORT'] = 'Enable wrapper log report';
 $_LANG['COULD_NOT_UPDATE_CONFIG_FILE'] = 'Couldn\'t update config file';
 $_LANG['CONFIGURATIONS_HAVE_BEEN_UPDATED'] = 'Configurations have been updated';
 $_LANG['HYPERVISORS_INFO'] = 'Hypervisors provide CPU,
-      RAM and network resources for your virtual machines.
-      Click a hypervisor label to show the virtual machines running on it.';
+                              RAM and network resources for your virtual machines.
+                              Click a hypervisor label to show the virtual machines running on it.';
 $_LANG['HYPERVISOR_DETAILS_INFO'] = 'The virtual machines on %s hypervisor.
                               The On/Off buttons change virtual machine Power status.
                               The icons on the right let you manage
@@ -127,3 +126,14 @@ $_LANG['PROBLEM_REPORT_DEBUG_LOG_ENABLE']= 'Enable Debug Log Report';
 $_LANG['WRAPPER_LOG_REPORT_ENABLE']= 'Enable Wrapper Log Report';
 $_LANG['LOG_ROTATION_DAYS']= 'Log Rotation Days';
 $_LANG['LOG_ROTATION_SIZE']= 'Log Rotation Size';
+$_LANG['EDIT_']= 'Edit';
+$_LANG['CONFIG_FILE_NOT_WRITABLE']= 'Configuration file is not writable';
+$_LANG['EDIT_LOG_SETTINGS']= 'Edit Log Settings';
+$_LANG['EDIT_LOG_SETTINGS_INFO']= 'Make necessary changes and press save button';
+$_LANG['FRONTEND_SETTINGS']= 'Frontend Settings';
+$_LANG['BASE_URL']= 'Base URL';
+$_LANG['DEFAULT_ALIAS']= 'Default Alias';
+$_LANG['SECRET_KEY']= 'Secret Key';
+$_LANG['SESSION_LIFETIME']= 'Session Lifetime';
+$_LANG['HOURS_']= 'Hours';
+$_LANG['DEFAULT_LANGUAGE']= 'Default Language';
