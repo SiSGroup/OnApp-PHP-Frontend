@@ -1,5 +1,6 @@
 <?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
-require_once 'c_log_settings.php';
+
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "c_base_settings.php";
 
 class Smarty_Settings
 {

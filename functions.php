@@ -352,6 +352,7 @@ function onapp_check_configs() {
         die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
 
     // Checking of necessary configuration options
+// TODO check is ONAPP_SMARTY_COMPILE_DIR and other config options exists
     $config_options = array(
         'ONAPP_SECRET_KEY',
     );

@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
 
 require_once 'functions.php';
 require_once 'error_log.php';
@@ -38,10 +38,7 @@ Class ONAPP_Controller
         else
             onapp_redirect(ONAPP_BASE_URL.'/errors/error404.php');
 
-        if ( ! defined('ONAPP_BASE_URL'))
-            onapp_error('No direct script access allowed');
-
-        $file_path = 'controllers/'.strtolower('c_'.$class_name.'').'.php';
+        $file_path = ONAPP_PATH.ONAPP_DS.'controllers'.ONAPP_DS.ONAPP_CONTROLLERS.ONAPP_DS.strtolower('c_'.$class_name.'').'.php';
 
         if(file_exists($file_path))
             require_once "$file_path";

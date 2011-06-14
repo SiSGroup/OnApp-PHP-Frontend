@@ -25,6 +25,7 @@ define('ONAPP_E_DEBUG', 16);
  *
  */
 function onapp_file_write($type, $content) {
+    //TODO check on Windows
     if ( dirname(ONAPP_LOG_DIRECTORY) == '.' )
         $log_directory = ONAPP_PATH.ONAPP_DS.ONAPP_LOG_DIRECTORY.ONAPP_DS;
     else
@@ -241,6 +242,18 @@ function onapp_get_php_errors() {
             $return[ constant($value) ] = $value;
 
     return $return;
+}
+
+function onapp_get_frontend_errors() {
+    $frontend_error_levels = array(
+        1  => 'ONAPP_E_FATAL',
+        2  => 'ONAPP_E_WARN',
+        4  => 'ONAPP_E_NOTICE',
+        8  => 'ONAPP_E_INFO',
+        16 => 'ONAPP_E_DEBUG'
+    );
+
+    return $frontend_error_levels;
 }
 
 /**

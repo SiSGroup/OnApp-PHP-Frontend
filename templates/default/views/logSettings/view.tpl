@@ -5,9 +5,9 @@
     </div>
 {/if}
 
-{if isset($smarty.session.message)}
+{if isset($message)}
     <div id="onapp_msg">
-            {$smarty.session.message|onapp_string}
+            {$message|onapp_string}
     </div>
 {/if}
 
@@ -33,7 +33,7 @@
             <td class="label">{'LOG_LEVEL_PHP'|onapp_string}</td>
             <td>
                  
-                    {$php_error_levels[$smarty.const.ONAPP_LOG_LEVEL_PHP]}
+                    {$php_error_levels[$config.log_level_php]}
                 
             </td>
         </tr>
