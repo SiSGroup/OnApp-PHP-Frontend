@@ -4,9 +4,10 @@
 <meta http-equiv="content-type" content="text/html; charset={'CHARSET'|onapp_string}" />
 <link rel="stylesheet" href="templates/{$smarty.const.ONAPP_TEMPLATE}/css/style.css" type="text/css" />
 <link rel="stylesheet" href="templates/{$smarty.const.ONAPP_TEMPLATE}/css/uniform.css" type="text/css" />
+<link rel="icon" type="image/ico" href="{$smarty.const.ONAPP_TEMPLATE}/images/favicon.ico" />
 <title>{'LOGIN_'|onapp_string}</title>
 </head>
-<body style="background:url(templates/default/images/bg.png)">
+<body>
 
 <div id="login">
     <div style="height:5px;"></div>

@@ -1,4 +1,4 @@
-{include file="default/header.tpl"}
+{include file="default/views/header.tpl"}
 
 {if isset($error)}
     <div id="onapp_error">
@@ -41,6 +41,5 @@
 
 </form>
 
-{include file="default/navigation.tpl"}
-
-{include file="default/footer.tpl"}
+{include file="default/views/navigation.tpl"}
+{include file="default/views/footer.tpl"}

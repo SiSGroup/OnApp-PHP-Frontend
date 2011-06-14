@@ -26,8 +26,7 @@ h1
 {
     color:#505050;
     font-size:15px;
-    padding-bottom:10px;
-    padding-top:10px;
+    padding:10px;
     background:url('../images/table_page_header.png' ) no-repeat bottom;
 }
 
@@ -47,7 +46,7 @@ div#header img
 }
 
 div#container{
-    width:965px;
+    width:965px; 
     margin:0 auto;
     height:auto;
     background:url(../images/container.png);
@@ -88,9 +87,9 @@ div#navigation ul li a:link, div#navigation ul li a:hover, div#navigation ul li 
 div#content
 {
     float:right;
-    width:715px; 
-    padding:5px; 
-    height:auto
+    width:725px;
+   
+    height:auto; 
 }
 
 #login_error, #onapp_error, #onapp_msg
@@ -98,7 +97,7 @@ div#content
     border-bottom: 3px solid #F5B0B3;
     display:block;
     background:#FBE3E4;
-    padding:10px 10px
+    padding:10px 10px;
 }
 
 #onapp_error, #onapp_msg
@@ -290,6 +289,7 @@ label
 input[type=submit] 
 {
     background: transparent url(../images/button-bg.png) repeat-x scroll 0 -100px;
+    margin-left:10px;
     white-space: nowrap;
     overflow: hidden;
     padding: 8px 20px 9px;
@@ -310,15 +310,17 @@ input[type=submit]
 
 .info
 {
-  margin-top:10px;
+  
+  margin-left:5px;
   color:#484637;
-    
+  clear:both;
+  margin-top:10px;  
 }
 
 .info_title
 {
     
-    background: url(../images/info_title.png);
+    background: url(../images/info_title.png) no-repeat;
     padding:6px;
     font-weight:bold;
 }
@@ -326,11 +328,11 @@ input[type=submit]
 .info_body
 {
     padding:10px; 
-    background: url(../images/info_body.png);
+    background: url(../images/info_body.png) no-repeat;
 }
 .info_bottom
 {
-    background: url(../images/info_bottom.png);
+    background: url(../images/info_bottom.png) no-repeat;
     height:10px;
 }
 
@@ -505,6 +507,9 @@ th, td, caption
     padding: 25px 250px;    
 }
 .chart{padding-left: 8px; padding-top:10px}
-
+.dt_checkbox{/*padding-bottom: 30px;*/}
+.two tr td{width:50%}
+.two input[type=submit]{margin: 10px 0}
+.two {border-bottom:none}
 
 
