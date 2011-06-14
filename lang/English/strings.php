@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
 $_LANG['CHARSET']='utf-8';
 $_LANG['ERORR_WRONG_LOGIN_DATA'] = 'Login, password or host is incorrect';
 $_LANG['HELLO_'] = 'Hello';
@@ -137,3 +137,18 @@ $_LANG['SECRET_KEY']= 'Secret Key';
 $_LANG['SESSION_LIFETIME']= 'Session Lifetime';
 $_LANG['HOURS_']= 'Hours';
 $_LANG['DEFAULT_LANGUAGE']= 'Default Language';
+$_LANG['CONTROLLERS_']= 'Controllers';
+$_LANG['LOG_DIRECTORY']= 'Log Directory';
+$_LANG['FRONTEND_SETTINGS_INFO']= 'Press edit button to make changes';
+$_LANG['SMARTY_SETTINGS']= 'Smarty Settings';
+$_LANG['SMARTY_SETTINGS_INFO']= 'Press edit button to make changes';
+$_LANG['TEMPLATE_DIRECTORY']= 'Template Directory';
+$_LANG['COMPILE_DIRECTORY']= 'Compile Directory';
+$_LANG['CACHE_DIRECTORY']= 'Cache Directory';
+$_LANG['ENABLE_CACHING']= 'Enable Caching ';
+$_LANG['CACHING_LIFETIME']= 'Caching Lifetime';
+$_LANG['FORCE_COMPILE']= 'Force Compile';
+$_LANG['COMPILE_CHECK']= 'Compile Check';
+$_LANG['EDIT_SMARTY_SETTINGS']= 'Edit Smarty Settings';
+$_LANG['EDIT_SMARTY_SETTINGS_INFO']= 'Make necessary changes and press save button';
+$_LANG['CONFIGURATION_INFO']= 'All configurations';
