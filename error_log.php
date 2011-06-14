@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
 
 error_reporting( E_ALL );
 ini_set( 'display_errors', 0 );
@@ -212,6 +212,38 @@ function onapp_error_handler( $type, $message, $file = NULL, $line = NULL, $cont
 }
 
 /**
+ * TODO add description
+ */
+function onapp_get_php_errors() {
+    $error_levels = array(
+        'E_ALL',
+        'E_USER_DEPRECATED',
+        'E_DEPRECATED',
+        'E_RECOVERABLE_ERROR',
+        'E_STRICT',
+        'E_USER_NOTICE',
+        'E_USER_WARNING',
+        'E_USER_ERROR',
+        'E_COMPILE_WARNING',
+        'E_COMPILE_ERROR',
+        'E_CORE_WARNING',
+        'E_CORE_ERROR',
+        'E_NOTICE',
+        'E_PARSE',
+        'E_WARNING',
+        'E_ERROR'
+    );
+
+    $return = array();
+
+    foreach($error_levels as $value)
+        if ( defined($value) )
+            $return[ constant($value) ] = $value;
+
+    return $return;
+}
+
+/**
  * Adds onapp error message.
  *
  * @param string $message Error message from error_get_last function
@@ -220,24 +252,7 @@ function onapp_error_handler( $type, $message, $file = NULL, $line = NULL, $cont
  *
  */
 function onapp_error_reporting($error) {
-    $error_levels = array(
-        30719 => 'E_ALL',
-        16384 => 'E_USER_DEPRECATED',
-        8192  => 'E_DEPRECATED',
-        4096  => 'E_RECOVERABLE_ERROR',
-        2048  => 'E_STRICT',
-        1024  => 'E_USER_NOTICE',
-        512   => 'E_USER_WARNING',
-        256   => 'E_USER_ERROR',
-        128   => 'E_COMPILE_WARNING',
-        64    => 'E_COMPILE_ERROR',
-        32    => 'E_CORE_WARNING',
-        16    => 'E_CORE_ERROR',
-        8     => 'E_NOTICE',
-        4     => 'E_PARSE',
-        2     => 'E_WARNING',
-        1     => 'E_ERROR'
-    );
+    $error_levels = onapp_get_php_errors();
 
     if( ONAPP_LOG_LEVEL_PHP < $error['type'] || is_null($error) )
         return;

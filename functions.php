@@ -1,4 +1,6 @@
-<?php
+<?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
+
+// TODO join functions onapp_get_languageList onapp_get_templatesList onapp_get_controllersList
 
 /**
  * Returns available language list
@@ -16,6 +18,46 @@ function onapp_get_languageList() {
             $result[] = $language;
 
     onapp_debug("onapp_get_languageList:\nreturn => " . var_export($result, true) );
+
+    return $result;
+}
+
+/**
+ * Returns available template list
+ *
+ * @return array Template List
+ *
+ */
+function onapp_get_templatesList() {
+    onapp_debug("Get template list");
+
+    $templates = scandir('templates');
+
+    foreach( $templates as $template )
+        if (! is_dir($template) && ! is_file("templates/$template") )
+            $result[] = $template;
+
+    onapp_debug("onapp_get_languageList:\nreturn => " . print_r($result, true) );
+
+    return $result;
+}
+
+/**
+ * Returns available controller list
+ *
+ * @return array Controllers List
+ *
+ */
+function onapp_get_controllersList() {
+    onapp_debug("Get controller list");
+
+    $controllers = scandir('controllers');
+
+    foreach( $controllers as $controller )
+        if (! is_dir($controller) && ! is_file("controllers/$controller") )
+            $result[] = $controller;
+
+    onapp_debug("onapp_get_languageList:\nreturn => " . print_r($result, true) );
 
     return $result;
 }
@@ -104,8 +146,9 @@ function onapp_show_template($view, $params = array()) {
 
     onapp_debug('Show templates');
     onapp_debug("onapp_show_template: view => $view, params => " . print_r($params, true));
-
-    $template = ONAPP_TEMPLATE.DIRECTORY_SEPARATOR.str_replace('_',DIRECTORY_SEPARATOR,$view).'.tpl';
+    
+    $template = ONAPP_PATH.ONAPP_DS.'templates'.ONAPP_DS.ONAPP_TEMPLATE.ONAPP_DS. 'views' .ONAPP_DS.str_replace('_',ONAPP_DS,$view).'.tpl';
+  // echo $template; die();
 // TODO check if template exist
 
     $globals = array(
@@ -122,15 +165,16 @@ function onapp_show_template($view, $params = array()) {
 
     $smarty = new Smarty;
 
-// TODO move into config.ini
-//    $smarty->template_dir = $INC . "templates" ;
-//    $smarty->compile_dir = '/exp/smarty/templates_c';
-//    $smarty->cache_dir = '/exp/smarty/cache';
-//    $smarty->config_dir = '/exp/smarty/configs';
-//    $smarty->caching = 2;
-//    $smarty->cache_lifetime =1;
-//    $smarty->compile_check = true;
-    $smarty->force_compile = true;
+    $smarty->template_dir = ONAPP_SMARTY_TEMPLATE_DIR;
+    $smarty->compile_dir  = ONAPP_SMARTY_COMPILE_DIR;
+    $smarty->cache_dir    = ONAPP_SMARTY_CACHE_DIR;
+    $smarty->caching      = ONAPP_SMARTY_CACHING_ENABLE;
+    //in seconds
+    $smarty->cache_lifetime = ONAPP_SMARTY_CACHING_LIFETIME;
+    // set false for best performance when no templates changes needed
+    $smarty->compile_check = ONAPP_SMARTY_COMPILE_CHECK;
+    // set false for best performance when no templates changes needed
+    $smarty->force_compile = ONAPP_SMARTY_FORCE_COMPILE;
 
     foreach($smarty_params as $key => $value)
         $smarty->assign("$key",$value);
@@ -300,10 +344,6 @@ function onapp_init_config() {
  *
  */
 function onapp_check_configs() {
-
-    require_once "wrapper/Profile.php";
-
-   // onapp_startSession();
 
     onapp_debug('Check configs');
 
