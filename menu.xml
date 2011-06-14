@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <menu>
     <screen class="Base" method="login" alias="login" access="access"/>
-    <screen title="LOGOUT_" class="Base" method="logout" alias="logout" access="access" />
-
     <screen title="PROFILE_" class="Profile" method="view" alias="profile" access="access" />
     <screen title="HYPERVISORS_" class="Hypervisors" method="view" alias="hypervisors" access="access" />
     <screen title="VIRTUAL_MACHINES" class="Virtual_Machines" method="view" alias="virtual_machines" access="access" />
@@ -23,6 +21,8 @@
         <screen title="SCREENS_" class="Screens" method="view" alias="screens" access="access"/>
         <screen title="LOG_SETTINGS" class="Log_Settings" method="view" alias="log_settings" access="access" />
         <screen title="FRONTEND_SETTINGS" class="Frontend_Settings" method="view" alias="frontend_settings" access="access" />
+        <screen title="SMARTY_SETTINGS" class="Smarty_Settings" method="view" alias="smarty_settings" access="access" />
     </screen>
     <screen title="HELP_" class="Help" method="view" alias="help" access="access" />
+    <screen title="LOGOUT_" class="Base" method="logout" alias="logout" access="access" />
 </menu>
