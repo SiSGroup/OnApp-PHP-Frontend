@@ -1,5 +1,7 @@
 <?php
-// error_reporting(E_ALL);
+error_reporting( E_ALL );
+
+ini_set( 'display_errors', 0 );
 
 /**
  * API Wrapper for OnApp
@@ -25,11 +27,6 @@ require_once dirname( __FILE__ ) . '/Logger.php';
  * Current OnApp PHP API wrapper version
  */
 define( 'ONAPP_VERSION', '1.0' );
-
-/**
- * The ONAPP class uses this variable to define the path to the cURL directory storing cookies for the users
- */
-define( 'ONAPP_OPTION_CURL_COOKIEDIR', 'cookiedir' );
 
 /**
  * The ONAPP class uses this variable to define the Proxy server used by cURL
@@ -66,6 +63,11 @@ define( 'ONAPP_OPTION_API_CHARSET', 'charset' );
  *   - application/json (will be available after the Json parcer is created)
  */
 define( 'ONAPP_OPTION_API_CONTENT', 'content' );
+
+/**
+ * TODO add description
+ */
+define( 'ONAPP_OPTION_DEBUG_MODE', 'debug_mode' );
 
 /**
  * The ONAPP class uses this field name to map this field in the API response and variable in the class
@@ -239,12 +241,12 @@ class ONAPP {
      * @var    array
      */
     var $_knownOptions = array(
-        ONAPP_OPTION_CURL_COOKIEDIR,
         ONAPP_OPTION_CURL_PROXY,
         ONAPP_OPTION_CURL_URL,
         ONAPP_OPTION_API_TYPE,
         ONAPP_OPTION_API_CHARSET,
-        ONAPP_OPTION_API_CONTENT
+        ONAPP_OPTION_API_CONTENT,
+        ONAPP_OPTION_DEBUG_MODE
     );
 
     /**
@@ -255,9 +257,6 @@ class ONAPP {
      * @var    array
      */
     var $_defaultOptions = array(
-        // cURL Cookies directory
-        ONAPP_OPTION_CURL_COOKIEDIR => '/tmp/.onapp',
-
         // cURL proxy
         ONAPP_OPTION_CURL_PROXY => '',
 
@@ -272,6 +271,9 @@ class ONAPP {
 
         // API request and response content
         ONAPP_OPTION_API_CONTENT => 'application/json',
+
+        // Debug mode
+        ONAPP_OPTION_DEBUG_MODE => false,
     );
 
     /**
@@ -282,9 +284,6 @@ class ONAPP {
      *
      * <code>
      *    var $options = array(
-     *
-     *        // cURL Cookies directory
-     *        ONAPP_OPTION_CURL_COOKIEDIR => '/tmp/.onapp',
      *
      *        // cURL proxy
      *        ONAPP_OPTION_CURL_PROXY     => '',
@@ -300,6 +299,9 @@ class ONAPP {
      *
      *        // API request and response content
      *        ONAPP_OPTION_API_CONTENT   => 'application/xml',
+     *
+     *        // Debug mode
+     *        ONAPP_OPTION_DEBUG_MODE => false
      *    );
      * </code>
      *
@@ -394,6 +396,14 @@ class ONAPP {
      * @var    sting
      */
     var $_version;
+
+    /**
+     * Return OnApp release
+     *
+     * @access private
+     * @var    sting
+     */
+    var $_release;
 
     /**
      * Return OnApp fields array mapping
@@ -492,8 +502,10 @@ class ONAPP {
                             );
                         }
                     }
-                }
-                $this->_loger->debug( "_getRequiredData: set attribute ( $key => '" . $result[ $key ] . "')." );
+                };
+
+                if( isset($result[ $key ]) )
+                    $this->_loger->debug( "_getRequiredData: set attribute ( $key => '" . $result[ $key ] . "')." );
             }
         ;
 
@@ -606,12 +618,15 @@ class ONAPP {
      * @access public
      */
     function auth( $url, $user, $pass, $proxy = '' ) {
-        $this->_loger = new Logger;
+        $this->options = $this->_defaultOptions;
+
+        $this->_loger = new ONAPP_Logger;
+
+        $this->_loger->setDebug(  $this->options[ ONAPP_OPTION_DEBUG_MODE ] );
+
         $this->_loger->setTimezone( );
 
         $this->_loger->debug( "auth: Authorization(url => '$url', user => '$user', pass => '********')." );
-
-        $this->options = $this->_defaultOptions;
 
         $this->setOption( ONAPP_OPTION_CURL_URL, $url );
         $this->setOption( ONAPP_OPTION_CURL_PROXY, $proxy );
@@ -641,21 +656,32 @@ class ONAPP {
 
         if( $response[ 'info' ][ 'http_code' ] == '200' ) {
 
-            preg_match_all( '#([0-9]*)\.([0-9]*)\.(\w+)?#', $response[ 'response_body' ], $out );
+            switch ( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+                case 'xml':
+                    $xml = simplexml_load_string($response['response_body']);
+                    $this->_version = (string)$xml->children()->version;
+                    break;
 
-            if( $out[ 1 ] != null && $out[ 2 ] != null ) {
-                $this->_version = $out[ 1 ][ 0 ] . '.' . $out[ 2 ][ 0 ];
+                case 'json':
+                    $json = json_decode($response[ 'response_body' ], true);
+                    $this->_version = $json['version'];
+                    break;
+
+                default:
+                    $this->_loger->error( "castStringToClass: Can't find serialize and unserialize functions for type (apiVersion => '" . $this->_apiVersion( ) . "').", __FILE__, __LINE__ );
+                    break;
             }
-            else {
-                $this->error = 'OnApp version does not match with "([0-9]*)\.([0-9]*)\.(\w+)?"';
-            }
+            $this->_version = (float)$this->_version;
+            $this->_version = 2.1;
+
         }
         else {
             $this->error = 'Can\'t get OnApp version.';
         }
 
         $this->_init_fields( $this->_version );
-    }
+
+     }
 
     function _init_fields( ) { }
 
@@ -672,14 +698,6 @@ class ONAPP {
      * @todo check response from basic URL
      */
     function _init_curl( $user, $pass, $cookiedir = '' ) {
-//        if( strlen( $cookiedir ) > 0 ) {
-//            $this->setOption( ONAPP_OPTION_CURL_COOKIEDIR, $cookiedir );
-//        }
-//        else
-//        {
-//            $cookiedir = $this->options[ ONAPP_OPTION_CURL_COOKIEDIR ];
-//        }
-
         $this->_loger->debug( "_init_curl: Init Curl (cookiedir => '$cookiedir')." );
 
         $this->_ch = curl_init( );
@@ -696,20 +714,10 @@ class ONAPP {
 
         curl_setopt( $this->_ch, CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $this->_ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $this->_ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-        curl_setopt( $this->_ch, CURLOPT_FRESH_CONNECT, 1);
-
         curl_setopt(
             $this->_ch, CURLOPT_USERPWD,
                 $user . ':' . $pass
         );
-
-//        $cookiefile = $this->options[ ONAPP_OPTION_CURL_COOKIEDIR ] .
-//                      $user .
-//                      '.cookie';
-
-//        curl_setopt( $this->_ch, CURLOPT_COOKIEFILE, $cookiefile );
-//        curl_setopt( $this->_ch, CURLOPT_COOKIEJAR, $cookiefile );
     }
 
     /**
@@ -801,7 +809,13 @@ class ONAPP {
         switch( $method ) {
             case ONAPP_REQUEST_METHOD_GET:
                 curl_setopt( $this->_ch, CURLOPT_HTTPGET, true );
-                $http_header[ ] = 'Content-Length: 0';
+
+                if( !is_null( $data ) ) {
+                    curl_setopt( $this->_ch, CURLOPT_POSTFIELDS, $data );
+                }
+                else{
+                    $http_header[ ] = 'Content-Length: 0';
+                }
                 break;
 
             case ONAPP_REQUEST_METHOD_POST:
@@ -818,6 +832,7 @@ class ONAPP {
                 if( !is_null( $data ) ) {
                     curl_setopt( $this->_ch, CURLOPT_POSTFIELDS, $data );
                 }
+                
                 break;
 
             case ONAPP_REQUEST_METHOD_DELETE:
@@ -829,7 +844,7 @@ class ONAPP {
             CURLOPT_HTTPHEADER,
             $http_header
         );
-
+                                                                     
         $result = array( );
         $result[ 'response_body' ] = curl_exec( $this->_ch );
         $result[ 'info' ] = curl_getinfo( $this->_ch );
@@ -849,8 +864,13 @@ class ONAPP {
                 case 422:
                     switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
                         case 'xml':
+                            $this->_loger->add( "Response (code => " . $result[ 'info' ][ 'http_code' ] . ", cast:\n" . $result[ 'response_body' ] );
+                            break;
+
                         case 'json':
                             $this->_loger->add( "Response (code => " . $result[ 'info' ][ 'http_code' ] . ", cast:\n" . $result[ 'response_body' ] );
+                            require_once 'JSONObjectCast.php';
+                            $this->error = JSONObjectCast::parseErrors( $result[ 'response_body' ] );
                             break;
                     }
                     break;
@@ -947,7 +967,7 @@ class ONAPP {
                     return $this;
                     break;
                 default:
-                    $this->error = "getList: Bad response (code => '$http_code', response => $response_body)";
+                    $this->error = "Bad response (code => '$http_code', response => $response_body)";
             }
         }
         else {
@@ -995,8 +1015,12 @@ class ONAPP {
                              $dom->childNodes->length != 0 &&
                              $dom->childNodes->item( 0 )->nodeName != 'nil-classes'
                         ) {
+// TODO fix // PHP Warning:  Invalid argument supplied for foreach() in /home/joker/Desktop/radar-customization/php/ONAPP/ONAPP.php on line 1005
                             foreach( $tagMap as $key => $tag ) {
-                                if( isset( $tag[ ONAPP_FIELD_TYPE ] ) && $tag[ ONAPP_FIELD_TYPE ] == "array" ) {
+
+//                                if( isset( $tag[ ONAPP_FIELD_TYPE ] ) && $tag[ ONAPP_FIELD_TYPE ] == "array" ) {
+                                if( isset( $tag[ ONAPP_FIELD_CLASS ] ) ) {
+
                                     $node_name = $dom->childNodes;
 
                                     foreach( $dom->childNodes as $param ) {
@@ -1006,11 +1030,15 @@ class ONAPP {
 
                                             $xmlObj = new $childclassname;
                                             $xmlObj->options = $this->_defaultOptions;
-                                            $xmlObj->_loger = new Logger;
+                                            $xmlObj->_loger = new ONAPP_Logger;
+                                            $xmlObj->_version = $this->_version;
                                             $xmlObj->_init_fields( $this->_version );
                                             $xmlObjcontent = simplexml_import_dom( $node )->asXML( );
 
-                                            $obj->$attr = $xmlObj->castStringToClass( $xmlObjcontent, true );
+                                            if ( isset($tag[ ONAPP_FIELD_TYPE ]) && $tag[ ONAPP_FIELD_TYPE ] == 'array')
+                                                $obj->$attr = $xmlObj->castStringToClass( $xmlObjcontent, true);
+                                            else
+                                                $obj->$attr = $xmlObj->castStringToClass( $xmlObjcontent );
                                         }
                                     }
                                 }
@@ -1064,7 +1092,12 @@ class ONAPP {
             case 'json':
                 require_once dirname( __FILE__ ) . '/JSONObjectCast.php';
                 $objCast = new JSONObjectCast( $this->_version );
-                return $objCast->unserialize( $classname, $content, $tagMap, $this->_tagRoot );
+                $obj = $objCast->unserialize( $classname, $content, $tagMap, $this->_tagRoot );
+
+                if( $is_list && !is_array($obj) && $obj->_id != NULL )
+                    $obj = array($obj);
+
+                return $obj;
                 break;
 
             default:
@@ -1095,7 +1128,6 @@ class ONAPP {
         $this->_loger->add( "getList: Get Transaction list." );
 
         $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_LIST ) );
-
         $response = $this->sendRequest( ONAPP_REQUEST_METHOD_GET );
 
         if( !empty( $response[ 'errors' ] ) ) {
@@ -1360,6 +1392,58 @@ class ONAPP {
         $this->_is_deleted = true;
     }
 
+    function sendPost($resource, $data = NULL) {
+        $this->_action(ONAPP_REQUEST_METHOD_POST, $resource, $data );
+    }
+    function sendGet($resource, $data = NULL) {
+        $this->_action(ONAPP_REQUEST_METHOD_GET, $resource, $data );
+    }
+    function sendPut($resource, $data = NULL) {
+        $this->_action(ONAPP_REQUEST_METHOD_PUT, $resource, $data );
+    }
+    /**
+     * Sends API Requests to realize not base actions
+     * 
+     * @param string $action curl request method
+     * @param string $resource API resource Uri route
+     * @param string $data aditional params 
+     * @return void
+     * @access private
+     */
+    function _action( $method, $resource, $data = NULL ) {  
+        switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+            case 'xml':
+                
+                $this->_loger->debug(
+                    "Additional parameters: $data"
+                );
+
+                $this->setAPIResource( $this->getResource( $resource ) );
+
+                $response = $this->sendRequest( $method, $data );
+
+                $result = $this->_castResponseToClass( $response );
+
+                if( !is_null( $this->error ) ) {
+                    $this->_obj = $result;
+                }
+                else
+                {
+                    $this->_obj->error = $this->error;
+                }
+                break;
+            case 'json':
+                $this->setAPIResource( $this->getResource( $resource ) );
+                $result = $this->sendRequest( $method, $data);
+                $this->_obj = $result;
+                break;
+            default:
+                $this->_loger->error( "_action: Can't find serialize and unserialize functions for type (apiVersion => '" . $this->_apiVersion . "').", __FILE__, __LINE__ );
+                break;
+        }
+        return $result;
+    }
+
     /**
      * The basic PHP5 getter used to auto reload the class GET methods
      *
@@ -1381,4 +1465,9 @@ class ONAPP {
     function __set( $strName, $mixValue ) {
         //TODO
     }
+}
+
+// include JSON library if PHP version is below 5.2
+if( !function_exists( 'json_encode' ) ) {
+    require_once dirname( dirname( __FILE__ ) ) . '/libs/JSON.php';
 }

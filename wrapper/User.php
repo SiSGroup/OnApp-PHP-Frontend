@@ -13,10 +13,10 @@
  *
  * @category  API WRAPPER
  * @package   ONAPP
- * @author    Andrew Yatskovets
+ * @author  Andrew Yatskovets
  * @copyright 2010 / OnApp
  * @link      http://www.onapp.com/
- * @see       ONAPP
+ * @see    ONAPP
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'User/UsedIpAddress.php';
 /**
  *
  */
-define( 'ONAPP_GETRESOURCE_SUSPEND', 'suspend' );
+define( 'ONAPP_GETRESOURCE_SUSPEND_USER', 'suspend' );
 
 /**
  *
@@ -41,96 +41,96 @@ define( 'ONAPP_GETRESOURCE_ACTIVATE', 'activate' );
  *
  * The User class represents the Users of the OnApp installation.
  *
- * The User class uses the following basic methods:
+ * The ONAPP_User class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
  *
  * Get the list of users
  *
- *     - <i>GET onapp.com/users.xml</i>
+ *   - <i>GET onapp.com/users.xml</i>
  *
  * Get a particular user details
  *
- *     - <i>GET onapp.com/users/{ID}.xml</i>
+ *   - <i>GET onapp.com/users/{ID}.xml</i>
  *
  * Add new user
  *
- *     - <i>POST onapp.com/users.xml</i>
+ *   - <i>POST onapp.com/users.xml</i>
  *
  * <code>
  * <?xml version="1.0" encoding="UTF-8"?>
  * <users>
- *    <email>{EMAIL}</email>
- *    <first-name>{FIRST NAME}</first-name>
- *    <last-name>{LAST NAME}</last-name>
- *    <login>{LOGIN}</login>
- *    <password>{PASSWORD}</password>
+ *  <email>{EMAIL}</email>
+ *  <first-name>{FIRST NAME}</first-name>
+ *  <last-name>{LAST NAME}</last-name>
+ *  <login>{LOGIN}</login>
+ *  <password>{PASSWORD}</password>
  * </users>
  * </code>
  *
  * Edit existing user
  *
- *     - <i>PUT onapp.com/users/{ID}.xml</i>
+ *   - <i>PUT onapp.com/users/{ID}.xml</i>
  *
  * <code>
  * <?xml version="1.0" encoding="UTF-8"?>
  * <users>
- *    <email>{EMAIL}</email>
- *    <first-name>{FIRST NAME}</first-name>
- *    <last-name>{LAST NAME}</last-name>
- *    <login>{LOGIN}</login>
+ *  <email>{EMAIL}</email>
+ *  <first-name>{FIRST NAME}</first-name>
+ *  <last-name>{LAST NAME}</last-name>
+ *  <login>{LOGIN}</login>
  * </users>
  * </code>
  *
  * Delete user
  *
- *     - <i>DELETE onapp.com/users/{ID}.xml</i>
+ *   - <i>DELETE onapp.com/users/{ID}.xml</i>
  *
  * <b>Use the following JSON API requests:</b>
  *
  * Get the list of users
  *
- *     - <i>GET onapp.com/users.json</i>
+ *   - <i>GET onapp.com/users.json</i>
  *
  * Get a particular user details
  *
- *     - <i>GET onapp.com/users/{ID}.json</i>
+ *   - <i>GET onapp.com/users/{ID}.json</i>
  *
  * Add new user
  *
- *     - <i>POST onapp.com/users.json</i>
+ *   - <i>POST onapp.com/users.json</i>
  *
  * <code>
  * {
- *      users: {
- *          email:'{EMAIL}',
- *          first-name:'{FIRST NAME}',
- *          last-name:'{LAST NAME}',
- *          login:'{LOGIN}',
- *          password:'{PASSWORD}'
- *      }
+ *    users: {
+ *        email:'{EMAIL}',
+ *        first-name:'{FIRST NAME}',
+ *        last-name:'{LAST NAME}',
+ *        login:'{LOGIN}',
+ *        password:'{PASSWORD}'
+ *    }
  * }
  * </code>
  *
  * Edit existing user
  *
- *     - <i>PUT onapp.com/users/{ID}.json</i>
+ *   - <i>PUT onapp.com/users/{ID}.json</i>
  *
  * <code>
  * {
- *      users: {
- *          email:'{EMAIL}',
- *          first-name:'{FIRST NAME}',
- *          last-name:'{LAST NAME}',
- *          login:'{LOGIN}'
- *      }
+ *    users: {
+ *        email:'{EMAIL}',
+ *        first-name:'{FIRST NAME}',
+ *        last-name:'{LAST NAME}',
+ *        login:'{LOGIN}'
+ *    }
  * }
  * </code>
  *
  * Delete user
  *
- *     - <i>DELETE onapp.com/users/{ID}.json</i>
+ *   - <i>DELETE onapp.com/users/{ID}.json</i>
  */
 class ONAPP_User extends ONAPP {
 
@@ -144,7 +144,7 @@ class ONAPP_User extends ONAPP {
     /**
      * the date when the User was activated in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_activated_at;
 
@@ -156,9 +156,9 @@ class ONAPP_User extends ONAPP {
     var $_activation_code;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * user creation date in [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -219,16 +219,16 @@ class ONAPP_User extends ONAPP {
     var $_remember_token;
 
     /**
-     * the date when User was deleted
+     * the date when User was deleted in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_deleted_at;
 
     /**
      * the date when the session ID expires in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var integer
+     * @var string
      */
     var $_remember_token_expires_at;
 
@@ -256,7 +256,7 @@ class ONAPP_User extends ONAPP {
     /**
      * the date when the User was updated in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -296,11 +296,18 @@ class ONAPP_User extends ONAPP {
     var $_used_memory;
 
     /**
-     * the user password
+     * user password
      *
-     * @var integer
+     * @var string
      */
     var $_password;
+
+    /**
+     * user password confirmation
+     *
+     * @var string
+     */
+    var $_password_confirmation;
 
     /**
      * available memory for user
@@ -330,10 +337,40 @@ class ONAPP_User extends ONAPP {
      */
     var $_role_ids;
 
+    /**
+     * use billing plan id
+     *
+     * @var integer
+     */
     var $_billing_plan_id;
+
+    /**
+     * user template group id
+     *
+     * @var integer
+     */
     var $_image_template_group_id;
+
+    /**
+     * the date when the User was suspended in the [YYYY][MM][DD]T[hh][mm]Z format
+     *
+     * @var string
+     */
     var $_suspend_at;
+
+    /**
+     * user group id
+     *
+     * @var integer
+     */
     var $_user_group_id;
+
+    /**
+     * user locale
+     *
+     * @var string
+     */
+    var $_locale;
 
     /**
      * root tag used in the API request
@@ -361,7 +398,7 @@ class ONAPP_User extends ONAPP {
      * API Fields description
      *
      * @access private
-     * @var    array
+     * @var array
      */
     function _init_fields( $version = NULL ) {
         if( is_null( $version ) ) {
@@ -443,6 +480,8 @@ class ONAPP_User extends ONAPP {
                     'time_zone' => array(
                         ONAPP_FIELD_MAP => '_time_zone',
                         ONAPP_FIELD_TYPE => 'string',
+                        ONAPP_FIELD_REQUIRED => true,
+                        ONAPP_FIELD_DEFAULT_VALUE => '',
                     ),
                     'total_amount' => array(
                         ONAPP_FIELD_MAP => '_total_amount',
@@ -492,12 +531,20 @@ class ONAPP_User extends ONAPP {
                     'status' => array(
                         ONAPP_FIELD_MAP => '_status'
                     ),
+                    'password' => array(
+                        ONAPP_FIELD_MAP => '_password',
+                    ),
+                    'password_confirmation' => array(
+                        ONAPP_FIELD_MAP => '_password_confirmation',
+                    ),
                 );
 
                 break;
 
             case '2.1':
                 $this->_fields = $this->_init_fields( '2.0' );
+
+                unset($this->_fields['activation_code']);
 
                 $this->_fields[ 'group_id' ][ ONAPP_FIELD_REQUIRED ] = false;
 
@@ -526,6 +573,15 @@ class ONAPP_User extends ONAPP {
                 $this->_fields[ 'user_group_id' ] = array(
                     ONAPP_FIELD_MAP => '_user_group_id',
                     ONAPP_FIELD_TYPE => 'integer',
+                    ONAPP_FIELD_REQUIRED => true,
+                    ONAPP_FIELD_DEFAULT_VALUE => '',
+                );
+
+                $this->_fields[ 'locale' ] = array(
+                    ONAPP_FIELD_MAP => '_locale',
+                    ONAPP_FIELD_TYPE => 'integer',
+                    ONAPP_FIELD_REQUIRED => true,
+                    ONAPP_FIELD_DEFAULT_VALUE => 'en',
                 );
 
                 break;
@@ -551,7 +607,7 @@ class ONAPP_User extends ONAPP {
      */
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
-            case ONAPP_GETRESOURCE_SUSPEND:
+            case ONAPP_GETRESOURCE_SUSPEND_USER:
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . "/suspend";
                 break;
 
@@ -565,7 +621,7 @@ class ONAPP_User extends ONAPP {
         }
 
         $actions = array(
-            ONAPP_GETRESOURCE_SUSPEND,
+            ONAPP_GETRESOURCE_SUSPEND_USER,
             ONAPP_GETRESOURCE_ACTIVATE,
         );
         if( in_array( $action, $actions ) ) {
@@ -581,7 +637,7 @@ class ONAPP_User extends ONAPP {
      * @access public
      */
     function suspend( ) {
-        $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_SUSPEND ) );
+        $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_SUSPEND_USER ) );
 
         $response = $this->sendRequest( ONAPP_REQUEST_METHOD_GET );
 
@@ -611,13 +667,19 @@ class ONAPP_User extends ONAPP {
     function save( ) {
         $this->_role_ids = $this->fillRolesIDs( );
 
-       if( is_null( $this->_id ) ) {
+        if( is_null( $this->_id ) ) {
             $obj = $this->_create( );
 
-            unset( $this->_fields[ "password" ] );
+            unset( $this->_fields[ 'password' ] );
         }
         else {
+            if( isset( $this->_password ) ) {
+                $this->_fields[ 'password' ][ ONAPP_FIELD_REQUIRED ] = true;
+                $this->_fields[ 'password_confirmation' ][ ONAPP_FIELD_REQUIRED ] = true;
+            }
+
             $obj = $this->_edit( );
+            unset( $this->_fields[ 'password' ], $this->_fields[ 'password_confirmation' ] );
         }
 
         if( isset( $obj ) && !isset( $obj->error ) ) {

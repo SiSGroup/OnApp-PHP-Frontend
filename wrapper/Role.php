@@ -30,7 +30,7 @@ require_once 'ONAPP.php';
  *
  * This class represents the roles assigned  to the users in this OnApp installation
  *
- * The Role class uses the following basic methods:
+ * The ONAPP_Role class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -121,9 +121,9 @@ class ONAPP_Role extends ONAPP {
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the role creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -150,9 +150,9 @@ class ONAPP_Role extends ONAPP {
     var $_label;
 
     /**
-     * the date when the Role was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Role update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -171,7 +171,6 @@ class ONAPP_Role extends ONAPP {
     var $_resource = 'roles';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -233,4 +232,49 @@ class ONAPP_Role extends ONAPP {
 
         return $this->_fields;
     }
+
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+        return parent::getResource( $action );
+
+       /**
+        * ROUTE :
+        * @name roles
+        * @method GET
+        * @alias  /roles(.:format)
+        * @format  {:controller=>"roles", :action=>"index"}
+        */
+
+       /**
+        * ROUTE :
+        * @name role
+        * @method GET
+        * @alias  /roles/:id(.:format)
+        * @format  {:controller=>"roles", :action=>"show"}
+        */
+
+       /**
+        * ROUTE :
+        * @name
+        * @method POST
+        * @alias  /roles(.:format)
+        * @format  {:controller=>"roles", :action=>"create"}
+        */
+
+       /**
+        * ROUTE :
+        * @name
+        * @method PUT
+        * @alias  /roles/:id(.:format)
+        * @format {:controller=>"roles", :action=>"update"}
+        */
+
+       /**
+        * ROUTE :
+        * @name
+        * @method DELETE
+        * @alias  /roles/:id(.:format)
+        * @format {:controller=>"roles", :action=>"destroy"}
+        */
+
+        }
 }

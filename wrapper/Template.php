@@ -28,8 +28,8 @@ require_once 'ONAPP.php';
  *
  * This class represents the Templates of the OnApp installation that you can build VMs on.
  *
- * The Template class uses the following basic methods:
- * {@link load}, {@link save}, {@link delete}, and {@link getList}.
+ * The ONAPP_Template class uses the following basic methods:
+ * {@link load}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
  *
@@ -136,9 +136,9 @@ class ONAPP_Template extends ONAPP {
     var $_checksum;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the template creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -185,9 +185,9 @@ class ONAPP_Template extends ONAPP {
     var $_state;
 
     /**
-     * the date when the Template was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the template update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -213,14 +213,46 @@ class ONAPP_Template extends ONAPP {
     var $_template_size;
 
     /**
+     * shows whether hot migrate is allowed
      *
-     *
+     * @var boolean
      */
     var $_allowed_hot_migrate;
+
+    /**
+     * opetating system arch
+     *
+     * @var string
+     */
     var $_operating_system_arch;
+
+    /**
+     * operating system edition
+     *
+     * @var string
+     */
     var $_operating_system_edition;
+
+    /**
+     * operating system tail
+     *
+     * @var string
+     */
     var $_operating_system_tail;
+
+    /**
+     * virtualization type
+     *
+     * @var string
+     */
     var $_virtualization;
+
+    /**
+     * parent template id
+     *
+     * @var integer
+     */
+    var $_parent_template_id;
 
     /**
      * root tag used in the API request
@@ -237,7 +269,6 @@ class ONAPP_Template extends ONAPP {
     var $_resource = 'templates';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -380,11 +411,46 @@ class ONAPP_Template extends ONAPP {
                     ONAPP_FIELD_REQUIRED => true
                 );
 
+                $this->_fields[ 'parent_template_id' ] = array(
+                    ONAPP_FIELD_MAP => '_template_size',
+                    ONAPP_FIELD_TYPE => 'integer',
+                    ONAPP_FIELD_READ_ONLY => true,
+                );
+
                 break;
         }
 
         return $this->_fields;
     }
+
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+            return parent::getResource( $action );
+
+            /**
+             * ROUTE :
+             * @name image_templates
+             * @method GET
+             * @alias  /templates(.:format)
+             * @format  {:controller=>"image_templates", :action=>"index"}
+             */
+
+            /**
+             * ROUTE :
+             * @name image_template
+             * @method GET
+             * @alias  /templates/:id(.:format)
+             * @format  {:controller=>"image_templates", :action=>"show"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method DELETE
+             * @alias  templates/:id(.:format)
+             * @format   {:controller=>"image_templates", :action=>"destroy"}
+             */
+
+        }
 
     function activate( $action_name ) {
         switch( $action_name ) {

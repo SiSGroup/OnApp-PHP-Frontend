@@ -19,8 +19,90 @@ require_once dirname( __FILE__ ) . '/../IpAddress.php';
 
 /**
  * VM IP Adresses
+ *
+ * The ONAPP_VirtualMachine_IpAddress class doesn't support any basic method.
+ *
  */
 class ONAPP_VirtualMachine_IpAddress extends ONAPP_IpAddress {
+
+
+    /**
+     * the IP Address ID
+     *
+     * @var integer
+     */
+    var $_id;
+
+    /**
+     * the Ip Address creation date in the [YYYY][MM][DD]T[hh][mm]Z format
+     *
+     * @var string
+     */
+    var $_created_at;
+
+    /**
+     * the IP Address
+     *
+     * @var string
+     */
+    var $_address;
+
+    /**
+     * the netmask
+     *
+     * @var string
+     */
+
+    var $_netmask;
+
+    /**
+     * the broadcast
+     *
+     * @var string
+     */
+    var $_broadcast;
+
+    /**
+     * the network address
+     *
+     * @var string
+     */
+    var $_network_address;
+
+    /**
+     * the network ID
+     *
+     * @var string
+     */
+    var $_network_id;
+
+    /**
+     * the Ip Address update date in the [YYYY][MM][DD]T[hh][mm]Z format
+     *
+     * @var string
+     */
+    var $_updated_at;
+
+    /**
+     * the gateway
+     *
+     * @var string
+     */
+    var $_gateway;
+
+    /**
+     * is the IP Address free
+     *
+     * @var boolean
+     */
+    var $_free;
+
+    /**
+     * don't use on guest during build
+     *
+     * @var boolean
+     */
+    var $_disallowed_primary;
 
     /**
      * root tag used in the API request
@@ -34,10 +116,16 @@ class ONAPP_VirtualMachine_IpAddress extends ONAPP_IpAddress {
      *
      * @var string
      */
-    var $_resource = '';
+    var $_resource = 'ip_addresses';
 
     /**
+     * Virtual Machine Id
      *
+     * @var string
+     */
+    var $_virtual_machine_id;
+
+    /**
      * called class name
      *
      * @var string
@@ -100,13 +188,82 @@ class ONAPP_VirtualMachine_IpAddress extends ONAPP_IpAddress {
                         ONAPP_FIELD_TYPE => 'integer',
                         ONAPP_FIELD_READ_ONLY => true,
                     ),
+                    'free' => array(
+                        ONAPP_FIELD_MAP => '_free',
+                        ONAPP_FIELD_TYPE => 'boolean',
+                        ONAPP_FIELD_READ_ONLY => true,
+                    ),
                 );
 
                 break;
         }
-        ;
 
         return $this->_fields;
+    }
+
+    /**
+     * Returns the URL Alias of the API Class that inherits the Class ONAPP
+     *
+     * @param string $action action name
+     *
+     * @return string API resource
+     * @access public
+     */
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+        switch( $action ) {
+            case ONAPP_GETRESOURCE_JOIN:
+                $resource = 'virtual_machines/' . $this->_virtual_machine_id . '/' . $this->_resource;
+                $this->_loger->debug( "getResource($action): return " . $resource );
+                break;
+            
+
+            default:
+                $resource = parent::getResource( $action );
+                break;
+        }
+
+        return $resource;
+    }
+    
+    function join( $ip_address_id = NULL, $virtual_machine_id = NULL, $network_interface_id = NULL ){
+        if( $virtual_machine_id){
+            $this->_virtual_machine_id = $virtual_machine_id;
+        }
+        if( $network_interface_id){
+            $this->_network_interface_id = $network_interface_id;
+        }
+        if( $ip_address_id){
+            $this->_network_interface_id = $network_interface_id;
+        }
+
+        switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+                  case 'xml':
+                      $data = '<?xml version="1.0" encoding="UTF-8"?><ip_address>
+                                   <network_interface_id>' . $this->_network_interface_id. '</network_interface_id>
+                                   <ip_address_id>'. $this->_id . '</ip_address_id>
+                               </ip_address>';
+
+                      break;
+                  case 'json':
+                      $data = json_encode( 
+                          array(
+                             'ip_address' => array(
+                                                  'network_interface_id' =>  $this->_network_interface_id,
+                                                  'ip_address_id'        =>  $this->_id
+                          )                  )
+                      );
+                      break;
+                  default:
+                      $this->_loger->error(
+                          "Can't find serialize and unserialize functions for type (apiVersion => '"
+                          . $this->_apiVersion . "').", __FILE__, __LINE__
+                      );
+                      exit;
+                      break;
+              }
+       
+        $this->sendPost( ONAPP_GETRESOURCE_JOIN, $data );
+
     }
 
     /**

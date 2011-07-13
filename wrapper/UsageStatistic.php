@@ -38,23 +38,23 @@ require_once dirname( __FILE__ ) . '/ONAPP.php';
 class ONAPP_UsageStatistic extends ONAPP {
 
     /**
-     * ID
+     * Usage Statistic ID
      *
      * @var integer
      */
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the statistic creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the statistic update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -115,7 +115,7 @@ class ONAPP_UsageStatistic extends ONAPP {
     var $_number_of_hours;
 
     /**
-     * @todo: Add description
+     * Indicates if VM is booted
      *
      * @var boolean
      */
@@ -143,12 +143,32 @@ class ONAPP_UsageStatistic extends ONAPP {
     var $_ip_addresses_count;
 
     /**
+     * Usage total cost
      *
-     *
+     * @var float
      */
     var $_cost;
+
+    /**
+     * Usage stat time per period
+     *
+     * @var string
+     */
     var $_stat_time;
+
+    /**
+     * VM billing statistic Id
+     *
+     * @var integer
+     */
     var $_vm_billing_stat_id;
+
+    /**
+     * VM hourly statatistic
+     *
+     *  
+     */
+    var $_vm_hourly_stat;
 
     /**
      * root tag used in the API request
@@ -165,7 +185,6 @@ class ONAPP_UsageStatistic extends ONAPP {
     var $_resource = 'usage_statistics';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -324,4 +343,17 @@ class ONAPP_UsageStatistic extends ONAPP {
                 break;
         }
     }
+
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+            return parent::getResource( $action );
+
+            /**
+             * ROUTE :
+             * @name usage_statistics
+             * @method GET
+             * @alias  /usage_statistics(.:format)
+             * @format  {:controller=>"usage_statistics", :action=>"index"}
+             */
+
+        }
 }

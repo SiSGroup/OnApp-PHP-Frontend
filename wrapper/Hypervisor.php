@@ -37,7 +37,7 @@ require_once 'ONAPP.php';
  *
  * This class represents the Hypervisors of your OnApp installation. The ONAPP class is the parent of the Hypervisors class.
  *
- * The Hypervisor class uses the following basic methods:
+ * The ONAPP_Hypervisor class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -128,16 +128,16 @@ class ONAPP_Hypervisor extends ONAPP {
     var $_id;
 
     /**
-     * the date when the hypervisor was called in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Hypervisor call date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_called_in_at;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Hypervisor creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -198,9 +198,9 @@ class ONAPP_Hypervisor extends ONAPP {
     var $_spare;
 
     /**
-     * the date when the Group was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Hypervisor update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -212,20 +212,23 @@ class ONAPP_Hypervisor extends ONAPP {
     var $_xen_info;
 
     /**
+     * shows whether hypervisor is enabled
      *
-     *
+     * @var boolean
      */
     var $_enabled;
 
     /**
+     * Hypervisor group id
      *
-     *
+     * @var integer
      */
     var $_hypervisor_group_id;
 
     /**
+     * Hypervisor group id
      *
-     *
+     * @var string
      */
     var $_hypervisor_type;
 
@@ -244,7 +247,6 @@ class ONAPP_Hypervisor extends ONAPP {
     var $_resource = 'settings/hypervisors';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -370,10 +372,55 @@ class ONAPP_Hypervisor extends ONAPP {
 
                 break;
         }
-        ;
-
+        
         return $this->_fields;
     }
+
+        function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+            return parent::getResource( $action );
+
+            /**
+             * ROUTE :
+             * @name hypervisors
+             * @method GET
+             * @alias  /settings/hypervisors(.:format)
+             * @format {:controller=>"settings_hypervisors", :action=>"index"}
+             */
+
+            /**
+             * ROUTE :
+             * @name hypervisor
+             * @method GET
+             * @alias  /settings/hypervisors/:id(.:format)
+             * @format  {:controller=>"settings_hypervisors", :action=>"show"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method POST
+             * @alias  /settings/hypervisors(.:format)
+             * @format  {:controller=>"settings_hypervisors", :action=>"create"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method PUT
+             * @alias  /settings/hypervisors/:id(.:format)
+             * @format {:controller=>"settings_hypervisors", :action=>"update"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method DELETE
+             * @alias  /settings/hypervisors/:id(.:format)
+             * @format  {:controller=>"settings_hypervisors", :action=>"destroy"}
+             */
+
+        }
+    
 }
 
 ?>

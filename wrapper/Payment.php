@@ -26,7 +26,7 @@ require_once 'ONAPP.php';
  *
  * This class represents the user payments entered to the system.
  *
- * The Payment class uses the following basic methods:
+ * The ONAPP_Payment class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -128,9 +128,9 @@ class ONAPP_Payment extends ONAPP {
     var $_amount;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Payment creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -142,9 +142,9 @@ class ONAPP_Payment extends ONAPP {
     var $_invoice_number;
 
     /**
-     * the date when the payment was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the payment update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -170,7 +170,6 @@ class ONAPP_Payment extends ONAPP {
     var $_resource = 'payments';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -231,7 +230,6 @@ class ONAPP_Payment extends ONAPP {
 
                 break;
         }
-        ;
 
         return $this->_fields;
     }
@@ -239,6 +237,47 @@ class ONAPP_Payment extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name /users/:user_id/payments(.:format)
+                 * @method GET
+                 * @alias  /virtual_machines(.:format)
+                 * @format  {:controller=>"payments", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name user_payment
+                 * @method GET
+                 * @alias  /users/:user_id/payments/:id(.:format)
+                 * @format   {:controller=>"payments", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias  /users/:user_id/payments(.:format)
+                 * @format  {:controller=>"payments", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method PUT
+                 * @alias   /users/:user_id/payments/:id(.:format)
+                 * @format  {:controller=>"payments", :action=>"update"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method DELETE
+                 * @alias  /users/:user_id/payments/:id(.:format)
+                 * @format  {:controller=>"payments", :action=>"destroy"}
+                 */
+
                 $resource = 'users/' . $this->_user_id . '/' . $this->_resource;
                 $this->_loger->debug( "getResource($action): return " . $resource );
                 break;

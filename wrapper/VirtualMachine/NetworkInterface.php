@@ -20,7 +20,7 @@ require_once dirname( __FILE__ ) . '/../ONAPP.php';
 /**
  * VM Network Interface
  *
- * The Network Interface class uses the following basic methods:
+ * The ONAPP_VirtualMachine_NetworkInterface class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -122,16 +122,16 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     var $_label;
 
     /**
-     * the date when the Network Interface was created in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Network Interface creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date when the Network Interface was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Network Interface update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -150,9 +150,9 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     var $_primary;
 
     /**
-     * @todo: Add description
+     * the Network Interface usage month rolled date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var date
+     * @var string
      */
     var $_usage_month_rolled_at;
 
@@ -164,9 +164,9 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     var $_mac_address;
 
     /**
-     * @todo: Add description
+     * the Network Interface usage last reset date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_usage_last_reset_at;
 
@@ -199,6 +199,13 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     var $_virtual_machine_id;
 
     /**
+     * Default firewall rule
+     *
+     * @var string
+     */
+    var $_default_firewall_rule;
+
+    /**
      * root tag used in the API request
      *
      * @var string
@@ -213,7 +220,6 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     var $_resource = 'network_interfaces';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -266,6 +272,7 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
                         ONAPP_FIELD_MAP => '_primary',
                         ONAPP_FIELD_TYPE => 'boolean',
                         ONAPP_FIELD_READ_ONLY => true,
+                        ONAPP_FIELD_REQUIRED => true,
                     ),
                     'usage_month_rolled_at' => array(
                         ONAPP_FIELD_MAP => '_usage_month_rolled_at',
@@ -301,11 +308,14 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
                         ONAPP_FIELD_TYPE => 'integer',
                         ONAPP_FIELD_READ_ONLY => true,
                     ),
+                    'default_firewall_rule' => array(
+                        ONAPP_FIELD_MAP => '_default_firewall_rule',
+                        ONAPP_FIELD_READ_ONLY => true,
+                    ),
                 );
 
                 break;
         }
-        ;
 
         return $this->_fields;
     }
@@ -321,6 +331,47 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name network_interfaces
+                 * @method GET
+                 * @alias  /network_interfaces(.:format)
+                 * @format  {:controller=>"network_interfaces", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name  network_interface
+                 * @method GET
+                 * @alias  /network_interfaces/:id(.:format)
+                 * @format   {:controller=>"network_interfaces", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias   /network_interfaces(.:format)
+                 * @format {:controller=>"network_interfaces", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method PUT
+                 * @alias /network_interfaces/:id(.:format)
+                 * @format {:controller=>"network_interfaces", :action=>"update"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method DELETE
+                 * @alias  /network_interfaces/:id(.:format)
+                 * @format  {:controller=>"network_interfaces", :action=>"destroy"}
+                 */
+
                 if( is_null( $this->_virtual_machine_id ) && is_null( $this->_obj->_virtual_machine_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _virtual_machine_id not set.",
@@ -464,9 +515,10 @@ class ONAPP_VirtualMachine_NetworkInterface extends ONAPP {
     function save( ) {
         if( isset( $this->_id ) ) {
             $obj = $this->_edit( );
-
             $this->load( );
         }
+        else
+            parent::save();
     }
 }
 

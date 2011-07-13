@@ -28,12 +28,18 @@ define( 'ONAPP_GETRESOURCE_BACKUP_CONVERT', 'convert' );
 define( 'ONAPP_GETRESOURCE_BACKUP_RESTORE', 'restore' );
 
 /**
+ * @todo: Add description
+ */
+define( 'ONAPP_GETRESOURCE_DISK_BACKUPS', 'disk_backups' );
+
+
+/**
  * VM Backups
  *
  * This class represents the Backups which have been taken or are waiting to be taken for Virtual Machine.
  *
- * The Backup class uses the following basic methods:
- * {@link load}, {@link save}, {@link delete}, {@link getList}, {@link convert} and {@link restore}.
+ * The ONAPP_VirtualMachine_Backup class uses the following basic methods:
+ * {@link load}, {@link save}, {@link delete}, {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
  *
@@ -112,23 +118,23 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Backup creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Backup update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Backup build date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_built_at;
 
@@ -203,14 +209,14 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
     var $_min_disk_size;
 
     /**
-     * @todo: Add description
+     * shows whether VM is built
      *
      * @var boolean
      */
     var $_built;
 
     /**
-     * @todo: Add description
+     * shows whether VM is locked
      *
      * @var boolean
      */
@@ -386,6 +392,15 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
         $show_log_msg = true;
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machine_backups
+                 * @method GET
+                 * @alias  /virtual_machines/:virtual_machine_id/backups(.:format)
+                 * @format  {:controller=>"backups", :action=>"index"}
+                 */
+
                 if( is_null( $this->_virtual_machine_id ) && is_null( $this->_obj->_virtual_machine_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _virtual_machine_id not set.",
@@ -403,6 +418,15 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
                 break;
 
             case ONAPP_GETRESOURCE_ADD:
+
+                /**
+                 * ROUTE :
+                 * @name 
+                 * @method POST
+                 * @alias  /virtual_machines/:virtual_machine_id/backups(.:format)
+                 * @format  {:controller=>"backups", :action=>"create"}
+                 */
+
                 if( is_null( $this->_disk_id ) && is_null( $this->_obj->_disk_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _disk_id not set.",
@@ -418,9 +442,37 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
 
                 $resource = 'settings/disks/' . $this->_disk_id . '/' . $this->_resource;
                 break;
+            case ONAPP_GETRESOURCE_DISK_BACKUPS:
 
+                /**
+                 * ROUTE :
+                 * @name disk_backups
+                 * @method GET
+                 * @alias  /settings/disks/:disk_id/backups(.:format)
+                 * @format {:controller=>"backups", :action=>"index"}
+                 */
+
+                $resource = 'settings/disks/' .$this->_disk_id . '/' . $this->_resource;
+                break;
             case ONAPP_GETRESOURCE_LOAD:
             case ONAPP_GETRESOURCE_DELETE:
+
+                /**
+                 * ROUTE :
+                 * @name backup
+                 * @method GET
+                 * @alias  /backups/:id(.:format)
+                 * @format  {:controller=>"backups", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method DELETE
+                 * @alias  /backups/:id(.:format)
+                 * @format   {:controller=>"backups", :action=>"destroy"}
+                 */
+
                 if( is_null( $this->_id ) && is_null( $this->_obj->_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _id not set.",
@@ -434,14 +486,33 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
                     }
                 }
 
-                $resource = 'virtual_machines/' . $this->_id . '/' . $this->_resource;
+                return $this->_resource . "/" . $this->_id;
+
                 break;
 
             case ONAPP_GETRESOURCE_BACKUP_CONVERT:
+
+                /**
+                 * ROUTE :
+                 * @name convert_backup
+                 * @method GET
+                 * @alias  /backups/:id/convert(.:format)
+                 * @format   {:controller=>"backups", :action=>"convert"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/convert';
                 break;
 
             case ONAPP_GETRESOURCE_BACKUP_RESTORE:
+
+                /**
+                 * ROUTE :
+                 * @name restore_backup
+                 * @method POST
+                 * @alias  /backups/:id/restore(.:format)
+                 * @format    {:controller=>"backups", :action=>"restore"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/restore';
                 break;
 
@@ -487,6 +558,36 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
     }
 
     /**
+     * Gets Backups List by Disk Id
+     *
+     * @param integer Disk Id
+     *
+     * @return response object
+     *
+     * @access public
+     */
+    function diskBackups( $disk_id =  NULL ) {
+        if( $disk_id )
+            $this->_disk_id = $disk_id;
+
+        $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_DISK_BACKUPS ) );
+
+        $response = $this->sendRequest( ONAPP_REQUEST_METHOD_GET );
+
+        if( !empty( $response[ 'errors' ] ) ) {
+            $this->error = $response[ 'errors' ];
+            return false;
+        }
+
+        return $this->castStringToClass(
+            $response[ "response_body" ],
+            true
+        );
+
+        $this->_obj = $result;
+    }
+
+    /**
      * Convert backup to template
      *
      * @param string $label The label of new template
@@ -510,7 +611,7 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
 
                 $this->_loger->add( "convert: Load XMLObjectCast (serializer and unserializer functions)." );
 
-                $objCast = &new XMLObjectCast( );
+                $objCast = new XMLObjectCast( );
 
                 $data = $objCast->serialize(
                     $this->_tagRoot,
@@ -533,8 +634,38 @@ class ONAPP_VirtualMachine_Backup extends ONAPP {
 
                 return $result;
                 break;
+                
+            case 'json':
+                
+                require_once dirname( dirname( __FILE__ ) ) . '/JSONObjectCast.php';
+                $this->_loger->add( '_create: Load JSONObjectCast (serializer and unserializer functions).' );
+                $objCast = new JSONObjectCast( $this->_version );
+
+                $data = $objCast->serialize(
+                    $this->_tagRoot,
+                    $this->_getRequiredData( )
+                );
+
+                $this->_loger->debug(
+                    'serialize: Serialize Class in to String:' . PHP_EOL . $data
+                );
+
+                $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_BACKUP_CONVERT ) );
+
+                $response = $this->sendRequest( ONAPP_REQUEST_METHOD_POST, $data );
+
+                if( !$this->error ) {
+                    $result = $this->_castResponseToClass( $response );
+                }
+
+                $this->_obj = $result;
+
+                return $result;
+                
+                break;
+                
             default:
-                $this->error( "convert: Can't find serialize and unserialize functions for type (apiVersion => '" . $this->_apiVersion . "').", __FILE__, __LINE__ );
+                $this->_loger->error( "convert: Can't find serialize and unserialize functions for type (apiVersion => '" . $this->_apiVersion . "').", __FILE__, __LINE__ );
         }
     }
 

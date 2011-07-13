@@ -21,7 +21,7 @@ require_once dirname( __FILE__ ) . '/IpAddress.php';
 /**
  * VM IP Address Joins
  *
- * The IP Address Join class uses the following basic methods:
+ * The ONAPP_VirtualMachine_IpAddressJoin uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -87,16 +87,16 @@ class ONAPP_VirtualMachine_IpAddressJoin extends ONAPP {
     var $_id;
 
     /**
-     * the date when the Network Interface was created in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Ip Address creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date when the Network Interface was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Ip Address update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var date
      */
     var $_updated_at;
 
@@ -133,7 +133,7 @@ class ONAPP_VirtualMachine_IpAddressJoin extends ONAPP {
      *
      * @var string
      */
-    var $_tagRoot = 'ip-address-joins';
+    var $_tagRoot = 'ip_address';
 
     /**
      * alias processing the object data
@@ -203,7 +203,6 @@ class ONAPP_VirtualMachine_IpAddressJoin extends ONAPP {
 
                 break;
         }
-        ;
 
         return $this->_fields;
     }
@@ -219,6 +218,39 @@ class ONAPP_VirtualMachine_IpAddressJoin extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machine_ip_address_joins
+                 * @method GET
+                 * @alias  /virtual_machines/:virtual_machine_id/ip_addresses(.:format)
+                 * @format  {:controller=>"ip_address_joins", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machine_ip_address_join
+                 * @method GET
+                 * @alias  /virtual_machines/:virtual_machine_id/ip_addresses/:id(.:format)
+                 * @format   {:controller=>"ip_address_joins", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias  /virtual_machines/:virtual_machine_id/ip_addresses(.:format)
+                 * @format   {:controller=>"ip_address_joins", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method DELETE
+                 * @alias  /virtual_machines/:virtual_machine_id/ip_addresses/:id(.:format)
+                 * @format  {:controller=>"ip_address_joins", :action=>"destroy"}
+                 */
+
                 if( is_null( $this->_virtual_machine_id ) && is_null( $this->_obj->_virtual_machine_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _virtual_machine_id not set.",
@@ -231,7 +263,7 @@ class ONAPP_VirtualMachine_IpAddressJoin extends ONAPP {
                         $this->_virtual_machine_id = $this->_obj->_virtual_machine_id;
                     }
                 }
-                ;
+                
                 $resource = 'virtual_machines/' . $this->_virtual_machine_id . '/' . $this->_resource;
                 $this->_loger->debug( "getResource($action): return " . $resource );
                 break;

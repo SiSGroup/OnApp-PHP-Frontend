@@ -19,19 +19,31 @@ require_once 'ONAPP.php';
 require_once 'Role.php';
 require_once 'IpAddress.php';
 
+/**
+ *
+ * Managing User Profile
+ *
+ * The ONAPP_Profile class uses the following basic methods:
+ * {@link load} and {@link save}.
+ *
+ * The ONAPP_Profile class represents user profile.
+ * The ONAPP class is a parent of ONAPP_Profile class.
+ *
+ */
+ 
 class ONAPP_Profile extends ONAPP {
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the User creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date when user was activated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the User activation date when user was activated in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_activated_at;
 
@@ -43,30 +55,30 @@ class ONAPP_Profile extends ONAPP {
     var $_memory_available;
 
     /**
-     * the user used memory
+     * the User used memory
      *
      * @var integer
      */
     var $_used_memory;
 
     /**
-     * the user outstanding amount
+     * the User outstanding amount
      *
      * @var float
      */
     var $_outstanding_amount;
 
     /**
-     * the date when user was suspended in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the User suspend date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_suspend_at;
 
      /**
-     * the date when user was suspended in the [YYYY][MM][DD]T[hh][mm]Z format
+     * token expiration date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_remember_token_expires_at;
 
@@ -85,16 +97,16 @@ class ONAPP_Profile extends ONAPP {
     var $_total_amount;
 
     /**
-     * the date when the Profile was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Profile update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
     /**
-     * the date when the Profile was deleted in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Profile delete date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_deleted_at;
 
@@ -183,7 +195,11 @@ class ONAPP_Profile extends ONAPP {
      */
     var $_locale;
 
-
+    /**
+     * Template group id
+     *
+     * @var integer
+     */
     var $_image_template_group_id;
 
     /**
@@ -442,6 +458,15 @@ class ONAPP_Profile extends ONAPP {
      * @access public
      */
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+
+       /**
+         * ROUTE :
+         * @name profile
+         * @method GET
+         * @alias /profile(.:format)
+         * @format   {:controller=>"users", :action=>"profile"}
+         */
+
         $resource = $this->_resource;
         $this->_loger->debug( "getResource($action): return " . $resource );
 

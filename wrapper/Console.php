@@ -22,56 +22,59 @@ require_once 'ONAPP.php';
 /**
  * Virtual Machine Console
  *
+ * The ONAPP_Console class uses the following basic methods:
+ * {@link load}.
+ *
  */
 class ONAPP_Console extends ONAPP {
 
     /**
-     * the virtual machine ID
+     * Virtual machine ID
      *
      * @var integer
      */
     var $_id;
 
     /**
+     * Remote session called in date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     *
-     * @todo add description
+     * @var string
      */
 
     var $_called_in_at;
 
     /**
+     * Remote session creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     *
-     * @todo add description
+     * @var string
      */
     var $_created_at;
 
     /**
+     * Port number
      *
-     *
-     * @todo add description
+     * @var integer
      */
     var $_port;
 
     /**
+     * Remote session update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     *
-     * @todo add description
+     * @var string
      */
     var $_updated_at;
 
     /**
+     * Virtual Machine Id
      *
-     *
-     * @todo add description
+     * @var integer
      */
     var $_virtual_machine_id;
 
     /**
+     * Remote key
      *
-     *
-     * @todo add description
+     * @var string
      */
     var $_remote_key;
 
@@ -90,7 +93,6 @@ class ONAPP_Console extends ONAPP {
     var $_resource = 'console';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -160,7 +162,16 @@ class ONAPP_Console extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_LOAD:
-                $resource = "virtual_machines/" . $this->_virtual_machine_id . '/'.$this->_resource;
+
+                /**
+                 * ROUTE :
+                 * @name 
+                 * @method GET
+                 * @alias  /console_remote/:remote_key(.:format)
+                 * @format {:controller=>"virtual_machines", :action=>"console_remote"}
+                 */
+
+                $resource = "virtual_machines/" . $this->_virtual_machine_id . "/" . $this->_resource;
                 $this->_loger->debug( "getResource($action): return " . $resource );
                 break;
 

@@ -20,11 +20,11 @@
 require_once dirname( __FILE__ ) . '/../ONAPP.php';
 
 /**
- * Network Joins
+ * ONAPP_Hypervisor_NetworkJoin
  *
  * This class reprsents the Networks for Hypervisor.
  *
- * The Network Join class uses the following basic methods:
+ * The ONAPP_Hypervisor_NetworkJoin class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -90,16 +90,16 @@ class ONAPP_Hypervisor_NetworkJoin extends ONAPP {
     var $_id;
 
     /**
-     * the date when the Network Join was created in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Network Join creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date when the Network Join was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Network Join update date was updated in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -125,10 +125,17 @@ class ONAPP_Hypervisor_NetworkJoin extends ONAPP {
     var $_interface;
 
     /**
+     * Target join id
      *
-     *
+     * @var integer
      */
     var $_target_join_id;
+
+    /**
+     * Target join type
+     *
+     * @var string
+     */
     var $_target_join_type;
 
     /**
@@ -146,7 +153,6 @@ class ONAPP_Hypervisor_NetworkJoin extends ONAPP {
     var $_resource = 'network_joins';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -239,6 +245,31 @@ class ONAPP_Hypervisor_NetworkJoin extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name hypervisor_network_joins
+                 * @method GET
+                 * @alias  /settings/hypervisors/:hypervisor_id/network_joins(.:format)
+                 * @format  {:controller=>"network_joins", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias  /settings/hypervisors/:hypervisor_id/network_joins(.:format)
+                 * @format  {:controller=>"network_joins", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name  hypervisor_network_join
+                 * @method DELETE
+                 * @alias /settings/hypervisors/:hypervisor_id/network_joins/:id(.:format)
+                 * @format  {:controller=>"network_joins", :action=>"destroy"}
+                 */
+
                 if( is_null( $this->_hypervisor_id ) && is_null( $this->_obj->_hypervisor_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _hypervisor_id not set.",

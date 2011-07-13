@@ -53,6 +53,18 @@ define( 'ONAPP_GETRESOURCE_SHUTDOWN', 'shutdown' );
  *
  *
  */
+define( 'ONAPP_GETRESOURCE_CHANGE_OWNER', 'change_owner' );
+
+/**
+ *
+ *
+ */
+define( 'ONAPP_GETRESOURCE_REBUILD_NETWORK', 'rebuild_network' );
+
+/**
+ *
+ *
+ */
 define( 'ONAPP_GETRESOURCE_STARTUP', 'startup' );
 
 /**
@@ -71,14 +83,34 @@ define( 'ONAPP_GETRESOURCE_BUILD', 'build' );
  *
  *
  */
+define( 'ONAPP_GETRESOURCE_SUSPEND_VM', 'suspend' );
+
+/**
+ *
+ *
+ */
 define( 'ONAPP_ACTIVATE_GETLIST_USER', 'getUserVMsList' );
+
+/**
+ *
+ *
+ */
+define( 'ONAPP_RESET_ROOT_PASSWORD', 'resetRootPassword' );
+
+/**
+ *
+ *
+ */
+define( 'ONAPP_GETRESOURCE_MIGRATE', 'migrate' );
+
+
 
 /**
  * Virtual Machines
  *
  * The Virtual Machine class represents the Virtual Machines of the OnAPP installation.
  *
- * The Virtual Machine class uses the following basic methods:
+ * The ONAPP_VirtualMachine class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -225,9 +257,9 @@ class ONAPP_VirtualMachine extends ONAPP {
     var $_cpus;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the date when VM was created in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -318,7 +350,7 @@ class ONAPP_VirtualMachine extends ONAPP {
     /**
      * the date when the Virtual Machine was updated in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -442,16 +474,60 @@ class ONAPP_VirtualMachine extends ONAPP {
     var $_total_disk_size;
 
     /**
+     * shows whether startup is required
      *
+     * @var boolean
      */
     var $_required_startup;
 
-
+    /**
+     * consists admin note
+     *
+     * @var string
+     */
     var $_admin_note;
+
+    /**
+     * if true
+     *
+     * @var boolean
+     */
     var $_allowed_hot_migrate;
+
+   /**
+     * if true
+     *
+     * @var boolean
+     */
     var $_note;
+
+    /**
+     * strict virtual machine id
+     *
+     * @var integer
+     */
     var $_strict_virtual_machine_id;
+
+    /**
+     * shows whether virtual machine is suspended
+     *
+     * @var boolean
+     */
     var $_suspended;
+
+    /**
+     * shows whether autoscale is enabled
+     *
+     * @var boolean
+     */
+    var $_enable_autoscale;
+
+    /**
+     * shows whether monitis is enabled
+     *
+     * @var boolean
+     */
+    var $_enable_monitis;
 
     /**
      * root tag used in the API request
@@ -468,7 +544,6 @@ class ONAPP_VirtualMachine extends ONAPP {
     var $_resource = 'virtual_machines';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -489,7 +564,6 @@ class ONAPP_VirtualMachine extends ONAPP {
         if( is_null( $version ) ) {
             $version = $this->_version;
         }
-
         switch( $version ) {
             case '2.0':
                 $this->_fields = array(
@@ -528,6 +602,8 @@ class ONAPP_VirtualMachine extends ONAPP {
                     'hostname' => array(
                         ONAPP_FIELD_MAP => '_hostname',
                         ONAPP_FIELD_REQUIRED => true,
+                        ONAPP_FIELD_TYPE => 'string',
+                        ONAPP_FIELD_DEFAULT_VALUE => ''
                     ),
                     'hypervisor_id' => array(
                         ONAPP_FIELD_MAP => '_hypervisor_id',
@@ -646,32 +722,45 @@ class ONAPP_VirtualMachine extends ONAPP {
                 $this->_fields[ 'admin_note' ] = array(
                     ONAPP_FIELD_MAP => '_admin_note',
                     ONAPP_FIELD_TYPE => 'string',
-                    ONAPP_FIELD_REQUIRED => true
                 );
 
                 $this->_fields[ 'allowed_hot_migrate' ] = array(
                     ONAPP_FIELD_MAP => '_allowed_hot_migrate',
                     ONAPP_FIELD_TYPE => 'boolean',
-                    ONAPP_FIELD_REQUIRED => true
+                    ONAPP_FIELD_REQUIRED => true,
+                    ONAPP_FIELD_DEFAULT_VALUE => '0'
                 );
 
                 $this->_fields[ 'note' ] = array(
                     ONAPP_FIELD_MAP => '_note',
                     ONAPP_FIELD_TYPE => 'string',
-                    ONAPP_FIELD_REQUIRED => true
                 );
 
                 $this->_fields[ 'strict_virtual_machine_id' ] = array(
                     ONAPP_FIELD_MAP => '_strict_virtual_machine_id',
                     ONAPP_FIELD_TYPE => 'integer',
-                    ONAPP_FIELD_REQUIRED => true
                 );
 
                 $this->_fields[ 'suspended' ] = array(
                     ONAPP_FIELD_MAP => '_suspended',
                     ONAPP_FIELD_TYPE => 'boolean',
-                    ONAPP_FIELD_REQUIRED => true
                 );
+
+                $this->_fields[ 'enable_autoscale' ] = array(
+                    ONAPP_FIELD_MAP => '_enable_autoscale',
+                    ONAPP_FIELD_TYPE => 'boolean',
+                    ONAPP_FIELD_READ_ONLY => true,
+                );
+
+                $this->_fields[ 'enable_monitis' ] = array(
+                    ONAPP_FIELD_MAP => '_enable_monitis',
+                    ONAPP_FIELD_TYPE => 'boolean',
+                    ONAPP_FIELD_READ_ONLY => true,
+                );
+
+                if ( $this->_release == "0") {
+                    unset($this->_fields[ 'enable_autoscale' ]);
+                };
 
                 break;
         }
@@ -681,7 +770,7 @@ class ONAPP_VirtualMachine extends ONAPP {
                 ONAPP_FIELD_MAP => '_primary_disk_size',
                 ONAPP_FIELD_TYPE => 'integer',
                 ONAPP_FIELD_REQUIRED => true,
-                ONAPP_FIELD_DEFAULT_VALUE => 1
+                ONAPP_FIELD_DEFAULT_VALUE => 5
             );
             $this->_fields[ "swap_disk_size" ] = array(
                 ONAPP_FIELD_MAP => '_swap_disk_size',
@@ -711,7 +800,7 @@ class ONAPP_VirtualMachine extends ONAPP {
                 ONAPP_FIELD_MAP => '_required_ip_address_assignment',
                 ONAPP_FIELD_TYPE => 'boolean',
                 ONAPP_FIELD_REQUIRED => true,
-                ONAPP_FIELD_DEFAULT_VALUE => ''
+                ONAPP_FIELD_DEFAULT_VALUE => '1'
             );
             $this->_fields[ "required_virtual_machine_build" ] = array(
                 ONAPP_FIELD_MAP => '_required_virtual_machine_build',
@@ -727,30 +816,188 @@ class ONAPP_VirtualMachine extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_REBOOT:
+
+                /**
+                 * ROUTE :
+                 * @name reboot_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/reboot(.:format)
+                 * @format   {:controller=>"virtual_machines", :action=>"reboot"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/reboot';
                 break;
 
             case ONAPP_GETRESOURCE_SHUTDOWN:
+
+                /**
+                 * ROUTE :
+                 * @name shutdown_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/shutdown(.:format)
+                 * @format   {:controller=>"virtual_machines", :action=>"shutdown"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/shutdown';
+                break;
+            case ONAPP_GETRESOURCE_CHANGE_OWNER:
+
+                /**
+                 * ROUTE :
+                 * @name change_owner_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/change_owner(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"change_owner"}
+                 */
+
+                $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/change_owner';
+                break;
+            case ONAPP_GETRESOURCE_REBUILD_NETWORK:
+
+                /**
+                 * ROUTE :
+                 * @name rebuild_network_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/rebuild_network(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"rebuild_network"}
+                 */
+
+                $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/rebuild_network';
                 break;
 
             case ONAPP_GETRESOURCE_STARTUP:
+
+                /**
+                 * ROUTE :
+                 * @name shutdown_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/startup(.:format)
+                 * @format   {:controller=>"virtual_machines", :action=>"startup"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/startup';
                 break;
 
             case ONAPP_GETRESOURCE_UNLOCK:
+
+                /**
+                 * ROUTE :
+                 * @name shutdown_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/unlock(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"unlock"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/unlock';
                 break;
 
+            case ONAPP_GETRESOURCE_MIGRATE:
+
+                /**
+                 * ROUTE :
+                 * @name migrate_virtual_machine
+                 * @method POST
+                 * @alias   /virtual_machines/:id/migrate(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"migrate"}
+                 */
+
+                $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/migrate';
+                break;
+
+            case ONAPP_GETRESOURCE_SUSPEND_VM:
+
+                /**
+                 * ROUTE :
+                 * @name suspend_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/suspend(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"suspend"}
+                 */
+
+                $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/suspend';
+                break;
+
             case ONAPP_GETRESOURCE_BUILD:
+
+                /**
+                 * ROUTE :
+                 * @name build_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/build(.:format)
+                 * @format   {:controller=>"virtual_machines", :action=>"build"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/build';
                 break;
 
+            case ONAPP_RESET_ROOT_PASSWORD:
+
+                /**
+                 * ROUTE :
+                 * @name reset_password_virtual_machine
+                 * @method POST
+                 * @alias  /virtual_machines/:id/reset_password(.:format)
+                 * @format {:controller=>"virtual_machines", :action=>"reset_password"}
+                 */
+
+                $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . '/reset_password';
+                break;
+
             case ONAPP_ACTIVATE_GETLIST_USER:
+
+                /**
+                 * ROUTE :
+                 * @name user_virtual_machines
+                 * @method POST
+                 * @alias  /users/:user_id/virtual_machines(.:format)
+                 * @format {:controller=>"virtual_machines", :action=>"index"}
+                 */
+
                 $resource = "/users/" . $this->_user_id . "/virtual_machines";
                 break;
 
             default:
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machines
+                 * @method GET
+                 * @alias  /virtual_machines(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machine
+                 * @method GET
+                 * @alias  /virtual_machines/:id(.:format)
+                 * @format   {:controller=>"virtual_machines", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias  /virtual_machines(.:format)
+                 * @format   {:controller=>"virtual_machines", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method PUT
+                 * @alias  /virtual_machines/:id(.:format)
+                 * @format {:controller=>"virtual_machines", :action=>"update"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method DELETE
+                 * @alias  /virtual_machines/:id(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"destroy"}
+                 */
+
                 $resource = parent::getResource( $action );
                 break;
         }
@@ -761,7 +1008,9 @@ class ONAPP_VirtualMachine extends ONAPP {
             ONAPP_GETRESOURCE_STARTUP,
             ONAPP_GETRESOURCE_UNLOCK,
             ONAPP_GETRESOURCE_BUILD,
-            ONAPP_ACTIVATE_GETLIST_USER
+            ONAPP_ACTIVATE_GETLIST_USER,
+            ONAPP_GETRESOURCE_SUSPEND_VM,
+            ONAPP_RESET_ROOT_PASSWORD
         );
         if( in_array( $action, $actions ) ) {
             $this->_loger->debug( "getResource($action): return " . $resource );
@@ -771,75 +1020,51 @@ class ONAPP_VirtualMachine extends ONAPP {
     }
 
     /**
-     * @return string console output
+     * Reboot Virtual machine
      *
-     * @access private
+     * @param string $mode reboot mode
+     * @access public
      */
-    function _POSTAction( $resource ) {
-        switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
-            case 'xml':
+    function reboot( $recovery = false ) {
+        if ( ! $recovery ) { 
+            $this->sendPost( ONAPP_GETRESOURCE_REBOOT );
+        } else {
+              switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+                  case 'xml':
+                      $data = '<mode>recovery</mode>';
+                      break;
+                  case 'json':
+                      $data = json_encode( array( 'mode' => 'recovery' ));
+                      break;
+                  default:
+                      $this->_loger->error(
+                          "_POSTAction: Can't find serialize and unserialize functions for type (apiVersion => '"
+                          . $this->_apiVersion . "').", __FILE__, __LINE__
+                      );
+                      exit;
+                      break;
+              }
 
-                require_once dirname( __FILE__ ) . '/XMLObjectCast.php';
-
-                $this->_loger->add( "_POSTAction: Load XMLObjectCast (serializer and unserializer functions)." );
-
-                $objCast = &new XMLObjectCast( );
-
-                $data = $objCast->serialize(
-                    $this->_tagRoot,
-                    $this->_getRequiredData( )
-                );
-/*
-                if ( $resource == ONAPP_GETRESOURCE_BUILD ) {
-                    $data = '';
-
-                    $template_id  = is_null($this->_template_id) ? $this->_obj->_template_id : $this->_template_id;
-
-                    if( $template_id )
-                        $data = sprintf('template_id=%d&', $template_id);
-
-                    if ($this->_required_startup)
-                        $data .= sprintf("required_startup=%s", $this->_required_startup);
-
-//                    curl_setopt($curl, CURLOPT_POSTFIELDS, $postfields);
-                };
-*/
-                $this->_loger->debug(
-                    "serialize: Serialize Class in to String:\n$data"
-                );
-
-                $this->setAPIResource( $this->getResource( $resource ) );
-
-                $response = $this->sendRequest( ONAPP_REQUEST_METHOD_POST, $data );
-
-                $result = $this->_castResponseToClass( $response );
-
-                if( !is_null( $this->error ) ) {
-                    $this->_obj = $result;
-                }
-                else
-                {
-                    $this->_obj->error = $this->error;
-                }
-
-                break;
-                case 'json':
-                      $this->setAPIResource( $this->getResource( $resource ) );
-                      $response = $this->sendRequest( ONAPP_REQUEST_METHOD_POST); 
-                      $this->_obj = $response;             
-                break;                                
-            default:
-                $this->error( "_POSTAction: Can't find serialize and unserialize functions for type (apiVersion => '" . $this->_apiVersion . "').", __FILE__, __LINE__ );
-        }
+              $this->sendPost( ONAPP_GETRESOURCE_REBOOT, $data );
+          }
     }
 
     /**
-     * Reboot Virtual machine
-     *
-     * @access public
-     */
-    function reboot( ) {
-        $this->_POSTAction( ONAPP_GETRESOURCE_REBOOT );
+    * Resets Virtual Machine Root Password
+    *
+    * @access public
+    */
+    function reset_password( ) {
+        $this->sendPost( ONAPP_RESET_ROOT_PASSWORD);
+    }
+
+    /**
+    * Suspends Virtual Machine
+    *
+    * @access public
+    */
+    function suspend( ) {
+        $this->sendPost( ONAPP_GETRESOURCE_SUSPEND_VM);
     }
 
     /**
@@ -848,17 +1073,105 @@ class ONAPP_VirtualMachine extends ONAPP {
      * @access public
      */
     function shutdown( ) {
-        $this->_POSTAction( ONAPP_GETRESOURCE_SHUTDOWN );
+        $this->sendPost( ONAPP_GETRESOURCE_SHUTDOWN );
+    }
+
+    /**
+     * Migrates Virtual Machine to the other hypervisor
+     *
+     * @param integer virtual machine id
+     * @param integer destination hypervisor id
+     * @access public
+     */
+    function migrate( $id, $hypervisor_id ) {
+        if( $id ){
+            $this->_id = $id;
+        }
+
+        switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+                  case 'xml':
+                      $data ="<destination>". $hypervisor_id ."</destination>";
+                      break;
+                  case 'json':
+                      $data = json_encode( array( 'destination' => $hypervisor_id, 'cold_migrate_on_rollback' => 1 ));
+                      break;
+                  default:
+                      $this->_loger->error(
+                          "_POSTAction: Can't find serialize and unserialize functions for type (apiVersion => '"
+                          . $this->_apiVersion . "').", __FILE__, __LINE__
+                      );
+                      exit;
+                      break;
+        }
+
+        $this->sendPost( ONAPP_GETRESOURCE_MIGRATE, $data );
+    }
+
+    /**
+     * Change Virtual Machine Owner
+     *
+     * @access public
+     *
+     * @return response object
+     */
+    function change_owner( $user_id = false ) {
+        if (! $user_id ) {
+                $this->sendPost( ONAPP_GETRESOURCE_STARTUP );
+        } else {
+            switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+                case 'xml':
+                    $data = '<user_id>'. $user_id . '</user_id>';
+                    break;
+                case 'json':
+                    $data = json_encode( array( 'user_id' => $user_id ));
+                    break;
+                default:
+                    $this->_loger->error( "_POSTAction: Can't find
+                    serialize and unserialize functions for type (apiVersion => '"
+                    . $this->_apiVersion . "').", __FILE__, __LINE__ );
+                    break;
+            }
+            $this->sendPost( ONAPP_GETRESOURCE_CHANGE_OWNER , $data );
+        }
+        return $this->_obj;
+    }
+
+    /**
+     * Rebuilds network for virtual machine
+     *
+     * @access public
+     */
+    function rebuild_network( ) {
+        $this->sendPost( ONAPP_GETRESOURCE_REBUILD_NETWORK );
     }
 
     /**
      * Start Virtual machine
      *
      * @access public
+     *
+     * @return object response object
      */
-    function startup( ) {
-        $this->_POSTAction( ONAPP_GETRESOURCE_STARTUP );
-        return $this->obj;
+    function startup( $recovery = false ) {
+        if (! $recovery ) {
+                $this->sendPost( ONAPP_GETRESOURCE_STARTUP );
+        } else {
+            switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+                case 'xml':
+                    $data = '<mode>recovery</mode>';
+                    break;
+                case 'json':
+                    $data = json_encode( array( 'mode' => 'recovery' ));
+                    break;
+                default:
+                    $this->_loger->error( "_POSTAction: Can't find
+                    serialize and unserialize functions for type (apiVersion => '"
+                    . $this->_apiVersion . "').", __FILE__, __LINE__ );
+                    break;
+            }
+            $this->sendPost( ONAPP_GETRESOURCE_STARTUP, $data );
+        }
+        return $this->_obj;
     }
 
     /**
@@ -867,7 +1180,7 @@ class ONAPP_VirtualMachine extends ONAPP {
      * @access public
      */
     function unlock( ) {
-        $this->_POSTAction( ONAPP_GETRESOURCE_UNLOCK );
+        $this->sendPost( ONAPP_GETRESOURCE_UNLOCK );
     }
 
     /**
@@ -876,7 +1189,7 @@ class ONAPP_VirtualMachine extends ONAPP {
      * @access public
      */
     function build( ) {
-        $this->_POSTAction( ONAPP_GETRESOURCE_BUILD );
+        $this->sendPost( ONAPP_GETRESOURCE_BUILD );
     }
 
     /**
@@ -911,21 +1224,25 @@ class ONAPP_VirtualMachine extends ONAPP {
                 $response[ "response_body" ],
                 true
             );
-        }
-        ;
+        }    
     }
 
     /**
-     * Save Object in to your account.
+     * Save Object into your account.
      */
     function save( ) {
+        if( !is_null($this->_id) ) {
+            parent::save( );
+            return;
+        }
+            
         $fields = $this->_fields;
 
         $this->_fields[ "primary_disk_size" ] = array(
             ONAPP_FIELD_MAP => '_primary_disk_size',
             ONAPP_FIELD_TYPE => 'integer',
             ONAPP_FIELD_REQUIRED => true,
-            ONAPP_FIELD_DEFAULT_VALUE => 1
+            ONAPP_FIELD_DEFAULT_VALUE => 5
         );
         $this->_fields[ "swap_disk_size" ] = array(
             ONAPP_FIELD_MAP => '_swap_disk_size',
@@ -955,7 +1272,7 @@ class ONAPP_VirtualMachine extends ONAPP {
             ONAPP_FIELD_MAP => '_required_ip_address_assignment',
             ONAPP_FIELD_TYPE => 'boolean',
             ONAPP_FIELD_REQUIRED => true,
-            ONAPP_FIELD_DEFAULT_VALUE => ''
+            ONAPP_FIELD_DEFAULT_VALUE => '1'
         );
         $this->_fields[ "required_virtual_machine_build" ] = array(
             ONAPP_FIELD_MAP => '_required_virtual_machine_build',
@@ -967,6 +1284,32 @@ class ONAPP_VirtualMachine extends ONAPP {
         parent::save( );
 
         $this->_fields = $fields;
+    }
+    /**
+     * Edit Administrator's Note
+     *
+     * @param integer virtual machine id
+     * @param string Administrator's Note
+     * @return void
+     */
+    function editAdminNote( $id, $admin_note ){
+        if( $admin_note ){
+            $this->_admin_note = $admin_note;
+        }
+        
+        if( $id ){
+            $this->_id = $id;
+        }
+
+        $this->_fields = null;
+        $this->_fields[ 'admin_note' ] = array(
+            ONAPP_FIELD_MAP => '_admin_note',
+            ONAPP_FIELD_TYPE => 'string',
+            ONAPP_FIELD_REQUIRED => true,
+        );
+
+        parent::save();
+
     }
 }
 

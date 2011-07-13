@@ -16,19 +16,24 @@
 
 /**
  * requires Base class
+ *
  */
 require_once dirname( __FILE__ ) . '/../ONAPP.php';
 //require_once dirname( __FILE__ ) . '/../User.php';
 
 /**
  * User IP Billing Statistics
+ *
+ *  The ONAPP_User_BillingStatistics class uses the following basic methods:
+ *  {@link getList}.
+ *
  */
 class ONAPP_User_BillingStatistics extends ONAPP {
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Billing Statistics creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -40,16 +45,16 @@ class ONAPP_User_BillingStatistics extends ONAPP {
     var $_cost;
 
     /**
-     * the date when the User was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Billing Statistics update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
     /**
-     * the date when the User vm_hourly_stat was started in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Billing Statistics start date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_stat_time;
 
@@ -103,7 +108,6 @@ class ONAPP_User_BillingStatistics extends ONAPP {
     var $_resource = 'vm_stats';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -193,6 +197,15 @@ class ONAPP_User_BillingStatistics extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name user_vm_stats
+                 * @method GET
+                 * @alias  /users/:user_id/vm_stats(.:format)
+                 * @format  {:controller=>"vm_stats", :action=>"index"}
+                 */
+
                 if( is_null( $this->_user_id ) && is_null( $this->_obj->_user_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _user_id not set.",
@@ -205,7 +218,7 @@ class ONAPP_User_BillingStatistics extends ONAPP {
                         $this->_user_id = $this->_obj->_user_id;
                     }
                 }
-                ;
+                
                 $resource = 'users/' . $this->_user_id . '/' . $this->_resource;
                 $this->_loger->debug( "getResource($action): return " . $resource );
                 break;

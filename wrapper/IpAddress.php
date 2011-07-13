@@ -20,7 +20,7 @@ require_once 'ONAPP.php';
 /**
  * IP Addresses
  *
- * The IP Address class uses the following basic methods:
+ * The ONAPP_IpAddress class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -118,11 +118,11 @@ class ONAPP_IpAddress extends ONAPP {
      * @var integer
      */
     var $_id;
-
+    
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Ip Address creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -163,9 +163,9 @@ class ONAPP_IpAddress extends ONAPP {
     var $_network_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Ip Address update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -205,12 +205,27 @@ class ONAPP_IpAddress extends ONAPP {
     var $_resource = 'ip_addresses';
 
     /**
-     *
      * called class name
      *
      * @var string
      */
     var $_called_class = 'ONAPP_IpAddress';
+
+    /**
+     * Virtual Machine Id 
+     *
+     * @var string
+     */
+    var $_virtual_machine_id;
+
+    /**
+     * Network interface Id
+     *
+     * @var string
+     */
+    var $_network_interface_id;
+
+    
 
     /**
      * API Fields description
@@ -229,8 +244,6 @@ class ONAPP_IpAddress extends ONAPP {
 
         switch( $version ) {
             case '2.0':
-            case '2.1':
-            
                 $this->_fields = array(
                     'id' => array(
                         ONAPP_FIELD_MAP => '_id',
@@ -288,7 +301,14 @@ class ONAPP_IpAddress extends ONAPP {
                         ONAPP_FIELD_READ_ONLY => true,
                     )
                 );
+                break;
 
+                case '2.1':
+                    $this->_fields = $this->_init_fields('2.0');
+
+//                    if ( $this->_release == "0") {
+//                        unset($this->_fields[ 'free' ]);
+//                    };
                 break;
         }
 
@@ -305,7 +325,52 @@ class ONAPP_IpAddress extends ONAPP {
      */
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
+            case ONAPP_GETRESOURCE_JOIN:
+                $resource = 'settings/networks/' . $this->_virtual_machine_id . '/' . $this->_resource;
+                $this->_loger->debug( "getResource($action): return " . $resource );
+                break;
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name network_ip_addresses
+                 * @method GET
+                 * @alias  /settings/networks/:network_id/ip_addresses(.:format)
+                 * @format {:controller=>"ip_addresses", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name network_ip_address
+                 * @method GET
+                 * @alias  /settings/networks/:network_id/ip_addresses/:id(.:format)
+                 * @format {:controller=>"ip_addresses", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias  /settings/networks/:network_id/ip_addresses(.:format)
+                 * @format {:controller=>"ip_addresses", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name 
+                 * @method PUT
+                 * @alias  /settings/networks/:network_id/ip_addresses/:id(.:format)
+                 * @format {:controller=>"ip_addresses", :action=>"update"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name 
+                 * @method DELETE
+                 * @alias  /settings/networks/:network_id/ip_addresses/:id(.:format)
+                 * @format {:controller=>"ip_addresses", :action=>"destroy"}
+                 */
+
                 if( is_null( $this->_network_id ) && is_null( $this->_obj->_network_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _network_id not set.",
@@ -318,7 +383,7 @@ class ONAPP_IpAddress extends ONAPP {
                         $this->_network_id = $this->_obj->_network_id;
                     }
                 }
-                ;
+                
                 $resource = 'settings/networks/' . $this->_network_id . '/' . $this->_resource;
                 $this->_loger->debug( "getResource($action): return " . $resource );
                 break;

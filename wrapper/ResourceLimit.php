@@ -26,8 +26,8 @@ require_once 'ONAPP.php';
  *
  * This class represents the resource limits set to users.
  *
- * The ResourceLimit class uses the following basic methods:
- * {@link load}, {@link save} and {@link delete}.
+ * The ONAPP_ResourceLimit class uses the following basic methods:
+ * {@link load}, {@link save} and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
  *
@@ -138,9 +138,9 @@ class ONAPP_ResourceLimit extends ONAPP {
     var $_cpus;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Resoiurce Limit creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -159,21 +159,23 @@ class ONAPP_ResourceLimit extends ONAPP {
     var $_memory;
 
     /**
-     * the date when the resource limit was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Resoiurce Limit update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
     /**
+     * Storage disk size
      *
-     *
+     * @var integer
      */
     var $_storage_disk_size;
 
     /**
+     * VM count
      *
-     *
+     * @var interger
      */
     var $_virtual_machines_count;
 
@@ -199,7 +201,6 @@ class ONAPP_ResourceLimit extends ONAPP {
     var $_resource = 'resource_limit';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -284,7 +285,6 @@ class ONAPP_ResourceLimit extends ONAPP {
                 );
                 break;
         }
-        ;
 
         return $this->_fields;
     }
@@ -298,6 +298,24 @@ class ONAPP_ResourceLimit extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+            case ONAPP_GETRESOURCE_EDIT:
+
+                /**
+                 * ROUTE :
+                 * @name user_resource_limit
+                 * @method GET
+                 * @alias   /users/:user_id/resource_limit(.:format)
+                 * @format  {:controller=>"resource_limits", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name user_resource_limit
+                 * @method GET
+                 * @alias   /users/:user_id/resource_limit(.:format)
+                 * @format  {:controller=>"resource_limits", :action=>"update"}
+                 */
+
                 if( is_null( $this->_user_id ) && is_null( $this->_obj->_user_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _user_id not set.",
@@ -310,12 +328,12 @@ class ONAPP_ResourceLimit extends ONAPP {
                         $this->_user_id = $this->_obj->_user_id;
                     }
                 }
-                ;
+                
                 $resource = 'users/' . $this->_user_id . '/' . $this->_resource;
                 break;
 
             case ONAPP_GETRESOURCE_LOAD:
-            case ONAPP_GETRESOURCE_EDIT:
+
                 $resource = $this->getResource( );
                 break;
 

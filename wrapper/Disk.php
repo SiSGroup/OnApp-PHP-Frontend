@@ -26,12 +26,16 @@ define( 'ONAPP_GETRESOURCE_AUTOBACKUP_ENABLE', 'autobackup_enable' );
  *
  */
 define( 'ONAPP_GETRESOURCE_AUTOBACKUP_DISABLE', 'autobackup_disable' );
+/**
+ *
+ */
+define( 'ONAPP_GETRESOURCE_TAKE_BACKUP', 'backups' );
 
 /**
  * Disks
  *
- * The Disk class uses the following basic methods:
- * {@link load}, {@link save}, {@link delete}, {@link getList}, {@link enableAutobackup} and {@link disableAutobackup}.
+ * The ONAPP_Disk class uses the following basic methods:
+ * {@link load}, {@link save}, {@link delete}, {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
  *
@@ -143,16 +147,16 @@ class ONAPP_Disk extends ONAPP {
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Disk creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date when the Disk was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Disk update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -260,6 +264,8 @@ class ONAPP_Disk extends ONAPP {
      */
     var $_called_class = 'ONAPP_Disk';
 
+    var $_require_format_disk;
+
     /**
      * API Fields description
      *
@@ -279,7 +285,7 @@ class ONAPP_Disk extends ONAPP {
                     'id' => array(
                         ONAPP_FIELD_MAP => '_id',
                         ONAPP_FIELD_TYPE => 'integer',
-                        ONAPP_FIELD_READ_ONLY => true
+                        ONAPP_FIELD_READ_ONLY => true,
                     ),
                     'created_at' => array(
                         ONAPP_FIELD_MAP => '_created_at',
@@ -356,7 +362,6 @@ class ONAPP_Disk extends ONAPP {
 
                 break;
         }
-        ;
 
         return $this->_fields;
     }
@@ -372,12 +377,30 @@ class ONAPP_Disk extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_LIST:
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machine_disks
+                 * @method GET
+                 * @alias  /virtual_machines/:virtual_machine_id/disks(.:format)
+                 * @format {:controller=>"disks", :action=>"index"}
+                 */
+
                 $resource = $this->_virtual_machine_id ?
                         'virtual_machines/' . $this->_virtual_machine_id . '/disks' :
                         $this->getResource( );
                 break;
 
             case ONAPP_GETRESOURCE_ADD:
+
+                /**
+                 * ROUTE :
+                 * @name 
+                 * @method POST
+                 * @alias  /virtual_machines/:virtual_machine_id/disks(.:format)
+                 * @format  {:controller=>"disks", :action=>"create"}
+                 */
+
                 if( is_null( $this->_virtual_machine_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _virtual_machine_id not set.",
@@ -392,15 +415,85 @@ class ONAPP_Disk extends ONAPP {
                 }
                 break;
 
-            case ONAPP_GETRESOURCE_AUTOBACKUP_ENABLE:
+            case ONAPP_GETRESOURCE_AUTOBACKUP_ENABLE:                                        
+
+                /**
+                 * ROUTE :
+                 * @name autobackup_enable_disk
+                 * @method POST
+                 * @alias  /settings/disks/:id/autobackup_enable(.:format)
+                 * @format  {:controller=>"disks", :action=>"autobackup_enable"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . "/autobackup_enable";
                 break;
 
             case ONAPP_GETRESOURCE_AUTOBACKUP_DISABLE:
+
+                /**
+                 * ROUTE :
+                 * @name autobackup_disable_disk
+                 * @method POST
+                 * @alias  /settings/disks/:id/autobackup_disable(.:format)
+                 * @format {:controller=>"disks", :action=>"autobackup_disable"}
+                 */
+
                 $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . "/autobackup_disable";
                 break;
+            case ONAPP_GETRESOURCE_TAKE_BACKUP:                                                                  
 
+                /**
+                 * ROUTE :
+                 * @name 
+                 * @method POST
+                 * @alias  /settings/disks/:disk_id/backups(.:format)
+                 * @format {:controller=>"backups", :action=>"create"}
+                 */
+                 
+                $resource = $this->getResource( ONAPP_GETRESOURCE_LOAD ) . "/backups";
+                break;
             default:
+
+                /**
+                 * ROUTE :
+                 * @name disks
+                 * @method GET
+                 * @alias  /settings/disks(.:format)
+                 * @format  {:controller=>"disks", :action=>"index"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name disk
+                 * @method GET
+                 * @alias  /settings/disks/:id(.:format)
+                 * @format  {:controller=>"disks", :action=>"show"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method POST
+                 * @alias  /settings/disks(.:format)
+                 * @format  {:controller=>"disks", :action=>"create"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method PUT
+                 * @alias  /settings/disks/:id(.:format)
+                 * @format {:controller=>"disks", :action=>"update"}
+                 */
+
+                /**
+                 * ROUTE :
+                 * @name
+                 * @method DELETE
+                 * @alias  /settings/disks/:id(.:format)
+                 * @format {:controller=>"disks", :action=>"destroy"}
+                 */
+
                 $resource = parent::getResource( $action );
                 break;
         }
@@ -423,14 +516,11 @@ class ONAPP_Disk extends ONAPP {
      *
      * @access public
      */
-    function enableAutobackup( ) {
-        $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_AUTOBACKUP_ENABLE ) );
+    function enableAutobackup( $id = NULL ) {
+        if( $id )
+            $this->_id = $id;
 
-        $response = $this->sendRequest( ONAPP_REQUEST_METHOD_POST );
-
-        $result = $this->_castResponseToClass( $response );
-
-        $this->_obj = $result;
+        $this->sendPost( ONAPP_GETRESOURCE_AUTOBACKUP_ENABLE );
     }
 
     /**
@@ -438,14 +528,11 @@ class ONAPP_Disk extends ONAPP {
      *
      * @access public
      */
-    function disableAutobackup( ) {
-        $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_AUTOBACKUP_DISABLE ) );
-
-        $response = $this->sendRequest( ONAPP_REQUEST_METHOD_POST );
-
-        $result = $this->_castResponseToClass( $response );
-
-        $this->_obj = $result;
+    function disableAutobackup( $id = NULL ) {
+        if( $id )
+            $this->_id = $id;
+        
+        $this->sendPost( ONAPP_GETRESOURCE_AUTOBACKUP_DISABLE );
     }
 
     /**
@@ -476,8 +563,42 @@ class ONAPP_Disk extends ONAPP {
         if( $vm_id ) {
             $this->_virtual_machine_id = $vm_id;
         }
-        parent::save( );
+
+        if( $this->_virtual_machine_id ){
+            $this->_fields[ "require_format_disk" ] = array(
+                ONAPP_FIELD_MAP => '_require_format_disk',
+                ONAPP_FIELD_TYPE => 'bolean',
+                ONAPP_FIELD_REQUIRED => true
+            );
+            
+            $this->_fields['mount_point'][ONAPP_FIELD_REQUIRED] = true;
+        }
+
+        if( $this->_id ){
+            $this->_fields['add_to_linux_fstab'][ONAPP_FIELD_REQUIRED] = false;
+            $this->_fields['data_store_id'][ONAPP_FIELD_REQUIRED] = false;
+            $this->_fields['is_swap'][ONAPP_FIELD_REQUIRED] = false;
+            $this->_fields['mount_point'][ONAPP_FIELD_REQUIRED] = false;
+        }
+      
+        return parent::save( );    
     }
+    
+    /**
+     * Takes Disk Backup 
+     * 
+     * @param integer Disk Id
+     * @return void
+     */
+    function takeBackup( $disk_id ){
+        if ( $disk_id )
+            $this->_id = $disk_id;
+
+        $this->sendPost( ONAPP_GETRESOURCE_TAKE_BACKUP );
+    }
+    
+    
+    
 }
 
 ?>

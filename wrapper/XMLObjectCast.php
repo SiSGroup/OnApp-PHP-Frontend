@@ -187,7 +187,7 @@ class XMLObjectCast {
             return array( );
         }
 
-        if( $dom->childNodes->length != 0 ) {
+        if( $dom->childNodes->length != 0 && $dom->childNodes->item( 0 )->childNodes->length != 0 ) {
             $node_name = $dom->childNodes->item( 0 )->childNodes->item( 0 )->nodeName;
             if( $node_name == 'error' ) {
                 $obj = new $classname;
@@ -222,6 +222,20 @@ class XMLObjectCast {
         $unserializer->unserialize( $xml, false );
 
         $unserializedData = $unserializer->getUnserializedData( );
+
+        if ($unserializer->_root == "errors") {
+            $error = $unserializer->_dataStack;
+            if ( is_array($error) ) {
+                $_error = array();
+                foreach ($error as $err)
+                    if (trim($err) != "")
+                      $_error[] = $err;
+
+                $error = $_error;
+            }
+
+            $unserializedData->error = $error;
+        }
 
         return $unserializedData;
     }

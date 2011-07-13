@@ -21,7 +21,7 @@ require_once dirname( __FILE__ ) . '/../ONAPP.php';
 /**
  * The CPU utilization for Virtual Machine
  *
- * The CPU Usage class uses the following basic methods:
+ * The ONAPP_VirtualMachine_CpuUsage class uses the following basic methods:
  * {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -46,53 +46,74 @@ class ONAPP_VirtualMachine_CpuUsage extends ONAPP {
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Cpu Usage creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Cpu Usage update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
     /**
-     * @todo: Add description
+     * Cpu usage period
      *
      * @var string
      */
     var $_period;
 
     /**
-     * @todo: Add description
+     * Cpu usage time
      *
-     * @var integer
+     * @var string
      */
     var $_cpu_time;
 
     /**
-     * @todo: Add description
+     * Cpu usage time raw
      *
      * @var integer
      */
     var $_cpu_time_raw;
 
     /**
-     * @todo: Add description
+     * Cpu usage elapsed time
      *
      * @var integer
      */
     var $_elapsed_time;
 
     /**
-     * VM ID
+     * Virtual machine id
      *
      * @var integer
      */
     var $_virtual_machine_id;
+
+    /**
+     * shows if monitis is enabled
+     *
+     * @var boolean
+     */
+    var $_enable_monitis;
+
+    /**
+     * the Cpu Usage start time date in the [YYYY][MM][DD]T[hh][mm]Z format
+     *
+     * @var string
+     */
+    var $_stat_time;
+
+    /**
+     * Used id
+     *
+     * @var integer
+     */
+    var $_user_id;
 
     /**
      * root tag used in the API request
@@ -109,7 +130,6 @@ class ONAPP_VirtualMachine_CpuUsage extends ONAPP {
     var $_resource = 'cpu_usage';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -174,7 +194,24 @@ class ONAPP_VirtualMachine_CpuUsage extends ONAPP {
                         ONAPP_FIELD_TYPE => 'integer',
                         ONAPP_FIELD_READ_ONLY => true,
                     ),
+                    'stat_time' => array(
+                        ONAPP_FIELD_MAP => '_stat_time',
+                        ONAPP_FIELD_TYPE => 'datetime',
+                        ONAPP_FIELD_READ_ONLY => true,
+                    ),
+                    'user_id' => array(
+                        ONAPP_FIELD_MAP => '_user_id',
+                        ONAPP_FIELD_TYPE => 'integer',
+                        ONAPP_FIELD_READ_ONLY => true,
+                    ),
                 );
+
+               if ( $this->_release == "0") {
+                    unset($this->_fields[ 'elapsed_time' ]);
+                    unset($this->_fields[ 'cpu_time_raw' ]);
+                    unset($this->_fields[ 'period' ]);
+                };
+
                 break;
         }
 
@@ -192,6 +229,15 @@ class ONAPP_VirtualMachine_CpuUsage extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_LIST:
+
+                /**
+                 * ROUTE :
+                 * @name cpu_usage_virtual_machine
+                 * @method GET
+                 * @alias  /virtual_machines/:id/cpu_usage(.:format)
+                 * @format  {:controller=>"virtual_machines", :action=>"cpu_usage"}
+                 */
+
                 if( is_null( $this->_virtual_machine_id ) && is_null( $this->_obj->_virtual_machine_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _virtual_machine_id not set.",

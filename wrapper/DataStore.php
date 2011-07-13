@@ -27,7 +27,7 @@ require_once 'ONAPP.php';
  *
  * The DataStore class represents the Data Storages of the OnAPP installation.
  *
- * The Data Store class uses the following basic methods:
+ * The ONAPP_DataStore class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -118,9 +118,9 @@ class ONAPP_DataStore extends ONAPP {
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Data Store creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -154,9 +154,9 @@ class ONAPP_DataStore extends ONAPP {
     var $_local_hypervisor_id;
 
     /**
-     * the date when the Data Store was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Data store update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -175,14 +175,16 @@ class ONAPP_DataStore extends ONAPP {
     var $_enabled;
 
     /**
+     * Data store group id
      *
-     *
+     * @var integer
      */
     var $_data_store_group_id;
 
     /**
+     * ip address
      *
-     *
+     * @var string
      */
     var $_ip;
 
@@ -201,7 +203,6 @@ class ONAPP_DataStore extends ONAPP {
     var $_resource = 'settings/data_stores';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -293,9 +294,54 @@ class ONAPP_DataStore extends ONAPP {
                 );
 
                 break;
-        };
+        }
 
         return $this->_fields;
+    }
+
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+         return parent::getResource( $action );
+
+        /**
+         * ROUTE :
+         * @name data_stores
+         * @method GET
+         * @alias  /settings/data_stores(.:format)
+         * @format {:controller=>"data_stores", :action=>"index"}
+         */
+
+        /**
+         * ROUTE :
+         * @name data_store
+         * @method GET
+         * @alias  /settings/data_stores/:id(.:format)
+         * @format {:controller=>"data_stores", :action=>"show"}
+         */
+
+        /**
+         * ROUTE :
+         * @name 
+         * @method POST
+         * @alias  /settings/data_stores(.:format)
+         * @format  {:controller=>"data_stores", :action=>"create"}
+         */
+
+        /**
+         * ROUTE :
+         * @name
+         * @method PUT
+         * @alias  /settings/data_stores/:id(.:format)
+         * @format {:controller=>"data_stores", :action=>"update"}
+         */
+
+        /**
+         * ROUTE :
+         * @name
+         * @method DELETE
+         * @alias  /settings/data_stores/:id(.:format)
+         * @format {:controller=>"data_stores", :action=>"destroy"}
+         */
+
     }
 }
 

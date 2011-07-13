@@ -25,7 +25,7 @@ require_once 'ONAPP.php';
  *
  * The Resolvers class represents the name-servers of the OnApp installation.
  *
- * The Resolver class uses the following basic methods:
+ * The ONAPP_Nameserver class uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -119,9 +119,9 @@ class ONAPP_Nameserver extends ONAPP {
     var $_address;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Name Server creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -130,13 +130,12 @@ class ONAPP_Nameserver extends ONAPP {
      *
      * @var integer
      */
-
     var $_network_id;
 
     /**
-     * the date when the Resolvers was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Name Server update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -217,10 +216,54 @@ class ONAPP_Nameserver extends ONAPP {
 
                 break;
         }
-        ;
-
         return $this->_fields;
     }
+
+        function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+            return parent::getResource( $action );
+
+            /**
+             * ROUTE :
+             * @name nameservers
+             * @method GET
+             * @alias  /settings/nameservers(.:format)
+             * @format  {:controller=>"nameservers", :action=>"index"}
+             */
+
+            /**
+             * ROUTE :
+             * @name nameserver
+             * @method GET
+             * @alias  /settings/nameservers/:id(.:format)
+             * @format  {:controller=>"nameservers", :action=>"show"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method POST
+             * @alias  /settings/nameservers(.:format)
+             * @format   {:controller=>"nameservers", :action=>"create"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method PUT
+             * @alias  /settings/nameservers/:id(.:format)
+             * @format {:controller=>"nameservers", :action=>"update"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method DELETE
+             * @alias  /settings/nameservers/:id(.:format)
+             * @format   {:controller=>"nameservers", :action=>"destroy"}
+             */
+
+        }
+        
 }
 
 ?>

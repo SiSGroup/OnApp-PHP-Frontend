@@ -21,6 +21,9 @@ require_once dirname( __FILE__ ) . '/../IpAddress.php';
 
 /**
  * User IP Adresses
+ *
+ * The ONAPP_User_UsedIpAddress class doesn't support any basic method.
+ * 
  */
 class ONAPP_User_UsedIpAddress extends ONAPP_IpAddress {
 
@@ -39,13 +42,17 @@ class ONAPP_User_UsedIpAddress extends ONAPP_IpAddress {
     var $_resource = '';
 
     /**
-     *
      * called class name
      *
      * @var string
      */
     var $_called_class = 'ONAPP_User_UsedIpAddress';
 
+    /**
+     * shows if primary is dissallowed
+     *
+     * @var boolean
+     */
     var $_disallowed_primary;
 
     /**
@@ -109,6 +116,11 @@ class ONAPP_User_UsedIpAddress extends ONAPP_IpAddress {
                     ),
                     'disallowed_primary' => array(
                         ONAPP_FIELD_MAP => '_disallowed_primary',
+                        ONAPP_FIELD_TYPE => 'boolean',
+                        ONAPP_FIELD_READ_ONLY => true,
+                    ),
+                    'free' => array(
+                        ONAPP_FIELD_MAP => '_free',
                         ONAPP_FIELD_TYPE => 'boolean',
                         ONAPP_FIELD_READ_ONLY => true,
                     )

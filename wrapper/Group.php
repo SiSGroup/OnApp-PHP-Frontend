@@ -25,9 +25,10 @@ require_once dirname( __FILE__ ) . '/ONAPP.php';
 /**
  * Managing Groups
  *
- * The Group class represents the billing groups.  The ONAPP class is the parent of the Group class.
+ * The Group class represents the billing groups.
+ * The ONAPP class is the parent of the Group class.
  *
- * The Group class uses the following basic methods:
+ * The ONAPP_Group uses the following basic methods:
  * {@link load}, {@link save}, {@link delete}, and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -151,14 +152,16 @@ require_once dirname( __FILE__ ) . '/ONAPP.php';
 class ONAPP_Group extends ONAPP {
 
     /**
-     *
-     * the group ID
+     * the group ID 
+     * 
+     * @var integer
      */
     var $_id;
 
     /**
+     * the Group creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * @var string
      */
     var $_created_at;
 
@@ -170,85 +173,98 @@ class ONAPP_Group extends ONAPP {
     var $_identifier;
 
     /**
-     *
      * the group Label
+     *
+     * @var string
      */
     var $_label;
 
     /**
-     *
      * the price for the CPU usage per hour per CPU core
+     *
+     * @var float
      */
     var $_price_cpu;
 
     /**
-     *
      * the price for the CPU Priority per hour per CPU Priority
+     *
+     * @var float
      */
     var $_price_cpu_share;
 
     /**
+     * the price for Disk size per hour per GB
      *
-     * the price for the Disk size per hour per GB
+     * @var float
      */
     var $_price_disk_size;
 
     /**
-     *
      * the price for the Memory per hour per MB
+     *
+     * @var float
      */
     var $_price_memory;
 
     /**
+     * the Group update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * the date when the Group was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * @var string
      */
     var $_updated_at;
 
     /**
-     *
      * the price for the IP address per hour per IP Address
+     *
+     * @var string
      */
     var $_price_ip_address;
 
     /**
-     *
      * the price for the Storage Disk Size per hour per GB
+     *
+     * @var float
      */
     var $_price_storage_disk_size;
 
     /**
-     *
      * the price for the CPU usage per hour per CPU core
      * for powered OFF Virtual Machine
+     *
+     * @var float
      */
     var $_price_cpu_power_off;
 
     /**
-     *
      * the price for the Memory per hour per MB
      * for powered OFF Virtual Machine
+     *
+     * @var float
      */
     var $_price_memory_power_off;
 
     /**
-     *
      * the price for the Disk size per hour per GB
      * for powered OFF Virtual Machine
+     *
+     * @var float
      */
     var $_price_disk_size_power_off;
 
     /**
-     *
      * the price for the CPU Priority per hour per CPU Priority
      * for powered OFF Virtual Machine
+     *
+     * @var float
      */
     var $_price_cpu_share_power_off;
 
     /**
-     *
      * the price for the IP address per hour per IP Address
      * for powered OFF Virtual Machine
+     *
+     * @var float
      */
     var $_price_ip_address_power_off;
 
@@ -267,7 +283,6 @@ class ONAPP_Group extends ONAPP {
     var $_resource = 'groups';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -387,7 +402,53 @@ class ONAPP_Group extends ONAPP {
 //                die("class ONAPP_Group not supported in OnApp 2.1.x\n");
                 break;
         }
-
+        
         return $this->_fields;
     }
+
+        function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+            return parent::getResource( $action );
+
+            /**
+             * ROUTE :
+             * @name groups
+             * @method GET
+             * @alias  /groups(.:format)
+             * @format {:controller=>"groups", :action=>"index"}
+             */
+
+            /**
+             * ROUTE :
+             * @name group
+             * @method GET
+             * @alias  /groups/:id(.:format)
+             * @format  {:controller=>"groups", :action=>"show"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method POST
+             * @alias  /groups(.:format)
+             * @format  {:controller=>"groups", :action=>"create"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method PUT
+             * @alias  /groups/:id(.:format)
+             * @format {:controller=>"groups", :action=>"update"}
+             */
+
+            /**
+             * ROUTE :
+             * @name
+             * @method DELETE
+             * @alias  /groups/:id(.:format)
+             * @format {:controller=>"groups", :action=>"destroy"}
+             */
+
+        }
+
 }

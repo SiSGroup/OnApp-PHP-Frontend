@@ -68,7 +68,7 @@ define( 'ONAPP_LOGGER_VALUE_MESSAGE', 'message' );
  * information). When you are developing it, though, you probably want to know
  * about the program's internal state, and would set them to debug.
  */
-class Logger {
+class ONAPP_Logger {
 
     /**
      * Shows a region on Earth, more or less bounded by lines of
@@ -95,7 +95,7 @@ class Logger {
      * @access private
      * @var    boolean
      */
-    var $_debug = true;
+    var $_debug = false;
 
     /**
      * Buffer containing all the information on the messages used in the class

@@ -36,8 +36,8 @@ require_once 'ONAPP.php';
  *
  * This class represents the Networks added to your system.
  *
- * The Network class uses the following basic methods:
- * {@link load}, {@link save}, {@link delete}, and {@link getList}.
+ * The ONAPP_Network class uses the following basic methods:
+ * {@link load} and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
  *
@@ -113,6 +113,11 @@ require_once 'ONAPP.php';
  *
  *     - <i>DELETE onapp.com/settings/networks/{ID}.json</i>
  */
+ /**
+  * 
+  * 
+  */
+  define(ONAPP_GETRESOURCE_IP_ADDRESSES, 'ip_addresses');
 
 class ONAPP_Network extends ONAPP {
 
@@ -124,9 +129,9 @@ class ONAPP_Network extends ONAPP {
     var $_id;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Network creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -135,7 +140,6 @@ class ONAPP_Network extends ONAPP {
      *
      * @var integer
      */
-
     var $_identifier;
 
     /**
@@ -146,9 +150,9 @@ class ONAPP_Network extends ONAPP {
     var $_label;
 
     /**
-     * the date when the Network was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Network update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -160,8 +164,9 @@ class ONAPP_Network extends ONAPP {
     var $_vlan;
 
     /**
+     * Network group Id
      *
-     *
+     * @var integer
      */
     var $_network_group_id;
 
@@ -180,7 +185,6 @@ class ONAPP_Network extends ONAPP {
     var $_resource = 'settings/networks';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -255,9 +259,46 @@ class ONAPP_Network extends ONAPP {
                );
 
                break;
-        };
+        }
 
         return $this->_fields;
+    }
+    
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+        switch ($action){
+            case ONAPP_GETRESOURCE_IP_ADDRESSES:
+                                                                     
+                /**
+                 * ROUTE :
+                 * @name network_ip_addresses
+                 * @method GET
+                 * @alias  /settings/networks/:network_id/ip_addresses(.:format)
+                 * @format {:controller=>"ip_addresses", :action=>"index"}
+                 */
+                 
+                 $resource = $this->_resource . '/' .$this->_id . '/ip_address';
+             
+            default:
+                /**
+                 * ROUTE :
+                 * @name networks
+                 * @method GET
+                 * @alias  /settings/networks(.:format)
+                 * @format {:controller=>"networks", :action=>"index"}
+                 */
+        
+                /**
+                 * ROUTE :
+                 * @name network
+                 * @method GET
+                 * @alias  /settings/networks/:id(.:format)
+                 * @format  {:controller=>"networks", :action=>"show"}
+                 */
+                 
+                $resource = parent::getResource( $action );
+                break;  
+        }
+        return $resource;
     }
 
     function activate( $action_name ) {

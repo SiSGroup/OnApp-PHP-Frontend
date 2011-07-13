@@ -26,7 +26,7 @@ require_once 'ONAPP.php';
  *
  * This class represents the Transactions of the OnApp installation.
  *
- * The Transaction class uses the following basic methods:
+ * The ONAPP_Transaction class uses the following basic methods:
  * {@link load} and {@link getList}.
  *
  * <b>Use the following XML API requests:</b>
@@ -127,9 +127,9 @@ class ONAPP_Transaction extends ONAPP {
     var $_actor;
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the transaction date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -190,9 +190,9 @@ class ONAPP_Transaction extends ONAPP {
     var $_status;
 
     /**
-     * the date when the Transaction was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the transaction update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
@@ -204,11 +204,25 @@ class ONAPP_Transaction extends ONAPP {
     var $_user_id;
 
     /**
+     * shows whether cancellation is allowed
      *
-     *
+     * @var boolean
      */
     var $_allowed_cancel;
+
+    /**
+     * transaction identifier
+     *
+     * @var string
+     */
     var $_identifier;
+
+    /**
+     * the start after date in the [YYYY][MM][DD]T[hh][mm]Z format
+     *
+     * @var string
+     */
+    var $_start_after;
 
     /**
      * root tag used in the API request
@@ -225,7 +239,6 @@ class ONAPP_Transaction extends ONAPP {
     var $_resource = 'transactions';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -326,18 +339,23 @@ class ONAPP_Transaction extends ONAPP {
                 $this->_fields[ 'allowed_cancel' ] = array(
                     ONAPP_FIELD_MAP => '_allowed_cancel',
                     ONAPP_FIELD_TYPE => 'boolean',
-                    ONAPP_FIELD_REQUIRED => true
+                    ONAPP_FIELD_READ_ONLY => true
                 );
 
                 $this->_fields[ 'identifier' ] = array(
                     ONAPP_FIELD_MAP => '_identifier',
                     ONAPP_FIELD_TYPE => 'string',
-                    ONAPP_FIELD_REQUIRED => true
+                    ONAPP_FIELD_READ_ONLY => true
+                );
+
+                $this->_fields[ 'start_after' ] = array(
+                    ONAPP_FIELD_MAP => '_start_after',
+                    ONAPP_FIELD_TYPE => 'datetime',
+                    ONAPP_FIELD_READ_ONLY => true
                 );
 
                 break;
         }
-        ;
 
         return $this->_fields;
     }
@@ -350,6 +368,69 @@ class ONAPP_Transaction extends ONAPP {
                 break;
         }
     }
+
+    /**
+     * Sends an API request to get the Objects. After requesting,
+     * unserializes the received response into the array of Objects
+     *
+     * @return the array of Object instances
+     * @access public
+     */
+     function getList( $page = 1 ) {
+        $this->activate( ONAPP_ACTIVATE_GETLIST );
+
+        $this->_loger->add( "getList: Get Transaction list." );
+
+        $this->setAPIResource( $this->getResource( ONAPP_GETRESOURCE_LIST ) );
+
+        switch( $this->options[ ONAPP_OPTION_API_TYPE ] ) {
+            case 'xml':
+                $data = '<page>' . $page . '</page>';
+                break;
+            case 'json':
+                $data = json_encode( array( 'page' => $page ));
+                break;
+            default:
+                $this->_loger->error( "_POSTAction: Can't find
+                serialize and unserialize functions for type (apiVersion => '"
+                . $this->_apiVersion . "').", __FILE__, __LINE__ );
+                break;
+        }
+
+        $response = $this->sendRequest( ONAPP_REQUEST_METHOD_GET, $data );
+
+        if( !empty( $response[ 'errors' ] ) ) {
+            $this->error = $response[ 'errors' ];
+            return false;
+        }
+
+        return $this->castStringToClass(
+            $response[ "response_body" ],
+            true
+        );
+    }
+
+    function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
+        return parent::getResource( $action );
+
+        /**
+         * ROUTE :
+         * @name transactions
+         * @method GET
+         * @alias  /settings/nameservers(.:format)
+         * @format  {:controller=>"transactions", :action=>"index"}
+         */
+
+        /**
+         * ROUTE :
+         * @name transaction
+         * @method GET
+         * @alias  /transactions/:id(.:format)
+         * @format   {:controller=>"transactions", :action=>"show"}
+         */
+
+        }
+
 }
 
 ?>

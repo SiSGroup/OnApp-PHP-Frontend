@@ -21,13 +21,17 @@ require_once dirname( __FILE__ ) . '/../ONAPP.php';
 
 /**
  * User IP Billing Statistics
+ *
+ * The ONAPP_VirtualMachine_BillingStatistics class uses the following basic methods:
+ * {@link getList}.
+ *
  */
 class ONAPP_VirtualMachine_BillingStatistics extends ONAPP {
 
     /**
-     * the date in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Billing Statistic creation date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_created_at;
 
@@ -39,16 +43,16 @@ class ONAPP_VirtualMachine_BillingStatistics extends ONAPP {
     var $_cost;
 
     /**
-     * the date when the User was updated in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Billing Statistics update date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_updated_at;
 
     /**
-     * the date when the User vm_hourly_stat was started in the [YYYY][MM][DD]T[hh][mm]Z format
+     * the Billing Statistics start date in the [YYYY][MM][DD]T[hh][mm]Z format
      *
-     * @var datetime
+     * @var string
      */
     var $_stat_time;
 
@@ -102,7 +106,6 @@ class ONAPP_VirtualMachine_BillingStatistics extends ONAPP {
     var $_resource = 'vm_stats';
 
     /**
-     *
      * called class name
      *
      * @var string
@@ -192,6 +195,15 @@ class ONAPP_VirtualMachine_BillingStatistics extends ONAPP {
     function getResource( $action = ONAPP_GETRESOURCE_DEFAULT ) {
         switch( $action ) {
             case ONAPP_GETRESOURCE_DEFAULT:
+
+                /**
+                 * ROUTE :
+                 * @name virtual_machine_vm_stats
+                 * @method GET
+                 * @alias  /virtual_machines/:virtual_machine_id/vm_stats(.:format)
+                 * @format {:controller=>"vm_stats", :action=>"index"}
+                 */
+
                 if( is_null( $this->_virtual_machine_id ) && is_null( $this->_obj->_virtual_machine_id ) ) {
                     $this->_loger->error(
                         "getResource($action): argument _virtual_machine_id not set.",
@@ -204,7 +216,7 @@ class ONAPP_VirtualMachine_BillingStatistics extends ONAPP {
                         $this->_virtual_machine_id = $this->_obj->_virtual_machine_id;
                     }
                 }
-                ;
+                
                 $resource = 'virtual_machines/' . $this->_virtual_machine_id . '/' . $this->_resource;
                 $this->_loger->debug( "getResource($action): return " . $resource );
                 break;
