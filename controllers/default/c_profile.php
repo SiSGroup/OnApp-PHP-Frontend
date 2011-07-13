@@ -23,11 +23,16 @@ class Profile
      * 
      * @return void
      */
-    private function show_template_view()
+    public function show_template_view($error = NULL)
     {
         onapp_show_template(
             'profile_view',
-            array('title' => 'PROFILE_')
+            array(
+                'title'      => onapp_string('PROFILE_'),
+                'info_title' => onapp_string('PROFILE_'),
+                'info_body'  => onapp_string('PROFILE_INFO'),
+                'error'      => onapp_string( $error ),
+                )
         );
     }
 }

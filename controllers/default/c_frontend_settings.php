@@ -4,8 +4,10 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "c_base_settings.php";
 
 class Frontend_Settings extends Base_Settings
 {
-    protected $template = array(
-        'edit' => 'frontendSettings__edit',
-        'view' => 'frontendSettings__view'
+    protected $config = array(
+        'template'   => 'frontendSettings',
+        'title'      => 'FRONTEND_SETTINGS',
+        'info_title' => 'FRONTEND_SETTINGS',
+        'info_body'  => 'FRONTEND_SETTINGS_INFO',
     );
 }

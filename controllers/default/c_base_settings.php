@@ -4,7 +4,8 @@ class Base_Settings
 {
 //    private $template = array(
 //        'edit' => 'logSettings_edit',
-//        'view' => 'logSettings_view'
+//        'view' => 'logSettings_view',
+//        title   => 'title'
 //    );
 
     /**
@@ -14,6 +15,7 @@ class Base_Settings
      */
     public function view()
     {
+        onapp_permission('roles');
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
         $action   =  onapp_get_arg('action');
@@ -45,17 +47,23 @@ class Base_Settings
     private function show_template_view($message = NULL)
     {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        onapp_permission('roles');
 
         $params = array(
-            'title'               => 'LOG_SETTINGS',
+            'title'               => onapp_string( $this->config['title'] ),
             'log_levels_frontend' => onapp_get_frontend_errors(),
             'php_error_levels'    => onapp_get_php_errors(),
-            'message'             => $message,
-            'config'              => parse_ini_file( ONAPP_PATH.ONAPP_DS.'config.ini' )
+            'message'             => onapp_string( $message ),
+            'config'              => parse_ini_file( ONAPP_PATH.ONAPP_DS.'config.ini' ),
+            'template'            => $this->config['template'],
+            'info_title'          => onapp_string( $this->config['info_title'] ),
+            'info_body'           => onapp_string( $this->config['info_body'] ),
+            
         );
 
-//TODO check is variable $this->template['view'] defined
-        onapp_show_template( $this->template['view'], $params );
+        if( $this->config['template'] == NULL)
+                onapp_die('No config[template] exists');
+        onapp_show_template( 'configuration_view', $params );
     }
 
     /**
@@ -68,16 +76,23 @@ class Base_Settings
     private function show_template_edit( $error = NULL )
     {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
-
+        
         $params = array(
-            'title'               => 'LOG_SETTINGS',
+            'title'               => onapp_string( $this->config['title'] ),
             'log_levels_frontend' => onapp_get_frontend_errors(),
             'php_error_levels'    => onapp_get_php_errors(),
-            'error'               => $error,
+            'error'               => onapp_string( $error ),
+            'language_list'       => onapp_get_dir_list('lang'),
+            'templates_list'      => onapp_get_dir_list(ONAPP_SMARTY_TEMPLATE_DIR),
+            'controllers_list'    => onapp_get_dir_list('controllers'),
+            'template'            => $this->config['template'],
+            'info_title'          => onapp_string( 'EDIT_'.$this->config['info_title'] ),
+            'info_body'           => onapp_string( 'EDIT_'.$this->config['info_body'] ),
+
         );
 
 //TODO check is variable $this->template['edit'] defined
-        onapp_show_template( $this->template['edit'], $params );
+        onapp_show_template( $this->config['template'].'_edit', $params );
     }
 
     /**
@@ -89,22 +104,31 @@ class Base_Settings
     private function save()
     {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        
+        $settings = onapp_get_arg('settings');
 
-        $log_settings = onapp_get_arg('log_settings');
-
-        onapp_debug('save: $log_settings => '. print_r($log_settings, true));
+        onapp_debug('save: $settings => '. print_r($settings, true));
 
         if( file_exists(ONAPP_PATH.ONAPP_DS.'config.ini') )
         {
             $conf = parse_ini_file( ONAPP_PATH.ONAPP_DS.'config.ini' );
             onapp_debug('$conf => '. print_r($conf, true));
+            
+            // get constant string names instead of numeric values
+            $frontend_error_levels = onapp_get_frontend_errors();
+            $php_error_levels      = onapp_get_php_errors();
+            foreach ($conf as $key => $value)
+            if($key == 'log_level_php')
+                $conf[$key] = $php_error_levels[$value];
+            else if($key == 'log_level_frontend')
+                $conf[$key] = $frontend_error_levels[$value];
 
-            $result = array_merge($conf, $log_settings);
+            $result = array_merge($conf, $settings);
 
             if ( ! $result )
                 $error = 'COULD_NOT_UPDATE_CONFIG_FILE';
             else {
-                onapp_debug('$conf and $log_settings arrays merge => '. print_r($result, true));
+                onapp_debug('$conf and $settings arrays merge => '. print_r($result, true));
 
                 $updated = $this->write_config($result, ONAPP_PATH.ONAPP_DS.'config.ini');
 

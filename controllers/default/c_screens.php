@@ -9,7 +9,8 @@ class Screens
     * @return void
     */
     public function view()
-    { 
+    {
+        onapp_permission('roles');
         onapp_debug(__CLASS__. ' :: ' .__FUNCTION__);
 
         $action = onapp_get_arg('action');
@@ -32,11 +33,14 @@ class Screens
      */
     private function show_template_view($error = null) {
         onapp_debug(__CLASS__. ' :: ' .__FUNCTION__);
+        onapp_permission('roles');
 
         $params = array(
-            'title'     => 'SCREENS_',
-            'error'     => $error,
-            'screen_id' => onapp_get_arg('screen_id')
+            'title'      => onapp_string('SCREENS_'),
+            'error'      => onapp_string( $error ),
+            'screen_id'  => onapp_get_arg('screen_id'),
+            'info_title' => onapp_string('SCREENS_'),
+            'info_body'  => onapp_string('SCREEN_INFO_INFO'),
         );
 
         onapp_show_template( 'screen_view', $params );
@@ -49,11 +53,12 @@ class Screens
      */
     private function info()
     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        onapp_permission('roles');
+        
         global $_SCREEN_IDS, $_ALIASES;
 
         $screen_id   = onapp_get_arg('screen_id');
-
-        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
         onapp_debug('$alias => '. $screen);
 
@@ -76,10 +81,13 @@ class Screens
      */
     private function show_template_info($error = null, $screen = null) {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        onapp_permission('roles');
         $params = array(
-                  'title'     => 'SCREENS_',
-                  'screen'    => $screen,
-                  'screen_id' => onapp_get_arg('screen_id')
+                  'title'      => onapp_string('SCREENS_'),
+                  'screen'     => $screen,
+                  'screen_id'  => onapp_get_arg('screen_id'),
+                  'info_title' => onapp_string('SCREEN_INFO'),
+                  'info_body'  => onapp_string('SCREEN_INFO_INFO'),
         );
 
         onapp_show_template( 'screen_info', $params );
