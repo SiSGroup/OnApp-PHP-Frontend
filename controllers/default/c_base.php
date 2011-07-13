@@ -70,6 +70,10 @@ class Base {
 
         $_SESSION['profile_obj'] = $profile_obj;
 
+        foreach($profile_obj->_roles as $role)
+            foreach($role->_permissions as $permission )
+               $_SESSION['permissions'][] = $permission->permission->identifier;
+
         onapp_debug("_load_profile: profile => " . print_r($profile_obj ,true));
     }
 }
