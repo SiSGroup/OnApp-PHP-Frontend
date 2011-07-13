@@ -1,11 +1,5 @@
 {include file="default/views/header.tpl"}
 
-
-<div class="info">
-    <div class="info_title">{'YOUR_PROFILE'|onapp_string}</div>
-    <div class="info_body">{'YOUR_PROFILE_INFORMATION'|onapp_string}</div>
-    <div class="info_bottom"></div>
-</div>
 <h1>{'USER_DETAILS'|onapp_string}&nbsp;</h1>
 <div class="div_page">
     <dl>

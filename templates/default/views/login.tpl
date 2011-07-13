@@ -15,7 +15,7 @@
    
      {if isset($error_message)}
         <div id="login_error">
-            {$error_message|onapp_string}
+            {$error_message}
         </div>
     {/if}
     

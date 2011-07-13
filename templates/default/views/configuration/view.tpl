@@ -1,221 +1,195 @@
 {include file="default/views/header.tpl"}
 
-<div style="clear:both;"></div>
-<div class="info">
 
-       <div class="info_title">
-            {'CONFIGURATION_'|onapp_string}
-        </div>
+{if $template == 'logSettings' || $template == 'configuration'}
 
-       <div class="info_body">
-            {'CONFIGURATION_INFO'|onapp_string}
-        </div>
-        <div class="info_bottom"></div>
+    <h1>{'LOG_SETTINGS'|onapp_string}</h1>
 
-</div>
+        <table class="form-table two" width="100%" cellpadding="0" cellspacing="0" >
 
+            <tr>
+                <td class="label">{'LOG_LEVEL_PHP'|onapp_string}</td>
+                <td>
+                        {$php_error_levels[$config.log_level_php]}
+                </td>
+            </tr>
 
-<h1>{'SCREENS_'|onapp_string}</h1>
+              <tr>
+                <td class="label">
+                    {'LOG_LEVEL_FRONTEND'|onapp_string}
+                </td>
+                <td>
+                    {$log_levels_frontend[$config.log_level_frontend]}
+                </td>
+            </tr>
 
-<form action='{$_ALIASES["screens"]}' method="post">
-    <table class="form-table two" width="100%" cellpadding="0" cellspacing="0" >
+            <tr style="clear:both;">
+                <td class="label">
+                    {'LOG_ROTATION_DAYS'|onapp_string}
+                </td>
+                <td>
+                    {$config.log_rotation_days} Days
+                </td>
+            </tr>
 
-        <tr>
-            <td class="label">{'SCREEN_ID'|onapp_string}</td>
-            <td>
-                <input type="text" name="screen_id" value="{$screen_id}" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="hidden" name="action" value="info" />
-                <input type="submit" name="submit" value="{'VIEW_'|onapp_string}" />
-            </td>
-        </tr>
+            <tr style="clear:both;">
+                <td class="label">
+                    {'LOG_ROTATION_SIZE'|onapp_string}
+                </td>
+                <td>
+                    {$config.log_rotation_size} MB
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">
+                    {'PROBLEM_REPORT_DEBUG_LOG_ENABLE'|onapp_string}
+                </td>
+                <td>
+                    {if $config.problem_report_debug_log_enable > 0}
+                         {'YES_'|onapp_string}
+                    {else}
+                         {'NO_'|onapp_string}
+                    {/if}
+                </td>
+
+            </tr>
+
+            <tr>
+                <td class="label">
+                    {'THIRD_PART_PRODUCT_REPORT_ENABLE'|onapp_string}
+                </td>
+                <td>
+                    {if $config.third_part_product_report_enable > 0}
+                        {'YES_'|onapp_string}
+                    {else}
+                         {'NO_'|onapp_string}
+                    {/if}
+                </td>
+
+            </tr>
+
+            <tr>
+                <td class="label">
+                     {'WRAPPER_LOG_REPORT_ENABLE'|onapp_string}
+                </td>
+                <td>
+                    {if $config.wrapper_log_report_enable > 0}
+                        {'YES_'|onapp_string}
+                    {else}
+                         {'NO_'|onapp_string}
+                    {/if}
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    <form action="{$config.base_url}/{$_ALIASES['log_settings']}" method="post">
+                        <input type="submit" value="{'EDIT_'|onapp_string}" />
+                        <input type="hidden" name="action" value="edit" />
+                    </form>
+                </td>
+            </tr>
     </table>
 
-    
+{/if}
 
-</form>
-
-
-<h1>{'LOG_SETTINGS'|onapp_string}</h1>
-    
-    <table class="form-table two" width="100%" cellpadding="0" cellspacing="0" >
-
-        <tr>
-            <td class="label">{'LOG_LEVEL_PHP'|onapp_string}</td>
-            <td>
-                 
-                    {$php_error_levels[$smarty.const.ONAPP_LOG_LEVEL_PHP]}
-                
-            </td>
-        </tr>
-
-          <tr>
-            <td class="label">{'LOG_LEVEL_FRONTEND'|onapp_string}</td>
-            <td>
-                    {$log_levels_frontend[$smarty.const.ONAPP_LOG_LEVEL_FRONTEND]}        
-            </td>
-        </tr>
-        
-        <tr style="clear:both;">
-            <td class="label">{'LOG_ROTATION_DAYS'|onapp_string}</td>
-            <td>
-                {$smarty.const.ONAPP_LOG_ROTATION_DAYS} Days
-            </td>
-        </tr>
-
-        <tr style="clear:both;">
-            <td class="label">{'LOG_ROTATION_SIZE'|onapp_string}</td>
-            
-            <td>
-                {$smarty.const.ONAPP_LOG_ROTATION_SIZE} MB
-            </td>
-        </tr>
-
-        <tr>
-            <td class="label">
-                {'PROBLEM_REPORT_DEBUG_LOG_ENABLE'|onapp_string}
-            </td>
-            <td>
-                {if $smarty.const.ONAPP_PROBLEM_REPORT_DEBUG_LOG_ENABLE == 1}
-                     Yes
-                {else}
-                     No
-                {/if}
-            </td>
-
-        </tr>
-
-        <tr>
-            <td class="label">
-                {'THIRD_PART_PRODUCT_REPORT_ENABLE'|onapp_string}
-            </td>
-            <td>
-                {if $smarty.const.ONAPP_THIRD_PART_PRODUCT_REPORT_ENABLE == 1}
-                    Yes
-                {else}
-                    No
-                {/if}
-            </td>
-
-        </tr>
-  
-        <tr>
-            <td class="label">
-                 {'WRAPPER_LOG_REPORT_ENABLE'|onapp_string}
-            </td>
-            <td>
-                {if $smarty.const.ONAPP_WRAPPER_LOG_REPORT_ENABLE == 1}
-                    Yes
-                {else}
-                    No
-                {/if}
-            </td>
-
-        </tr>
-        <tr>
-            <td>
-                <form action="{$smarty.const.ONAPP_BASE_URL}/{$_ALIASES['log_settings']}" method="post">
-                    <input type="submit" value="{'EDIT_'|onapp_string}" />
-                    <input type="hidden" name="action" value="edit" />
-                </form>
-            </td>
-        </tr>
-</table> 
+{if $template == 'frontendSettings' || $template == 'configuration'}
 
 <h1>{'FRONTEND_SETTINGS'|onapp_string}</h1>
     
-    <table class="form-table two" width="100%" cellpadding="0" cellspacing="0" >
+        <table class="form-table two" width="100%" cellpadding="0" cellspacing="0" >
 
-        <tr>
-            <td class="label">{'BASE_URL'|onapp_string}</td>
-            <td>
-                 
-                    {$smarty.const.ONAPP_BASE_URL}
-                
-            </td>
-        </tr>
+            <tr>
+                <td class="label">{'BASE_URL'|onapp_string}</td>
+                <td>
 
-          <tr>
-            <td class="label">{'HOST_NAME'|onapp_string}</td>
-            <td>
-                    {$smarty.const.ONAPP_HOSTNAME}
-            </td>
-        </tr>
-        
-        <tr style="clear:both;">
-            <td class="label">{'DEFAULT_ALIAS'|onapp_string}</td>
-            <td>
-                {$smarty.const.ONAPP_DEFAULT_ALIAS}
-            </td>
-        </tr>
+                        {$config.base_url}
 
-        <tr style="clear:both;">
-            <td class="label">{'SECRET_KEY'|onapp_string}</td>
-            
-            <td>
-                {$smarty.const.ONAPP_SECRET_KEY}
-            </td>
-        </tr>
+                </td>
+            </tr>
 
-        <tr>
-            <td class="label">
-                {'SESSION_LIFETIME'|onapp_string}
-            </td>
-            <td>
-                {round( $smarty.const.ONAPP_SESSION_LIFETIME * 0.000277777778, 1 )} {'HOURS_'|onapp_string}
-            </td>
+              <tr>
+                <td class="label">{'HOST_NAME'|onapp_string}</td>
+                <td>
+                        {$config.hostname}
+                </td>
+            </tr>
 
-        </tr>
+            <tr style="clear:both;">
+                <td class="label">{'DEFAULT_ALIAS'|onapp_string}</td>
+                <td>
+                    {$config.default_alias}
+                </td>
+            </tr>
 
-        <tr>
-            <td class="label">
-                {'DEFAULT_LANGUAGE'|onapp_string}
-            </td>
-            <td>
-                {$smarty.const.ONAPP_DEFAULT_LANGUAGE}
-            </td>
+            <tr style="clear:both;">
+                <td class="label">{'SECRET_KEY'|onapp_string}</td>
 
-        </tr>
-  
-        <tr>
-            <td class="label">
-                 {'TEMPLATE_'|onapp_string}
-            </td>
-            <td>
-                {$smarty.const.ONAPP_TEMPLATE}
-            </td>
-        </tr>
+                <td>
+                    {$config.secret_key}
+                </td>
+            </tr>
 
-        <tr>
-            <td class="label">
-                 {'CONTROLLERS_'|onapp_string}
-            </td>
-            <td>
-                {$smarty.const.ONAPP_CONTROLLERS}
-            </td>
-        </tr>
-        
-        <tr>
-            <td class="label">
-                 {'LOG_DIRECTORY'|onapp_string}
-            </td>
-            <td>
-                {$smarty.const.ONAPP_LOG_DIRECTORY}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form action="{$smarty.const.ONAPP_BASE_URL}/{$_ALIASES['frontend_settings']}" method="post">
-                    <input type="submit" value="{'EDIT_'|onapp_string}" />
-                    <input type="hidden" name="action" value="edit" />
-                </form>
-            </td>
-        </tr>
-</table> 
+            <tr>
+                <td class="label">
+                    {'SESSION_LIFETIME'|onapp_string}
+                </td>
+                <td>
+                    {round( $config.session_lifetime * 0.000277777778, 1 )} {'HOURS_'|onapp_string}
+                </td>
 
+            </tr>
+
+            <tr>
+                <td class="label">
+                    {'DEFAULT_LANGUAGE'|onapp_string}
+                </td>
+                <td>
+                    {$config.default_language}
+                </td>
+
+            </tr>
+
+            <tr>
+                <td class="label">
+                     {'TEMPLATE_'|onapp_string}
+                </td>
+                <td>
+                    {$config.template}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">
+                     {'CONTROLLERS_'|onapp_string}
+                </td>
+                <td>
+                    {$config.controllers}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">
+                     {'LOG_DIRECTORY'|onapp_string}
+                </td>
+                <td>
+                    {$config.log_directory}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form action="{$config.base_url}/{$_ALIASES['frontend_settings']}" method="post">
+                        <input type="submit" value="{'EDIT_'|onapp_string}" />
+                        <input type="hidden" name="action" value="edit" />
+                    </form>
+                </td>
+            </tr>
+    </table> 
+
+{/if}
+
+{if $template == 'smartySettings' || $template == 'configuration'}
 
 <h1>{'SMARTY_SETTINGS'|onapp_string}</h1>
     
@@ -224,14 +198,14 @@
         <tr>
             <td class="label">{'TEMPLATE_DIRECTORY'|onapp_string}</td>
             <td>
-                    {$smarty.const.ONAPP_SMARTY_TEMPLATE_DIR}
+                    {$config.smarty_template_dir}
             </td>
         </tr>
 
           <tr>
             <td class="label">{'COMPILE_DIRECTORY'|onapp_string}</td>
             <td>
-                    {$smarty.const.ONAPP_SMARTY_COMPILE_DIR}
+                    {$config.smarty_compile_dir}
             </td>
         </tr>
         
@@ -242,26 +216,26 @@
             </td>
         </tr>
 
-        <tr style="clear:both;">
-            <td class="label">{'ENABLE_CACHING'|onapp_string}</td>
-            
-            <td>
-                {if $smarty.const.ONAPP_SMARTY_CACHING_ENABLE > 0}
-                     Yes
-                {else}
-                     No
-                {/if}
-            </td>
-        </tr>
-
         <tr>
             <td class="label">
                 {'CACHING_LIFETIME'|onapp_string}
             </td>
             <td>
-                {round( $smarty.const.ONAPP_SMARTY_CACHING_LIFETIME * 0.000277777778, 1 )} {'HOURS_'|onapp_string}
+                {round( $config.smarty_caching_lifetime * 0.000277777778, 1 )} {'HOURS_'|onapp_string}
             </td>
 
+        </tr>
+
+        <tr style="clear:both;">
+            <td class="label">{'ENABLE_CACHING'|onapp_string}</td>
+
+            <td>
+                {if $config.smarty_caching_enable > 0}
+                        {'YES_'|onapp_string}
+                    {else}
+                        {'NO_'|onapp_string}
+                {/if}
+            </td>
         </tr>
 
         <tr>
@@ -269,10 +243,10 @@
                 {'FORCE_COMPILE'|onapp_string}
             </td>
             <td>
-                {if $smarty.const.ONAPP_SMARTY_FORCE_COMPILE > 0}
-                     Yes
-                {else}
-                     No
+                {if $config.smarty_force_compile > 0}
+                        {'YES_'|onapp_string}
+                    {else}
+                        {'NO_'|onapp_string}
                 {/if}
             </td>
 
@@ -283,24 +257,25 @@
                  {'COMPILE_CHECK'|onapp_string}
             </td>
             <td>
-                {if $smarty.const.ONAPP_SMARTY_COMPILE_CHECK > 0}
-                     Yes
-                {else}
-                     No
-                {/if}
+                {if $config.smarty_compile_check > 0}
+                        {'YES_'|onapp_string}
+                    {else}
+                        {'NO_'|onapp_string}
+                    {/if}
             </td>
         </tr>
 <tr>
     <td>
-        <form action="{$smarty.const.ONAPP_BASE_URL}/{$_ALIASES['smarty_settings']}" method="post">
+        <form action="{$config.base_url}/{$_ALIASES['smarty_settings']}" method="post">
             <input type="submit" value="{'EDIT_'|onapp_string}" />
             <input type="hidden" name="action" value="edit" />
         </form>
     </td>
 </tr>
-</table> 
+</table>
+
+{/if}
 
 
 {include file="default/views/navigation.tpl"}
 {include file="default/views/footer.tpl"}
- 

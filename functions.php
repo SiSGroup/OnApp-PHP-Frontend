@@ -1,66 +1,25 @@
 <?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
 
-// TODO join functions onapp_get_languageList onapp_get_templatesList onapp_get_controllersList
-
 /**
- * Returns available language list
+ * Gets list of directories in specified directory
  *
- * @return array Language packages available
- *
+ * @param string directory to get the list from
+ * @return array list of directories
  */
-function onapp_get_languageList() {
-    onapp_debug("Get languages list");
+function onapp_get_dir_list($dir) {
+    onapp_debug("Get directory list of ($dir)");
 
-    $languages = scandir('lang');
+    $directories = scandir(ONAPP_PATH.ONAPP_DS.$dir);
 
-    foreach( $languages as $language )
-        if (! is_dir($language) && ! is_file("lang/$language") )
-            $result[] = $language;
+    foreach( $directories as $directory)
+        if (! is_dir($directory) && ! is_file(ONAPP_PATH.ONAPP_DS.$dir.ONAPP_DS.$directory) )
+            $result[] = $directory;
 
-    onapp_debug("onapp_get_languageList:\nreturn => " . var_export($result, true) );
+    onapp_debug("onapp_get_dir_list ($dir):\nreturn => " . print_r($result, true) );
 
     return $result;
 }
 
-/**
- * Returns available template list
- *
- * @return array Template List
- *
- */
-function onapp_get_templatesList() {
-    onapp_debug("Get template list");
-
-    $templates = scandir('templates');
-
-    foreach( $templates as $template )
-        if (! is_dir($template) && ! is_file("templates/$template") )
-            $result[] = $template;
-
-    onapp_debug("onapp_get_languageList:\nreturn => " . print_r($result, true) );
-
-    return $result;
-}
-
-/**
- * Returns available controller list
- *
- * @return array Controllers List
- *
- */
-function onapp_get_controllersList() {
-    onapp_debug("Get controller list");
-
-    $controllers = scandir('controllers');
-
-    foreach( $controllers as $controller )
-        if (! is_dir($controller) && ! is_file("controllers/$controller") )
-            $result[] = $controller;
-
-    onapp_debug("onapp_get_languageList:\nreturn => " . print_r($result, true) );
-
-    return $result;
-}
 
 /**
  * Returns a string from language package
@@ -70,10 +29,12 @@ function onapp_get_controllersList() {
  * @return string language package string value
  *
  */
-function onapp_string($string) {
+function onapp_string($string = NULL) {
+    if( $string == NULL)
+        return NULL;
     global $_LANG;
 
-//    onapp_debug("Get string" );
+    onapp_debug("Get string" );
 
     $return = isset($_LANG[$string]) ?
         $_LANG[$string] :
@@ -83,7 +44,7 @@ function onapp_string($string) {
         $_LANG[$string] :
         "String $string not found";
 
-//    onapp_debug("onapp_string: 'string' => '$string', return => $return");
+    onapp_debug("onapp_string: 'string' => '$string', return => $return");
 
     return $return;
 }
@@ -148,20 +109,21 @@ function onapp_show_template($view, $params = array()) {
     onapp_debug("onapp_show_template: view => $view, params => " . print_r($params, true));
     
     $template = ONAPP_PATH.ONAPP_DS.'templates'.ONAPP_DS.ONAPP_TEMPLATE.ONAPP_DS. 'views' .ONAPP_DS.str_replace('_',ONAPP_DS,$view).'.tpl';
-  // echo $template; die();
-// TODO check if template exist
+
+    if( ! file_exists($template))
+        die("File $template not found");
 
     $globals = array(
         'navigation'    => $_SCREEN_IDS,
         '_ALIASES'      => $_ALIASES,
-        'langs'         => onapp_get_languageList()
+        'langs'         => onapp_get_dir_list('lang')
     );
 
     $smarty_params = is_array($params)
         ? array_merge($params, $globals)
         : $globals;
 
-    require_once "libs/smarty/Smarty.class.php";
+    require_once ONAPP_PATH.ONAPP_DS.'libs'.ONAPP_DS.'smarty'.ONAPP_DS.'Smarty.class.php';
 
     $smarty = new Smarty;
 
@@ -180,6 +142,8 @@ function onapp_show_template($view, $params = array()) {
         $smarty->assign("$key",$value);
 
     $smarty->display($template);
+
+    unset($_SESSION['message']);
 
     onapp_debug('Display Smarty Template');
 }
@@ -203,7 +167,7 @@ function onapp_load_language($lang = '') {
     else
         $language = $lang;
 
-    $file = 'lang/'.$language.'/strings.php';
+    $file = ONAPP_PATH.ONAPP_DS.'lang'.ONAPP_DS.$language.ONAPP_DS.'strings.php';
 
     if(file_exists($file))
         include $file;
@@ -222,8 +186,8 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
     global $_SCREEN_IDS, $_ALIASES;
 
     if(is_null($SimpleXMLElement))
-        if(file_exists('menu.xml'))
-            $SimpleXMLElement = simplexml_load_file('menu.xml');
+        if(file_exists(ONAPP_PATH.ONAPP_DS.'menu.xml'))
+            $SimpleXMLElement = simplexml_load_file(ONAPP_PATH.ONAPP_DS.'menu.xml');
         else
             onapp_die('Could not find file menu.xml');
 
@@ -349,7 +313,7 @@ function onapp_check_configs() {
 
     // Cheching PHP version
     if (version_compare(PHP_VERSION, '5.0.0', '<'))
-        die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
+        onapp_die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
 
     // Checking of necessary configuration options
 // TODO check is ONAPP_SMARTY_COMPILE_DIR and other config options exists
@@ -359,7 +323,7 @@ function onapp_check_configs() {
 
     foreach($config_options as $option)
         if (! defined($option) )
-            die("Config option $option not found");
+            onapp_die("Config option $option not found");
 
     // Checking of necessary fuctions
     $necessary_fuctions = array(
@@ -368,7 +332,7 @@ function onapp_check_configs() {
 
     foreach($necessary_fuctions as $function_name)
        if(!function_exists($function_name))
-           die("Function $function_name not found");
+           onapp_die("Function $function_name not found");
 
     // Checking of necessary PHP extensions
 
@@ -386,9 +350,9 @@ function onapp_check_configs() {
             if ( file_exists($file) )
                 include($file);
             else
-                die("File $file does'n file");
+                onapp_die("File $file does'n file");
 
-            exit(1);
+            exit;
         }
 }
 
@@ -440,10 +404,11 @@ function onapp_is_auth() {
  *
  * @param string $permission
  *
- * @return void
- *
+ * @return void     
  */
 function onapp_permission($permissions) {
+   // todo fix to 2.2 onapp version!
+    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     global $_ALIASES;
     if(is_array($permissions))
     {
@@ -452,10 +417,13 @@ function onapp_permission($permissions) {
                 return;
     }
     else
-        in_array($permissions, $_SESSION['permissions']);
+        if(in_array($permissions, $_SESSION['permissions']))
+            return;
 
-    $error = 'YOU_HAVE_NOT_PERMISSION_FOR_THIS_ACTION';
-    onapp_redirect(BASEURL.'/'.($_ALIASES['profile']).'?error='.$error);
+    require_once ONAPP_PATH.ONAPP_DS.'controllers'.ONAPP_DS.ONAPP_CONTROLLERS.ONAPP_DS.'c_profile.php';
+    $profile = new Profile;
+    $profile->show_template_view('YOU_HAVE_NOT_PERMISSION_FOR_THIS_ACTION');
+    exit;
 }
 
 /**
@@ -467,6 +435,7 @@ function onapp_permission($permissions) {
  *
  */
 function onapp_has_permission($permissions) {
+    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     if(is_array($permissions))
     {
            foreach($permissions as $permission)

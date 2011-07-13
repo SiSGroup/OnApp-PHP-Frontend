@@ -1,20 +1,5 @@
 {include file="default/views/header.tpl"}
 
-<div style="clear:both;"></div>
-
-<div class="info">
-
-       <div class="info_title">
-            {'SCREENS_'|onapp_string}
-        </div>
-
-       <div class="info_body">
-            {'SCREENS_INFO_INFO'|onapp_string}
-        </div>
-        <div class="info_bottom"></div>
-
-    </div>
-
 <h1>{'SCREEN_INFO'|onapp_string}</h1>
 
     <table class="form-table" width="100%" cellpadding="0" cellspacing="0" >

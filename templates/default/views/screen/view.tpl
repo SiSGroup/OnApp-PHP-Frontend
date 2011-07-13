@@ -1,26 +1,5 @@
 {include file="default/views/header.tpl"}
 
-{if isset($error)}
-    <div id="onapp_error">
-            {$error|onapp_string}
-    </div>
-{/if}
-
-<div style="clear:both;"></div>
-
-<div class="info">
-
-       <div class="info_title">
-            {'SCREENS_'|onapp_string}
-        </div>
-
-       <div class="info_body">
-            {'SCREENS_INFO_INFO'|onapp_string}
-        </div>
-        <div class="info_bottom"></div>
-
-    </div>
-
 <h1>{$title|onapp_string}</h1>
 
 <form action='{$_ALIASES["screens"]}' method="post">

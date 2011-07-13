@@ -3,10 +3,10 @@
 html,body,*{margin:0;padding:0; }
 body
 {
-    font: 76% arial,sans-serif;
+    font: 76% verdana,sans-serif;
     text-align:center; 
     height: 100%;       
-    /*background:url('../images/bg.png')*/
+    background:url('../images/bg.png')
 }
 img
 {
@@ -69,6 +69,7 @@ div#navigation
     height:auto
 }
 
+
 div#navigation ul
 {
     list-style-type: none; list-style-position: outside;
@@ -81,7 +82,7 @@ div#navigation ul li{
 
 div#navigation ul li a:link, div#navigation ul li a:hover, div#navigation ul li a:visited
 {
-     width:180px; text-decoration:none; color:#ffffff
+     width:180px; text-decoration:none; color:#eeeeee
 }
 
 div#content
@@ -160,19 +161,24 @@ div#login_info a
     padding: 6px 4px;
     font-weight:normal;
     background: #ffffff;
+    font-family:"Lucida Grande", "Lucida Sans Unicode", "Trebuchet MS", helvetica, arial, verdana, sans-serif
 }
+dl dd{font: bold 14px helvetica, arial, sans-serif; color: #505050}
 
-.table_my tr td.dark_td
+.table_my tr td.dark_td, .table_my tr td.tree_icon_td, .table_my tr td.five_icon_td
 {
     background:#a1a1a1; 
     width:40px;
     padding:6px 10px;
 }
-.dark_td img
+.dark_td img, .tree_icon_td img, .five_icon_td img
 {
     float:left;
     padding-left:3px;    
 }
+
+.table_my tr td.tree_icon_td {width: 60px}
+.table_my tr td.five_icon_td {width: 100px}
 
 .table_my tr th
 {
@@ -283,6 +289,15 @@ label
 {
     padding:15px 15px 25px;
 }
+
+
+a.power.pending {
+background: transparent url(../images/power-bg.png) no-repeat scroll -160px 0;
+width: 65px;
+overflow:hidden;
+color: #909090 !important;
+}
+
 /***************************************************************************************/
 
 
@@ -314,7 +329,7 @@ input[type=submit]
   margin-left:5px;
   color:#484637;
   clear:both;
-  margin-top:10px;  
+  margin-top:10px; 
 }
 
 .info_title
@@ -441,7 +456,7 @@ th, td, caption
 
 
 .action_edit a, .action_reboot a, .action_off a, .action_rebuild a,
-.action_on a, .action_delete a  
+.action_on a, .action_delete a, .action_build a  
 {
     margin-top:-3px;
     padding-left:20px;
@@ -464,6 +479,11 @@ th, td, caption
 .action_rebuild
 {
     background:url(../images/action_icons.png) 0 -398px no-repeat;    
+}
+
+.action_build
+{
+    background:url(../images/action_icons.png) 0 -399px no-repeat;    
 }
 
 .action_off
@@ -512,4 +532,85 @@ th, td, caption
 .two input[type=submit]{margin: 10px 0}
 .two {border-bottom:none}
 
+.table_my tr td.complete {
+background: #CCEBD2 url(../images/status.png) no-repeat scroll right -235px;
+border-bottom: 1px solid #B0CEB6;
+border-left: 1px solid #C0DEC6;
+border-right: 1px solid #C0DEC6;
+width: 80px;
+color: #475349;
+}
 
+.table_my tr td.failed {
+background: #E6DED2 url(../images/status.png) no-repeat scroll right -393px;
+border-bottom: 1px solid #D7BBAE;
+border-left: 1px solid #E7CBBE;
+border-right: 1px solid #E7CBBE;
+width: 80px;
+color: #A22F21;
+}
+
+.table_my tr td.cancelled {
+background: #E1E1E1 url(../images/status.png) no-repeat scroll right -78px;
+border-bottom: 1px solid silver;
+border-left: 1px solid #D0D0D0;
+border-right: 1px solid #D0D0D0;
+width: 80px;
+color: #555;
+}
+
+.table_my tr td.running {
+background: #FCFBBE url(../images/loadinfo.gif) no-repeat scroll right;
+border-bottom: 1px solid #CEC5B0;
+border-left: 1px solid #DEDAC0;
+border-right: 1px solid #DEDAC0;
+width: 80px;
+color: #96683A;
+}
+
+#pagination input.pagination_input{width:35px;}
+
+#pagination a, #pagination em {
+display: inline-block;
+border-radius: 3px;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+background: #F2F2F2;
+border: 1px solid #BBB;
+color: #333;
+padding: 2px 5px;
+height: 14px;
+text-decoration: none;
+}
+#pagination {border-top: 1px solid whiteSmoke; font-weight:normal;
+    border-bottom: 1px solid #CCC;
+    padding: 5px 20px; padding-left:20%; margin-top:10px;}
+#log_details{border:1px solid #d6d6d6; overflow:auto; margin-left:10px; width:680px; padding:10px; background:#e7e7e7;}
+
+#pagination em {
+background: #535457;
+border: 1px solid #222;
+color: white;
+font-style: normal;
+font-weight: normal;
+line-height: 16px;
+}
+#pagination a{font-weight:normal; font-size:10px;}
+p.second_level_description{padding:10px;}
+
+.table_my tr td.enabled {
+background: #CCEBD2 url(../images/status.png) no-repeat scroll right -235px;
+border-bottom: 1px solid #B0CEB6;
+border-left: 1px solid #C0DEC6;
+border-right: 1px solid #C0DEC6;
+width: 80px;
+color: #475349;
+}
+.table_my tr td.disabled {
+background: #E1E1E1 url(../images/status.png) no-repeat scroll right -78px;
+border-bottom: 1px solid silver;
+border-left: 1px solid #D0D0D0;
+border-right: 1px solid #D0D0D0;
+width: 80px;
+color: #555
+}

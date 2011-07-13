@@ -47,7 +47,7 @@ function onapp_file_write($type, $content) {
             break;
         case 'error':
             if( isset($_SESSION['log_id']) )
-                $filename = $log_directory.'error_'.$_SESSION['log_id'].'.log';
+                $filename = $log_directory. date("Ymdhis") .'_error_'.$_SESSION['log_id'].'.log';
             else
                 return;
             break;
