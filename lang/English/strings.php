@@ -426,6 +426,12 @@ $_LANG['VIRTUAL_MACHINE_MIGRATE_HAS_BEEN_QUEUED'] = 'Virtual machine migrate has
 $_LANG['EDIT_ADMIN_NOTE'] = 'Edit Administrator\'s Note' ;
 $_LANG['EDIT_ADMIN_NOTE_INFO'] = 'Make changes and push the save button' ;
 $_LANG['NOTE_'] = 'Note' ;
+$_LANG['SCHEDULE_DETAILS'] = 'Schedule Details';
+$_LANG['SCHEDULE_DETAILS_INFO'] = 'Details of the selected schedule';
+$_LANG['SCHEDULE_LOG'] = 'Schedule Log';
+$_LANG['VM_DETAILS'] = 'VM Details';
+$_LANG['ADD_NEW_FIREWALL_RULE'] = 'Add New Firewall Rule';
+
 
 
 
