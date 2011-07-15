@@ -1,5 +1,5 @@
 {include file="default/views/header.tpl"}
-
+<h1>{'ADD_NEW_FIREWALL_RULE'|onapp_string}</h1>
     <form action='{$_ALIASES["virtual_machines"]}' method="post">
         <div class="div_page">
             <dl>
