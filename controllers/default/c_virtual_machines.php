@@ -173,6 +173,12 @@ class Virtual_Machines
             case 'edit_admin_note':
                 $this->edit_admin_note( $id );
                 break;
+            case 'disk_backups_schedule_details':
+                $this->show_template_disk_backups_schedule_details( $id );
+                break;
+            case 'console':
+                $this->console( $id );
+                break;
             default:
                 $this->show_template_view();
                 break;
@@ -415,6 +421,36 @@ class Virtual_Machines
         );
 
         onapp_show_template( 'vm_backup', $params );  
+     }
+
+    /**
+     * Shows disk backups schedule details
+     *
+     * @param integer schedule id
+     * @return void
+     */
+     private function show_template_disk_backups_schedule_details( $id )
+     {
+        onapp_permission(array('schedules', 'schedules.read', 'schedules.read.own'));
+
+        $onapp = $this->get_factory();
+
+        $schedule = $onapp->factory('Disk_Schedule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $schedule_obj = $schedule->load( $id );                                                            //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
+
+        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $user_obj = $user->load( $schedule_obj->_user_id );                                                             // print('<pre>'); print_r($user_obj); print('</pre>'); die();
+
+        $params = array(
+            'user_first_name'     =>     $user_obj->_first_name,
+            'user_last_name'      =>     $user_obj->_last_name,
+            'schedule_obj'        =>     $schedule_obj,
+            'title'               =>     onapp_string('SCHEDULE_DETAILS'),
+            'info_title'          =>     onapp_string('SCHEDULE_DETAILS'),
+            'info_body'           =>     onapp_string('SCHEDULE_DETAILS_INFO'),
+        );
+
+        onapp_show_template( 'vm_diskBackupsScheduleDetails', $params );
      }
      
     /**
@@ -1445,7 +1481,7 @@ class Virtual_Machines
         if( is_null($disk->error))
         {
             $_SESSION['message'] = 'BACKUP_HAS_BEEN_CREATED_AND_WILL_BE_TAKEN_SHORTLY';
-            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']. '?action=disk_backups&id=' . onapp_get_arg('virtual_machine_id') );
+            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']. '?action=disk_backups&id='. $id .'&virtual_machine_id=' . onapp_get_arg('virtual_machine_id') );
         }
         else
             $this->show_template_disk_backup( onapp_get_arg('virtual_machine_id'), $disk->error );
@@ -1835,15 +1871,15 @@ class Virtual_Machines
             $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             $vm->_id = $id;
             $vm->_user_id = $user_id;
-            $vm->change_owner( $user_id );                                                 // print('<pre>');print_r($vm); print('</pre>'); die();
+            $vm->change_owner( $user_id );                                                //  print('<pre>');print_r($vm); print('</pre>'); die();
 
-            if( is_null($vm->_obj["errors"]))
+            if( is_null($vm->errors) )
             {
                 $_SESSION['message'] = 'VIRTUAL_MACHINE_OWNER_HAS_BEEN_CHANGED_SUCCESSFULLY';
                 onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']. '?action=details&id=' .$id);
             }
             else
-                $this->show_template_details($id, $vm->_obj["errors"]);
+                $this->show_template_details($id, $vm->errors);
         }
      }
      
@@ -2123,7 +2159,7 @@ class Virtual_Machines
                 onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']  . '?action=details&id=' . $id);
             }
             else
-                $this->show_template_details($id, $schedule->error);
+                $this->show_template_details($id, $firewall->error);
      }
       
     /**
@@ -2221,6 +2257,33 @@ class Virtual_Machines
             }
             else
                 $this->show_template_details( $id, $vm->error );
+        }
+     }
+
+    /**
+     * Opens virtual machine console id
+     *
+     * @param interger virtual machine id
+     * @return void
+     */
+     private function console( $id )
+     {
+        onapp_permission(array('virtual_machines', 'virtual_machines.console', 'virtual_machines.console.own'));
+                                                           
+        global $_ALIASES;
+        $onapp = $this->get_factory();
+
+        $console = $onapp->factory('Console', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $console_obj = $console->load( $id );                                                         //print('<pre>'); print_r($console_obj); print('</pre>');die();
+
+        $url=ONAPP_HOSTNAME. ONAPP_DS. 'console_remote' . ONAPP_DS .$console->_obj->_remote_key; 
+                                                                                        
+        if( is_null( $console->error ) )
+        {
+            onapp_redirect( $url );
+        }
+        else{
+            $this->show_template_details( $id, $vm->error );
         }
      }
 
