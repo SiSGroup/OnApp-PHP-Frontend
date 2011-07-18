@@ -26,11 +26,13 @@ class Base {
             if( $onapp->instance->_version && $onapp->instance->_version != '' ) {
                 $this->_start_session();
                 $this->_load_profile($onapp);
-
-                // TODO redirect on previous called URL
-                $redirect_url = ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS];
-
-                onapp_redirect($redirect_url);
+                if( isset($_SESSION['redirect']) ){
+                    $redirect_url = $_SESSION['redirect'];
+                    onapp_redirect($redirect_url);
+                }
+                else{
+                    onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES[ONAPP_DEFAULT_ALIAS]);
+                }
             }
             else
                 $params = array(
@@ -44,14 +46,17 @@ class Base {
     function logout() {
         global $_ALIASES;
 
+        session_start();
+        session_regenerate_id();
         session_destroy();
-
+        unset($_SESSION);
+        session_start();
+  
         onapp_redirect( $_ALIASES["login"] );
     }
 
     private function _start_session() {
         $_SESSION['id']       =  session_id();
-
         $_SESSION['host']     = onapp_get_arg('host');
         $_SESSION['lang']     = onapp_get_arg('lang');
         $_SESSION['login']    = onapp_get_arg('login');

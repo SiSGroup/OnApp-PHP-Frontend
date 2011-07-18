@@ -16,13 +16,18 @@ Class ONAPP_Controller
 
         if( onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] == 'login')
             onapp_redirect( ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS] );
-        elseif ( ! onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] != 'login' )
-            // TODO save url before redirection for future redirection back after sucess login
+        
+        elseif ( ! onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] != 'login' ){
+            $_SESSION['redirect'] =
+                ( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ?
+                'https://' : 'http://' )
+                . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            onapp_debug("Set redirection url => " . print_r($_SESSION['redirect'] ,true));
             onapp_redirect( ONAPP_BASE_URL.'/'.$_ALIASES['login'] );
+        }
     }
 
-    public function access() {
-    }
+    public function access() { }
 
     public function run() {
         global $_ALIASES, $_SCREEN_IDS;
