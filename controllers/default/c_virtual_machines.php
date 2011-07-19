@@ -2230,8 +2230,8 @@ class Virtual_Machines
         } 
      }
 
-     /**
-     * Assigns new IP Address to virtual machine
+    /**
+     * Migrate VM to other Hypervisor
      *
      * @param interger virtual machine id
      * @return void
