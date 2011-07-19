@@ -446,3 +446,25 @@ function onapp_has_permission($permissions) {
     }
     return in_array($permissions, $_SESSION['permissions']);
 }
+/**
+ * Gets the list of file names in target directory
+ *
+ * @param string path to directory
+ * @return array list of file names in this directory
+ */
+function onapp_scan_dir( $path ){
+    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+    if ($handle = opendir( $path )) {
+        while (false !== ($file = readdir($handle))) {
+            if( ! is_dir($file) ) {
+                $files_list[] = $file;
+            }
+        }
+    }
+    else {
+        onapp_die('Directory not found -> '. $path);
+    }
+    closedir($handle);
+    return $files_list;
+
+}
