@@ -76,6 +76,14 @@
                 <input type="text" name="settings[log_directory]" value="{$smarty.const.ONAPP_LOG_DIRECTORY}" />
             </dd>
         </dl>
+
+        <dl style="clear:both;">
+            <dt class="label">{'DEBUG_FILE_NAME'|onapp_string}</dt>
+
+            <dd>
+                <input type="text" name="settings[debug_file_name]" value="{$smarty.const.ONAPP_DEBUG_FILE_NAME}" />
+            </dd>
+        </dl>
        
  </div>
  

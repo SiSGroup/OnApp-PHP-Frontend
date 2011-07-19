@@ -178,6 +178,14 @@
                 </td>
             </tr>
             <tr>
+                <td class="label">
+                     {'DEBUG_FILE_NAME'|onapp_string}
+                </td>
+                <td>
+                    {$config.debug_file_name}
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <form action="{$config.base_url}/{$_ALIASES['frontend_settings']}" method="post">
                         <input type="submit" value="{'EDIT_'|onapp_string}" />
