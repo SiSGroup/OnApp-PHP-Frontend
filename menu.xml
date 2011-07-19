@@ -9,7 +9,10 @@
         <screen title="SOFTWARE_LICENSES" class="Software_Licenses" method="view" alias="software_licenses" access="access" />
         <screen title="TEMPLATE_STORE" class="Template_Store" method="view" alias="template_store" access="access" />
     </screen>
-    <screen title="LOGS_" class="Logs" method="view" alias="logs" access="access" />
+    <screen title="LOGS_" class="Logs" method="view" alias="logs" access="access">
+        <screen title="ERROR_LOGS" method="view" class="Error_Logs" alias="error_logs" access="access" />
+        <screen title="DEBUG_LOGS" method="view" class="Debug_Logs" alias="debug_logs" access="access" />
+    </screen>
     <screen title="SETTINGS_" class="Settings" method="view" alias="settings" access="access" />
     <screen title="USERS_AND_GROUPS" class="User_And_Groups" method="view" alias="users_and_groups" access="access" />
     <screen title="TOOLS_" class="Tools" method="view" alias="tools" access="access" >
