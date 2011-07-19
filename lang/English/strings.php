@@ -431,6 +431,28 @@ $_LANG['SCHEDULE_DETAILS_INFO'] = 'Details of the selected schedule';
 $_LANG['SCHEDULE_LOG'] = 'Schedule Log';
 $_LANG['VM_DETAILS'] = 'VM Details';
 $_LANG['ADD_NEW_FIREWALL_RULE'] = 'Add New Firewall Rule';
+$_LANG['FRONTEND_LOGS'] = 'Frontend Logs';
+$_LANG['ERROR_LOGS'] = 'Error Logs';
+$_LANG['ERROR_LOGS_INFO'] = 'Click on the error log identifier to see it\'s details';
+$_LANG['ERROR_IDENTIFIER'] = 'Error Identirier';
+$_LANG['ERROR_LOGS_DETAILS'] = 'Error Log Details';
+$_LANG['ERROR_LOGS_DETAILS_INFO'] = '';
+$_LANG['DEBUG_LOGS'] = 'Debug Logs';
+$_LANG['DEBUG_FILE_NAME'] = 'Debug File Name';
+$_LANG['DEBUG_LOGS_DETAILS'] = 'Debug Logs Details';
+$_LANG['DEBUG_LOGS_DETAILS_INFO'] = '';
+$_LANG['DEBUG_LOGS_INFO'] = 'Insert the session or error identifier and press the View button to see the log information';
+$_LANG['SESSION_ID'] = 'Session ID';
+$_LANG['SESSION_IDENTIFIER_NOT_FOUND_IN_LOG_FILE'] = 'Session Identifier Not Found In Log File';
+
+
+
+
+
+
+
+
+
 
 
 
