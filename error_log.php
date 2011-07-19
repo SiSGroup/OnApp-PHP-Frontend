@@ -47,7 +47,7 @@ function onapp_file_write($type, $content) {
             break;
         case 'error':
             if( isset($_SESSION['log_id']) )
-                $filename = $log_directory. date("Ymdhis") .'_error_'.$_SESSION['log_id'].'.log';
+                $filename = $log_directory . 'error_'.$_SESSION['log_id'].'.log';       //. date("Ymdhis")
             else
                 return;
             break;
@@ -172,6 +172,10 @@ function onapp_die( $message )
 
     onapp_file_write('error', $msg);
 
+    onapp_file_write('frontend', $msg);
+
+    onapp_rotate_error_log();
+
     onapp_error_handler(E_ERROR, $message);
 
     die($message);
@@ -279,6 +283,29 @@ function onapp_error_reporting($error) {
             $msg = '['.$_SESSION['log_id']."] : [$error_type] in " . $error['file'] . ' on line ' . $error['line'] .' \''. $error['message'] . '\'';
 
         onapp_file_write('frontend', "$msg");
+
         onapp_file_write('error',    "$msg");
+
+        onapp_rotate_error_log();
+    }
+}
+
+/**
+ * Rotates error logs files
+ *
+ * @return void
+ */
+function onapp_rotate_error_log(){
+    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+    $list = onapp_scan_dir( ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY );
+
+    foreach( $list as $file ){
+        $file_path = ONAPP_PATH.ONAPP_DS. ONAPP_LOG_DIRECTORY . ONAPP_DS . $file;
+
+        if ( filemtime( $file_path ) < ( time() - ( 24 * 60 * 60 * ONAPP_LOG_ROTATION_DAYS ) ) ) {
+            chmod($file_path, 0666);
+            unlink($file_path);
+        }
     }
 }
