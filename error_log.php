@@ -24,7 +24,7 @@ define('ONAPP_E_DEBUG', 16);
  * @return void
  *
  */
-function onapp_file_write($type, $content) {
+function onapp_file_write( $content, $type = NULL, $path = NULL ) {
     //TODO check on Windows
     if ( dirname(ONAPP_LOG_DIRECTORY) == '.' )
         $log_directory = ONAPP_PATH.ONAPP_DS.ONAPP_LOG_DIRECTORY.ONAPP_DS;
@@ -52,7 +52,7 @@ function onapp_file_write($type, $content) {
                 return;
             break;
         default:
-            return;
+            $filename = $path;
             break;
     }
 
@@ -63,6 +63,19 @@ function onapp_file_write($type, $content) {
         die("Cannot write to file $filename");
 
     fclose($handle);
+}
+/**
+ * Reads file content
+ *
+ * @param string path to the file
+ * @return string file content
+ */
+function onapp_file_read( $path ){
+    $handle = fopen($path, "r");
+    $contents = fread($handle, filesize($path));
+    fclose($handle);
+
+    return $contents;
 }
 
 /**
@@ -98,7 +111,7 @@ function onapp_debug( $message )
 
     $msg = '['.$_SESSION['log_id']."] : [DEBUG] $message";
 
-    onapp_file_write('frontend', $msg);
+    onapp_file_write( $msg, 'frontend' );
 }
 
 /**
@@ -118,7 +131,7 @@ function onapp_info( $message )
 
     $msg = '['.$_SESSION['log_id']."] : [INFO] $message";
 
-    onapp_file_write('frontend', $msg);
+    onapp_file_write( $msg, 'frontend' );
 }
 
 /**
@@ -136,7 +149,7 @@ function onapp_notice( $message )
 
     $msg = '['.$_SESSION['log_id']."] : [WARN] $message";
 
-    onapp_file_write('frontend', $msg);
+    onapp_file_write( $msg, 'frontend' );
 }
 
 /**
@@ -154,7 +167,7 @@ function onapp_warn( $message )
 
     $msg = '['.$_SESSION['log_id']."] : [WARN] $message";
 
-    onapp_file_write('frontend', $msg);
+    onapp_file_write( $msg, 'frontend' );
 }
 
 
@@ -170,9 +183,9 @@ function onapp_die( $message )
 {
     $msg = '['.$_SESSION['log_id']."] : [FATAL] $message";
 
-    onapp_file_write('error', $msg);
+    onapp_file_write( $msg, 'error' );
 
-    onapp_file_write('frontend', $msg);
+    onapp_file_write( $msg, 'frontend' );
 
     onapp_rotate_error_log();
 
@@ -213,6 +226,9 @@ function onapp_error_handler( $type, $message, $file = NULL, $line = NULL, $cont
     onapp_error_reporting($error);
 
     $last_error = error_get_last( );
+    
+    onapp_rotate_debug_log();
+
     onapp_error_reporting($last_error);
 }
 
@@ -282,9 +298,9 @@ function onapp_error_reporting($error) {
         else
             $msg = '['.$_SESSION['log_id']."] : [$error_type] in " . $error['file'] . ' on line ' . $error['line'] .' \''. $error['message'] . '\'';
 
-        onapp_file_write('frontend', "$msg");
+        onapp_file_write( $msg, 'error' );
 
-        onapp_file_write('error',    "$msg");
+        onapp_file_write( $msg, 'frontend' );
 
         onapp_rotate_error_log();
     }
@@ -307,5 +323,32 @@ function onapp_rotate_error_log(){
             chmod($file_path, 0666);
             unlink($file_path);
         }
+    }
+}
+
+/**
+ * Rotates debug logs files
+ *
+ * @return void
+ */
+function onapp_rotate_debug_log(){ 
+    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+    $file = ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY . ONAPP_DS . ONAPP_DEBUG_FILE_NAME;
+    
+    $size = ( filesize($file) / 1024 ) / 1024;
+
+    if($size >= ONAPP_LOG_ROTATION_SIZE){
+        
+        for( $i = 6; $i > 0; $i-- ){
+            $old_name = $file . '.' . $i;
+            $new_name = $file. '.' . ($i+1);
+            
+            if( file_exists($old_name) && $i != 6  ){
+                rename($old_name, $new_name);
+            }
+        }
+        
+        $renamed = rename( $file, $file. '.1' );
     }
 }
