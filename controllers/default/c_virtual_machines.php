@@ -7,6 +7,7 @@ class Virtual_Machines
         if ( !isset($this->factory_instance) ) {
             require_once "wrapper/Factory.php";
 
+            
             $this->factory_instance = new ONAPP_Factory(
                 $_SESSION["host"],
                 $_SESSION["login"],
@@ -23,8 +24,12 @@ class Virtual_Machines
     */
     public function view()
     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
         $id                 = onapp_get_arg('id');
         $action             = onapp_get_arg('action');
+
+        onapp_debug('id => '. $id .' action => ' . $action);
         
         switch($action)
         {
@@ -192,8 +197,12 @@ class Virtual_Machines
     * @param other message
     * @return void
     */
-    private function show_template_view($error = NULL, $message = NULL)
+    private function show_template_view($error = NULL)
     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug( 'error => '. $error );
+        
         $onapp = $this->get_factory();                                                                        // print_r($onapp);die();
         
         $hypervisor_id    = onapp_get_arg('hypervisor_id');
@@ -261,8 +270,12 @@ class Virtual_Machines
    * @param string other message
    * @return void
    */
-    public function show_template_details($id, $error = NULL, $message = NULL)
+    public function show_template_details($id, $error = NULL)
     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         $onapp = $this->get_factory();
 
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
@@ -304,8 +317,12 @@ class Virtual_Machines
      * @param other message
      * @return void
      */
-     private function show_template_create($error = NULL, $message = NULL)
+     private function show_template_create( $error = NULL )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug( 'error => '. $error );
+
         $onapp = $this->get_factory();
 
         $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
@@ -348,8 +365,12 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_cpu_usage($id)
+     private function show_template_cpu_usage( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id);
+
         $onapp = $this->get_factory();
 
         onapp_permission(array('virtual_machines', 'virtual_machines.power', 'virtual_machines.power.own'));
@@ -397,8 +418,12 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_backup($id, $error =  NULL, $message = NULL)
+     private function show_template_backup($id, $error =  NULL)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         onapp_permission(array('backups.read.own', 'backups.read', 'backups'));
 
         $onapp = $this->get_factory();
@@ -431,6 +456,10 @@ class Virtual_Machines
      */
      private function show_template_disk_backups_schedule_details( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id);
+
         onapp_permission(array('schedules', 'schedules.read', 'schedules.read.own'));
 
         $onapp = $this->get_factory();
@@ -459,8 +488,12 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_firewall( $id )
+     private function show_template_firewall( $id, $error =  NULL )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id);
+
         onapp_permission(array('firewall_rules.read.own', 'firewall_rules.read', 'firewall_rules'));
 
         $onapp = $this->get_factory();
@@ -503,8 +536,12 @@ class Virtual_Machines
      * @param integer virtual machine disk id
      * @return void
      */
-     private function show_template_disk_backups_schedule( $id, $error )
+     private function show_template_disk_backups_schedule( $id, $error =  NULL )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         onapp_permission(array('schedules', 'schedules.read', 'schedules.read.own'));
 
         $onapp = $this->get_factory();
@@ -534,8 +571,12 @@ class Virtual_Machines
      * @param integer virtual machine disk id
      * @return void
      */
-     private function show_template_disk_backup( $id )
+     private function show_template_disk_backup( $id, $error =  NULL )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         $onapp = $this->get_factory();
 
         onapp_permission(array('backups.read.own', 'backups.read', 'backups'));
@@ -569,6 +610,10 @@ class Virtual_Machines
      */
      private function show_template_change_owner( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id);
+
         $onapp = $this->get_factory();
 
         onapp_permission(array('virtual_machines', 'virtual_machines.change_owner'));
@@ -600,8 +645,12 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_disks($id, $error =  NULL, $message = NULL)
+     private function show_template_disks($id, $error =  NULL)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         $onapp = $this->get_factory();
 
         onapp_permission(array('disks', 'disks.read', 'disks.read.own'));
@@ -659,8 +708,12 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_ip_addresses($id, $error =  NULL, $message = NULL)
-     {  
+     private function show_template_ip_addresses($id, $error =  NULL)
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         onapp_permission(array('ip_address_joins', 'ip_address_joins.read', 'ip_address_joins.read.own'));
 
         $onapp = $this->get_factory();
@@ -712,6 +765,10 @@ class Virtual_Machines
      */
      private function show_template_backup_convert( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id);
+
         onapp_permission(array('backups.convert.own', 'backups.convert', 'backups'));
 
         $params = array(
@@ -731,8 +788,12 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_edit_admin_note( $id )
+     private function show_template_edit_admin_note( $id, $error =  NULL )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id. ' error => '. $error );
+
         onapp_permission('virtual_machines', 'sysadmin_tools');
 
         $onapp = $this->get_factory();
@@ -763,6 +824,10 @@ class Virtual_Machines
      */
      private function show_template_disk_edit( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks', 'disks.update', 'disks.update.own'));
 
         $onapp = $this->get_factory();
@@ -787,8 +852,12 @@ class Virtual_Machines
      * @param integer virtual machine disk id
      * @return void
      */
-     private function show_template_migrate($id)
-     { 
+     private function show_template_migrate( $id )
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id);
+
         onapp_permission(array('virtual_machines', 'virtual_machines.migrate.own', 'virtual_machines.migrate'));
 
         $onapp = $this->get_factory();
@@ -823,6 +892,10 @@ class Virtual_Machines
      */
      private function show_template_disk_backups_schedule_edit( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('schedules', 'schedules.update'));
 
         $onapp = $this->get_factory();
@@ -856,6 +929,10 @@ class Virtual_Machines
      */
      private function show_template_firewall_rule_edit( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('firewall_rules', 'firewall_rules.update'));
 
         $onapp = $this->get_factory();
@@ -892,6 +969,10 @@ class Virtual_Machines
      */
      private function show_template_disk_backups_schedule_create( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('schedules', 'schedules.create'));
 
         $onapp = $this->get_factory();
@@ -913,7 +994,11 @@ class Virtual_Machines
      * @return void
      */
      private function show_template_disk_create( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks', 'disks.create'));
 
         $onapp = $this->get_factory();
@@ -940,7 +1025,11 @@ class Virtual_Machines
      * @return void
      */
      private function show_template_ip_address_join_new($id)
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('ip_address_joins', 'ip_address_joins.create', 'ip_address_joins.create.own'));
         
         $onapp = $this->get_factory();
@@ -996,6 +1085,10 @@ class Virtual_Machines
      */
      private function show_template_network_interfaces( $id, $error =  NULL )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id . ' error => ' . $error );
+
         onapp_permission(array('networks.read', 'networks', 'virtual_machines'));
 
         $onapp = $this->get_factory();
@@ -1053,7 +1146,11 @@ class Virtual_Machines
      * @return void
      */
      private function show_template_network_interface_edit( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('networks.update', 'networks'));
         
         $virtual_machine_id = onapp_get_arg('virtual_machine_id');
@@ -1100,7 +1197,11 @@ class Virtual_Machines
      * @return void
      */
      private function show_template_network_interface_create( $id )
-     {  
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         $onapp = $this->get_factory();                                                       
         
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
@@ -1140,6 +1241,10 @@ class Virtual_Machines
      */
      private function show_template_edit( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('virtual_machines', 'virtual_machines.update.own', 'virtual_machines.update'));
 
         $onapp = $this->get_factory();
@@ -1166,10 +1271,13 @@ class Virtual_Machines
      */
      private function create()
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_permission(array('virtual_machines', 'virtual_machines.create'));
+
         global $_ALIASES;
         $onapp = $this->get_factory();
 
-        onapp_permission(array('virtual_machines', 'virtual_machines.create'));
         $virtual_machine = onapp_get_arg('virtual_machine');                               
         
         $vm_obj = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
@@ -1197,7 +1305,12 @@ class Virtual_Machines
      */
      private function startup($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('virtual_machines', 'virtual_machines.power.own', 'virtual_machines.power'));
+
         global $_ALIASES;
         $onapp = $this->get_factory();
         
@@ -1234,22 +1347,26 @@ class Virtual_Machines
      */
      private function reset_password($id)
      {
-        global $_ALIASES;
-        $onapp = $this->get_factory();
-        
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('virtual_machines.reset_root_password', 'virtual_machines.reset_root_password.own'));
 
-            $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-            $virtual_machine->_id = $id;
-            $virtual_machine->reset_password();
+        global $_ALIASES;
+        $onapp = $this->get_factory();
 
-            if( is_null($virtual_machine->error))
-            {
-                $_SESSION['message'] = 'VIRTUAL_MACHINE_PASSWORD_WIL_BE_CHANGED_SHORTLY';
-                onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id );
-            }
-            else
-                $this->show_template_view( $virtual_machine->error);
+        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $virtual_machine->_id = $id;
+        $virtual_machine->reset_password();
+
+        if( is_null($virtual_machine->error))
+        {
+           $_SESSION['message'] = 'VIRTUAL_MACHINE_PASSWORD_WIL_BE_CHANGED_SHORTLY';
+           onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id );
+        }
+        else
+            $this->show_template_view( $virtual_machine->error);
      }
 
     /**
@@ -1260,10 +1377,15 @@ class Virtual_Machines
      */
      private function reboot($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
+        onapp_permission(array('virtual_machines', 'virtual_machines.power.own', 'virtual_machines.power'));
+
         global $_ALIASES;
         $onapp = $this->get_factory();
 
-        onapp_permission(array('virtual_machines', 'virtual_machines.power.own', 'virtual_machines.power'));
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         
         $mode = onapp_get_arg('mode');
@@ -1297,10 +1419,15 @@ class Virtual_Machines
      */
      private function delete($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
+        onapp_permission(array('virtual_machines', 'virtual_machines.delete', 'virtual_machines.delete.own'));
+        
         global $_ALIASES;
         $onapp = $this->get_factory();
 
-        onapp_permission(array('virtual_machines', 'virtual_machines.delete', 'virtual_machines.delete.own'));
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $virtual_machine->_id = $id;
         $virtual_machine->delete();
@@ -1322,6 +1449,10 @@ class Virtual_Machines
      */
      private function autobackup_disable( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks.autobackup', 'disks.autobackup.own'));
 
         global $_ALIASES;
@@ -1347,6 +1478,10 @@ class Virtual_Machines
      */
      private function autobackup_enable( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks.autobackup', 'disks.autobackup.own'));
 
         global $_ALIASES;
@@ -1372,10 +1507,15 @@ class Virtual_Machines
      */
      private function shutdown($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
+        onapp_permission(array('virtual_machines', 'virtual_machines.power', 'virtual_machines.power.own'));
+
         global $_ALIASES;
         $onapp = $this->get_factory();
 
-        onapp_permission(array('virtual_machines', 'virtual_machines.power', 'virtual_machines.power.own'));
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $virtual_machine->_id = $id;   
         $virtual_machine->shutdown( );
@@ -1398,10 +1538,14 @@ class Virtual_Machines
      */
      private function suspend($id)
      {
-        global $_ALIASES;
-        $onapp = $this->get_factory();
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
 
         onapp_permission(array('virtual_machines', 'virtual_machines.suspend'));
+        
+        global $_ALIASES;
+        $onapp = $this->get_factory();
         
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $virtual_machine->_id = $id; 
@@ -1418,11 +1562,15 @@ class Virtual_Machines
      */
      private function build($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
+        onapp_permission(array('virtual_machines', 'virtual_machines.create'));
+
         global $_ALIASES;
         $onapp = $this->get_factory();
 
-        onapp_permission(array('virtual_machines', 'virtual_machines.create'));
- 
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $virtual_machine->_id = $id; 
         $virtual_machine->build();
@@ -1444,6 +1592,10 @@ class Virtual_Machines
      */
      private function backup_delete($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('backups.delete', 'backups'));
         
         global $_ALIASES;
@@ -1470,6 +1622,10 @@ class Virtual_Machines
      */
      private function backup_take( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('backups.create', 'backups'));
         
         global $_ALIASES;
@@ -1495,6 +1651,10 @@ class Virtual_Machines
      */
      private function firewall_rule_delete( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('firewall_rules.delete', 'firewall_rules', 'firewall_rules.delete.own'));
         
         global $_ALIASES;
@@ -1524,10 +1684,14 @@ class Virtual_Machines
      */
      private function backup_restore($id)
      {
-        global $_ALIASES;
-        $onapp = $this->get_factory();
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
 
         onapp_permission(array('backups.convert', 'backups.convert.own', 'backups'));
+
+        global $_ALIASES;
+        $onapp = $this->get_factory();
 
         $backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $backup->_id = $id;
@@ -1549,7 +1713,11 @@ class Virtual_Machines
      * @return void
      */
      private function backup_convert($id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('backups.convert', 'backups.convert.own', 'backups'));
         
         $label = onapp_get_arg('label');
@@ -1582,7 +1750,11 @@ class Virtual_Machines
      * @return void
      */
      private function edit_admin_note( $id )
-     {   //echo $id; die();
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission('virtual_machines', 'sysadmin_tools');
 
         $note = onapp_get_arg('note');
@@ -1614,7 +1786,11 @@ class Virtual_Machines
      * @return void
      */
      private function disk_edit( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks', 'disks.update', 'disks.update.own'));
         
         $disk = onapp_get_arg('disk');
@@ -1649,7 +1825,11 @@ class Virtual_Machines
      * @return void
      */
      private function disk_backups_schedule_edit( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('schedules', 'schedules.update'));
         
         $schedule = onapp_get_arg('schedule');
@@ -1684,7 +1864,11 @@ class Virtual_Machines
      * @return void
      */
      private function firewall_rule_edit( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('firewall_rules', 'firewall_rules.update', 'firewall_rules.update.own'));
         
         $virtual_machine_id = onapp_get_arg('virtual_machine_id');
@@ -1721,7 +1905,11 @@ class Virtual_Machines
      * @return void
      */
      private function disk_backups_schedule_create( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('schedules', 'schedules.create'));
         
         $schedule = onapp_get_arg('schedule');
@@ -1756,7 +1944,11 @@ class Virtual_Machines
      * @return void
      */
      private function firewall_rule_create( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('firewall_rules', 'firewall_rules.create'));
         
         $firewall = onapp_get_arg('firewall');
@@ -1786,17 +1978,17 @@ class Virtual_Machines
      * @return void
      */
      private function firewall_rule_update_defaults( $id )
-     { 
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('networks', 'networks.update'));
         
         $firewall = onapp_get_arg('firewall');
-                                                                            //  print_r($firewall); die();
+                                                                            // print_r($firewall); die();
         global $_ALIASES;
         $onapp = $this->get_factory();
-            
-        
-
-        
 
         $firewall_obj = $onapp->factory('VirtualMachine_FirewallRule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);           // print('<pre>');print_r($network_interfaces); print('</pre>'); die();
 
@@ -1819,6 +2011,10 @@ class Virtual_Machines
      */
      private function disk_create( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks', 'disks.create'));
 
         $disk = onapp_get_arg('disk');
@@ -1857,6 +2053,10 @@ class Virtual_Machines
      */
      private function change_owner( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('virtual_machines', 'virtual_machines.change_owner'));
 
         global $_ALIASES;
@@ -1891,6 +2091,10 @@ class Virtual_Machines
      */
      private function firewall_rule_move( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('firewall_rules.update', 'firewall_rules.update.own', 'firewall_rules'));
 
         global $_ALIASES;
@@ -1918,6 +2122,10 @@ class Virtual_Machines
      */
      private function network_interface_edit( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission( array( 'networks', 'networks.update' ) );
         
         $network_interface = onapp_get_arg('network_interface');   //print_r($network_interface); die();
@@ -1954,6 +2162,10 @@ class Virtual_Machines
      */
      private function edit( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission( array( 'virtual_machines', 'virtual_machines.update', 'virtual_machines.update.own' ) );
 
         $virtual_machine = onapp_get_arg('virtual_machine');                                                         //print_r($virtual_machine); die();
@@ -1990,6 +2202,10 @@ class Virtual_Machines
      */
      private function network_interface_create( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission( array( 'networks', 'networks.create' ) );
         
         $network_interface = onapp_get_arg('network_interface');
@@ -2029,6 +2245,10 @@ class Virtual_Machines
      */
      private function ip_address_delete($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('ip_address_joins.delete', 'ip_address_joins'));
 
         global $_ALIASES;
@@ -2058,6 +2278,10 @@ class Virtual_Machines
      */
      private function network_interface_delete( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('networks.delete', 'networks'));
         
         $virtual_machine_id = onapp_get_arg('virtual_machine_id');
@@ -2087,6 +2311,10 @@ class Virtual_Machines
      */
      private function disk_delete( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('disks', 'disks.delete.own', 'disks.delete'));
 
         $virtual_machine_id = onapp_get_arg('virtual_machine_id');
@@ -2116,6 +2344,10 @@ class Virtual_Machines
      */
      private function disk_backups_schedule_delete( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('schedules', 'schedules.delete'));
 
         $disk_id = onapp_get_arg('disk_id');
@@ -2145,6 +2377,10 @@ class Virtual_Machines
      */
      private function firewall_rules_apply( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('firewall_rules', 'firewall_rules.update'));
 
         global $_ALIASES;
@@ -2169,7 +2405,11 @@ class Virtual_Machines
      * @return void
      */
      private function rebuild_network($id)
-     {  
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(
             array(
                 'virtual_machines.rebuild_network',
@@ -2204,7 +2444,11 @@ class Virtual_Machines
      * @return void
      */
      private function ip_address_join_new($id)
-     {   
+     {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('ip_address_joins.create', 'ip_address_joins', 'ip_address_joins.create.own'));
         
         $ip_address = onapp_get_arg('ip_address');
@@ -2238,6 +2482,10 @@ class Virtual_Machines
      */
      private function migrate($id)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('virtual_machines', 'virtual_machines.migrate', 'virtual_machines.migrate.own'));
 
         $virtual_machine = onapp_get_arg('virtual_machine');
@@ -2268,6 +2516,10 @@ class Virtual_Machines
      */
      private function console( $id )
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         onapp_permission(array('virtual_machines', 'virtual_machines.console', 'virtual_machines.console.own'));
                                                            
         global $_ALIASES;
@@ -2295,6 +2547,10 @@ class Virtual_Machines
      */
      private function calculateBackups($vm_backup_obj)
      {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+
+        onapp_debug('id => ' .$id );
+
         $backups_quantity = 0;
         $backups_total_size = 0;
         if($vm_backup_obj && is_array($vm_backup_obj))
