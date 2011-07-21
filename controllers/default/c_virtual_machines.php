@@ -7,7 +7,6 @@ class Virtual_Machines
         if ( !isset($this->factory_instance) ) {
             require_once "wrapper/Factory.php";
 
-            
             $this->factory_instance = new ONAPP_Factory(
                 $_SESSION["host"],
                 $_SESSION["login"],
@@ -722,7 +721,7 @@ class Virtual_Machines
         $vm_obj = $virtual_machine->load($id);                                                            
 
         $ip_address = $onapp->factory('VirtualMachine_IpAddressJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $ip_address_obj = $ip_address->getList($id);
+        $ip_address_obj = $ip_address->getList($id);                                                                     // print('<pre>');  print_r($ip_address_obj); print('</pre>'); die();
 
         $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $network_interface_obj = $network_interface->getList($id);                                                     //  print_r($network_interface_obj); die();
@@ -754,7 +753,7 @@ class Virtual_Machines
             'message'               =>     onapp_string( $message ),
         );
                                                                                                                                   //   print_r($network_interface_array);die();
-        onapp_show_template( 'vm_ipAddress', $params );           //print('<pre>');  print_r($network_interface_obj); print('</pre>'); //  print('<pre>');  print_r($ip_address_obj); print('</pre>');
+        onapp_show_template( 'vm_ipAddress', $params );           //print('<pre>');  print_r($network_interface_obj); print('</pre>'); 
      }
 
     /**
@@ -1038,16 +1037,29 @@ class Virtual_Machines
         $vm_obj = $vm->load($id);                                                                     //print('<pre>'); print_r($vm_obj); print('</pre>');die();
         
         $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);
+        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                //  print('<pre>'); print_r($hypervisor); print('</pre>');die();
         
         $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);                           // print('<pre>'); print_r($network_join_obj); print('</pre>');die();
-        
-        $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);                              
-        foreach($network_join_obj as $network_join){
-            $network_obj = $network->load($network_join->_network_id);
-            $network_obj_array[$network_join->_id] = $network_obj; 
-        }                                                                                              //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+
+        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
+
+        $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);                        //print('<pre>'); print_r($network); print('</pre>');die();
+
+        if (  is_array( $network_join_obj ) ) {
+            foreach($network_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }
+        }                                                                           //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+                                                                                        //  print('<pre>'); print_r($network_obj); print('</pre>');die();
+        if ( is_array( $networkzone_join_obj ) ) {
+            foreach($networkzone_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }                                                                                            //   print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+        }
         
         $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $network_interface_obj = $network_interface->getList($id);                                     //print('<pre>'); print_r($network_interface_obj); print('</pre>');die();
@@ -1062,7 +1074,7 @@ class Virtual_Machines
                 if( $object->_free == 1)
                     $ip_addresses_array[$network_interface_object[$interface_id]->_id][$object->_id] = $object->_address. '/' . $object->_netmask . '/' .$object->_gateway ;
             }
-        }                                                                                                 //print('<pre>'); print_r($ip_addresses_array); print('</pre>');die();
+        }                                                                                                // print('<pre>'); print_r($ip_addresses_array); print('</pre>');die();
                                                                                                           
         $params = array(
             'ip_addresses'           =>     json_encode( $ip_addresses_array ),
@@ -1096,29 +1108,45 @@ class Virtual_Machines
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $vm_obj = $virtual_machine->load($id);                                                                      //  print('<pre>'); print_r($vm_obj); print('</pre>');die();
 
-        $ip_address = $onapp->factory('VirtualMachine_IpAddressJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $ip_address_obj = $ip_address->getList($id);
+        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                             //echo   $vm_obj->_hypervisor_id; die();
+
+        
+
+        $ip_address = $onapp->factory('VirtualMachine_IpAddressJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);               
+        $ip_address_obj = $ip_address->getList($id);                                                                   // print('<pre>'); print_r($ip_address_obj); print('</pre>');die();
 
         $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_interface_obj = $network_interface->getList($id);                                                  //print('<pre>'); print_r($network_interface_obj); print('</pre>');die();
+        $network_interface_obj = $network_interface->getList($id);                                                 // print('<pre>'); print_r($network_interface_obj); print('</pre>');die();
 
         foreach( $network_interface_obj as $network_interface )
             $network_interface_array[$network_interface->_id] = $network_interface;        
-                                                                                 // print('<pre>');print_r($network_obj);print('</pre>'); die();
+                                                                                                                 // print('<pre>');print_r($network_interface_array);print('</pre>'); die();
         $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);  
+        $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);
+
+        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
         
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                             //echo   $vm_obj->_hypervisor_id; die();    
+        
                                                                                                                    // print('<pre>');print_r($network_join_obj);print('</pre>'); die();
         foreach($network_join_obj as $network_join)
             $network_join_array[$network_join->_id] = $network_join;
          
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
          
-        foreach($network_join_array as $network_join){
-            $network_obj = $network->load($network_join->_network_id);
-            $network_obj_array[$network_join->_id] = $network_obj; 
+        if (  is_array( $network_join_obj ) ) {
+            foreach($network_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }
+        }                                                                           //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+                                                                                   //  print('<pre>'); print_r($network_obj); print('</pre>');die();
+        if ( is_array( $networkzone_join_obj ) ) {
+            foreach($networkzone_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }                                                                                            //   print('<pre>'); print_r($network_obj_array); print('</pre>');die();
         }                                                                                                  // print('<pre>');print_r($network_obj_array);print('</pre>'); die();
                                                                                                
         if( is_null($network_interface_obj->_id) && ! is_array($network_interface_obj) )
@@ -1168,12 +1196,24 @@ class Virtual_Machines
         
         $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);                               // print('<pre>'); print_r($network_join_obj); print('</pre>');die();
+
+        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
         
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
          
-        foreach($network_join_obj as $network_join){
-            $network_obj = $network->load($network_join->_network_id);
-            $network_obj_array[$network_join->_id] = $network_obj; 
+        if (  is_array( $network_join_obj ) ) {
+            foreach($network_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }
+        }                                                                           //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+                                                                                   //  print('<pre>'); print_r($network_obj); print('</pre>');die();
+        if ( is_array( $networkzone_join_obj ) ) {
+            foreach($networkzone_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }                                                                                            //   print('<pre>'); print_r($network_obj_array); print('</pre>');die();
         }                                                                                             //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
         
         $params = array(
@@ -1205,21 +1245,32 @@ class Virtual_Machines
         $onapp = $this->get_factory();                                                       
         
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load( $id );
+        $vm_obj = $virtual_machine->load( $id );                                                                // print('<pre>'); print_r($vm_obj); print('</pre>');die();
         
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);
+        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);                    
+        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                       //  print('<pre>'); print_r($hypervisor_obj); print('</pre>');die();
         
         $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);                               // print('<pre>'); print_r($network_join_obj); print('</pre>');die();
+
+        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
         
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-         
-        foreach($network_join_obj as $network_join){
-            $network_obj = $network->load($network_join->_network_id);
-            $network_obj_array[$network_join->_id] = $network_obj; 
-        }                                                                                             //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();                                                                  //  print('<pre>'); print_r($network_obj); print('</pre>');die();
-        
+
+        if (  is_array( $network_join_obj ) ) {
+            foreach($network_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }
+        }                                                                           //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+                                                                                   //  print('<pre>'); print_r($network_obj); print('</pre>');die();
+        if ( is_array( $networkzone_join_obj ) ) {
+            foreach($networkzone_join_obj as $network_join){
+                $network_obj = $network->load($network_join->_network_id);
+                $network_obj_array[$network_join->_id] = $network_obj;
+            }                                                                                            //   print('<pre>'); print_r($network_obj_array); print('</pre>');die();
+        }
         $params = array(
             'hypervisor_label'      =>     $hypervisor_obj->_label,
             'network_obj'           =>     $network_obj_array,
@@ -2217,8 +2268,7 @@ class Virtual_Machines
             global $_ALIASES;
             
             $onapp = $this->get_factory();
-        
-                                                                                
+                                                                            
             $network_interface_obj = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             
             foreach($network_interface as $key => $value)
@@ -2232,8 +2282,7 @@ class Virtual_Machines
                 onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']  . '?action=network_interfaces&id=' . $id);
             }
             else
-                $this->show_template_network_interface($id, $network_interface_obj->error);
-                
+                $this->show_template_network_interface($id, $network_interface_obj->error);             
         }
      }
 
@@ -2583,3 +2632,4 @@ class Virtual_Machines
         return onapp_has_permission(array('virtual_machines', 'virtual_machines.read.own'));
     }
 }
+   
