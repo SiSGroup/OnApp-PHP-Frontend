@@ -5,7 +5,7 @@ class Virtual_Machines
 
     private function get_factory() {
         if ( !isset($this->factory_instance) ) {
-            require_once "wrapper/Factory.php";
+            //require_once "wrapper/Factory.php";
 
             $this->factory_instance = new ONAPP_Factory(
                 $_SESSION["host"],
@@ -545,11 +545,9 @@ class Virtual_Machines
 
         $onapp = $this->get_factory();
         $schedule = $onapp->factory('Disk_Schedule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $schedule_obj = $schedule->getListByDiskId( $id );                                          //print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
+        $schedule_obj = $schedule->getListByDiskId( $id );                                         //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
 
-        if( is_null($schedule_obj->_id) && ! is_array( $schedule_obj ) )
-            $schedule_obj = NULL;
-                                                                                      //print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
+                                                                                      //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
         $params = array(
             'schedule_obj'    =>     $schedule_obj,
             'disk_id'         =>     $id,
@@ -812,8 +810,6 @@ class Virtual_Machines
 
         onapp_show_template( 'vm_editAdminNote', $params );
      }
-
-
 
     /**
      * Shows virtual machine disk edit page
@@ -1427,7 +1423,11 @@ class Virtual_Machines
 
         onapp_debug('id => ' .$id );
 
-        onapp_permission(array('virtual_machines.reset_root_password', 'virtual_machines.reset_root_password.own'));
+        onapp_permission(array(
+                            'virtual_machines',
+                            'virtual_machines.reset_root_password',
+                            'virtual_machines.reset_root_password.own'
+                        ));
 
         global $_ALIASES;
         $onapp = $this->get_factory();
