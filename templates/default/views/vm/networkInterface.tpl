@@ -12,13 +12,14 @@
             <th></th>
                 
         </tr>
+
     {foreach from=$network_interface_obj item=network_interface}
         <tr>
             <td>
                 {$network_interface->_label}
             </td>
             <td>
-                {$network_labels[$network_interface->_network_join_id]->_label} ( {$hypervisor_label} )
+                {$network_labels[$network_interface->_network_join_id]->_label} ( {$target_labels[$network_interface->_network_join_id]})
             </td>
             <td>
                 {if $network_interface->_rate_limit == 0}

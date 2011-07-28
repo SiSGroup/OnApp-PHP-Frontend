@@ -69,7 +69,7 @@
             </form>
         </div>
     {else}
-        {include file="default/hypervisor/details.tpl"}
+        {include file="default/views/hypervisor/details.tpl"}
     {/if}
 
 

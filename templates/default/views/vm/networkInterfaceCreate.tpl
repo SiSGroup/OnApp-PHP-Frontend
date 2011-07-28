@@ -22,7 +22,7 @@
                 <select  name="network_interface[_network_join_id]">
                     {foreach from=$network_obj key=network_join_id item=network}
                         <option value="{$network_join_id}" {if $network_interface_obj->_network_join_id == $network_join_id}selected="true"{/if}>
-                            {$network->_label} ( {$hypervisor_label} )                           
+                            {$network->_label} ( {$target_labels[$network_join_id]} )
                         </option>
                     {/foreach}
                 </select>
