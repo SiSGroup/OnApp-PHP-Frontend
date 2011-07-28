@@ -406,8 +406,7 @@ function onapp_is_auth() {
  *
  * @return void     
  */
-function onapp_permission($permissions) {
-   // todo fix to 2.2 onapp version!
+function onapp_permission($permissions) {                                                         
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     global $_ALIASES;
     if(is_array($permissions))
@@ -467,4 +466,19 @@ function onapp_scan_dir( $path ){
     closedir($handle);
     return $files_list;
 
+}
+
+function onapp_format_money($number, $fractional=false) {
+    if ($fractional) {
+        $number = sprintf('%.2f', $number);
+    }
+    while (true) {
+        $replaced = preg_replace('/(-?\d+)(\d\d\d)/', '$1,$2', $number);
+        if ($replaced != $number) {
+            $number = $replaced;
+        } else {
+            break;
+        }
+    }
+    return $number;
 }
