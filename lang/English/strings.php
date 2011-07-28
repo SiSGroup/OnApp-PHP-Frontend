@@ -292,7 +292,7 @@ $_LANG['ADD_NEW_NETWORK_INTERFACE_INFO'] =
     'To add a new network interface to this virtual
      machine, complete the form below and click the Add 
      Network Interface button';
-$_LANG['NETWORK_INTERFACE_HAVE_BEEN_REMOVED_SUCCESSFULLY'] = 'Network interface has been removed successfully';
+$_LANG['NETWORK_INTERFACE_WILL_BE_REMOVED_IN_A_MOMENT'] = 'Network interface will be removed in a moment';
 $_LANG['DISK_SETTINGS'] = 'Disk Settings';
 $_LANG['DISK_SETTINGS_INFO'] = 
     'Click the icons to edit disk size, to view IOPS charts, 
@@ -444,105 +444,32 @@ $_LANG['DEBUG_LOGS_DETAILS_INFO'] = '';
 $_LANG['DEBUG_LOGS_INFO'] = 'Insert the session or error identifier and press the View button to see the log information';
 $_LANG['SESSION_ID'] = 'Session ID';
 $_LANG['SESSION_IDENTIFIER_NOT_FOUND_IN_LOG_FILE'] = 'Session Identifier Not Found In Log File';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-     
-     
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$_LANG['USERS_AND_GROUPS'] = 'Users And Groups';
+$_LANG['USERS_'] = 'Users';
+$_LANG['UNDEFINED_'] = 'Undefined';
+$_LANG['USERS_AND_GROUPS_INFO'] =
+    'Here are all the users on the system. Click the links in each entry to view
+    their virtual machines, view and edit payments and set resource limits.
+    Click the icons on the right to edit their details, delete and suspend users.
+    Use the button at the bottom of the list to add new users, and the
+    navigation at the top to show billing plan and role information.';
+$_LANG['ROLES_USER_GROUP'] = 'Roles / User Group';
+$_LANG['PAYMENTS_'] = 'Payments';
+$_LANG['BILLING_PLAN'] = 'Billing Plan';
+$_LANG['USER_STATISTICS'] = 'User Statistics';
+$_LANG['MONTHLY_BILLS'] = 'Mounthly Bills';
+$_LANG['USER_INFORMATION'] = 'User Information';
+$_LANG['USER_INFORMATION_INFO'] =
+    'This screen shows details for the selected user, including roles, billing
+    and resource limits. To edit or delete a user payment, click the icons
+    next to the relevant invoice';
+$_LANG['ADD_A_NEW_USER'] = 'Add A New User';
+$_LANG['BILLING_DETAILS'] = 'Billing Details';
+$_LANG['OUTSTANDING_AMOUNT'] = 'Outstanding amount';
+
+$_LANG['TOTAL_COST'] = 'Total cost';
+$_LANG['BILLING_PLAN_FOR'] = 'Billing plan for';
+$_LANG['MONTHLY_FEE'] = 'Monthly fee';
 
 
 
