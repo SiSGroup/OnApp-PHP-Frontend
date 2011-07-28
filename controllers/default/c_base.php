@@ -1,19 +1,14 @@
 <?php
-
 if( !defined( 'ONAPP_PATH' ) ) {
 	die( 'No direct script access allowed' );
 }
-
 class Base {
 	function login( ) {
 		global $_ALIASES;
-
 		$login = onapp_get_arg( 'login' );
 		$password = onapp_get_arg( 'password' );
 		$host = onapp_get_arg( 'host' );
-
 		$params = array( );
-
 		if( !is_null( $login ) &&
 			!is_null( $password ) &&
 			!is_null( $host )
@@ -23,8 +18,7 @@ class Base {
 				$login,
 				$password
 			);
-
-			if( !is_null( $onapp->getAPIVersion( ) ) ) {
+			if( ! is_null( $onapp->getAPIVersion( ) ) ) {
 				$this->_start_session( );
 				$this->_load_profile( $onapp );
 				if( isset( $_SESSION[ 'redirect' ] ) ) {
@@ -42,22 +36,17 @@ class Base {
 				);
 			}
 		}
-
 		onapp_show_template( 'login', $params );
 	}
-
 	function logout( ) {
 		global $_ALIASES;
-
 		session_start( );
 		session_regenerate_id( );
 		session_destroy( );
 		unset( $_SESSION );
 		session_start( );
-
 		onapp_redirect( $_ALIASES[ "login" ] );
 	}
-
 	private function _start_session( ) {
 		$_SESSION[ 'id' ] = session_id( );
 		$_SESSION[ 'host' ] = onapp_get_arg( 'host' );
@@ -68,22 +57,16 @@ class Base {
 			'encrypt'
 		);
 	}
-
 	private function _load_profile( $onapp ) {
 		onapp_debug( "Load OnApp user profile" );
-
 		$profile = $onapp->factory( 'Profile' );
-
 		$profile_obj = $profile->load( );
-
-		$_SESSION[ 'profile_obj' ] = $profile_obj;
-
-		foreach( $profile_obj->_roles as $role ) {
-			foreach( $role->_permissions as $permission ) {
-				$_SESSION[ 'permissions' ][ ] = $permission->permission->identifier;
+		$_SESSION[ 'profile_obj' ] = $profile_obj;                         		 
+		foreach( $profile_obj->_roles as $role ) {                              
+			foreach( $role->_permissions as $permission ) {                      
+				$_SESSION[ 'permissions' ][ ] = $permission->_identifier;
 			}
-		}
-
+		}                                                                              
 		onapp_debug( '_load_profile: profile => ' . print_r( $profile_obj, true ) );
 	}
 }
