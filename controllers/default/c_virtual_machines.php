@@ -94,7 +94,7 @@ class Virtual_Machines
                 $this->ip_address_delete( $id );
                 break;
             case 'network_interfaces':
-                $this->show_template_network_interfaces( $id );
+                $this->show_template_network_interface( $id );
                 break;
             case 'interface_usage':
                 $this->show_template_interface_usage( $id );
@@ -1091,7 +1091,7 @@ class Virtual_Machines
      * @param integer virtual machine id
      * @return void
      */
-     private function show_template_network_interfaces( $id, $error =  NULL )
+     private function show_template_network_interface( $id, $error =  NULL )
      {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
@@ -1159,6 +1159,7 @@ class Virtual_Machines
             'title'                       =>     onapp_string('NETWORK_INTERFACE_FOR_THIS_VIRTUAL_MACHINE'),
             'info_title'                  =>     onapp_string('NETWORK_INTERFACE_FOR_THIS_VIRTUAL_MACHINE'),
             'info_body'                   =>     onapp_string('NETWORK_INTERFACE_FOR_THIS_VIRTUAL_MACHINE_INFO'),
+            'error'                       =>     $error,
         );                                                                                                   //print('<pre>');print_r($network_array);print('</pre>'); die();
 
         onapp_show_template( 'vm_networkInterface', $params );                                              // print('<pre>');  print_r($ip_address_obj); print('</pre>');
@@ -2433,10 +2434,10 @@ class Virtual_Machines
         $schedule->_id = $id;
         $schedule->delete( $id );                                                                 //print('<pre>'); print_r($disk);die(); print('</pre>');
 
-        if( is_null($schedule->error))
+        if( is_null($schedule->error ) )
             {
                 $_SESSION['message'] = 'SCHEDULE_HAS_BEEN_DESTRUCTED';
-                onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']  . '?action=disk_backups_schedule&id=' . $disk_id);
+                onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']  . '?action=disk_backups_schedule&id=' . $disk_id );
             }
             else
                 $this->show_template_disk_backups_schedule($disk_id, $schedule->error);
