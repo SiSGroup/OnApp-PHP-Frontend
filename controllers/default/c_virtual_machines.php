@@ -1530,7 +1530,7 @@ class Virtual_Machines
 
         onapp_debug('id => ' .$id );
 
-        onapp_permission(array('disks.autobackup', 'disks.autobackup.own'));
+        onapp_permission(array('disks', 'disks.autobackup', 'disks.autobackup.own'));
 
         global $_ALIASES;
         $onapp = $this->get_factory();
@@ -1559,7 +1559,7 @@ class Virtual_Machines
 
         onapp_debug('id => ' .$id );
 
-        onapp_permission(array('disks.autobackup', 'disks.autobackup.own'));
+        onapp_permission(array('disks', 'disks.autobackup', 'disks.autobackup.own'));
 
         global $_ALIASES;
         $onapp = $this->get_factory();
@@ -2299,7 +2299,7 @@ class Virtual_Machines
 
             foreach($network_interface as $key => $value)
                 $network_interface_obj->$key = $value;
-
+                                                                                                  // print('<pre>');print_r($network_interface_obj); print('</pre>'); die();
             $network_interface_obj->save( );                                                      // print('<pre>');print_r($network_interface_obj); print('</pre>'); die();
 
             if( is_null($network_interface_obj->error))
