@@ -68,6 +68,7 @@
             <input type="hidden" name = "action" value="create" />
             <input type="submit" value="{'ADD_A_NEW_USER'|onapp_string}" />
         </form>
-           
+
+{include file="default/views/usersAndGroups/navigation_main.tpl"}
 {include file="default/views/navigation.tpl"}
 {include file="default/views/footer.tpl"}
