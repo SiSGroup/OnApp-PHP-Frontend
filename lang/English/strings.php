@@ -470,6 +470,50 @@ $_LANG['OUTSTANDING_AMOUNT'] = 'Outstanding amount';
 $_LANG['TOTAL_COST'] = 'Total cost';
 $_LANG['BILLING_PLAN_FOR'] = 'Billing plan for';
 $_LANG['MONTHLY_FEE'] = 'Monthly fee';
+$_LANG['USER_GROUP'] = 'User Group';
+
+$_LANG['USER_PAYMENTS'] = 'User Payments';
+$_LANG['PAYMENT_DATE'] = 'Payment Date';
+$_LANG['INVOICE_NUMBER'] = 'Invoice Number';
+$_LANG['USER_GROUP'] = 'User Group';
+$_LANG['AMOUNT_'] = 'Amount';
+$_LANG['EDIT_PAYMENT'] = 'Edit Payment';
+$_LANG['DESTROY_PAYMENT'] = 'Destroy Payment';
+$_LANG['PAYMENTS_FOR_THIS_USER'] = 'Payments for this user';
+$_LANG['PAYMENTS_FOR_THIS_USER_INFO'] = 
+    'The payments (invoices paid) for the selected user. Once an invoice is 
+    paid, you can add it to the system using the Add New Payment button.';
+$_LANG['ADD_NEW_PAYMENT'] = 'Add New Payment';
+$_LANG['PAYMENT_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Payment has been deleted successfully';
+$_LANG['PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Payment has been created successfully';
+$_LANG['ADD_NEW_PAYMENT'] = 'Add New Payment';
+$_LANG['ADD_NEW_PAYMENT_INFO'] = 
+    'To add a new payment to the system, fill in the form below and then click 
+    the Save button';
+
+$_LANG['EDIT_PAYMENT'] = 'Edit Payment';
+$_LANG['EDIT_PAYMENT_INFO'] =
+    'To edit the selected payment, change its properties in the form below and
+    then click the Save button';
+$_LANG['PAYMENT_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Payment has been updated successfully';
+
+$_LANG['WHITE_LIST'] = 'White List';
+$_LANG['EDIT_PROFILE'] = 'Edit Profile';
+$_LANG['USER_MENU'] = 'User Menu';
+$_LANG['USER_GROUPS'] = 'User Groups';
+$_LANG['BILLING_PLANS'] = 'Billing Plans';
+$_LANG['ROLES_'] = 'Roles';
+
+
+
+
+
+
+
+
+
+
+
 
 
 
