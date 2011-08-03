@@ -42,10 +42,10 @@
                    <a href="{$_ALIASES["users_and_groups"]}?action=payments&amp;id={$user->_id}">{'PAYMENTS_'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=billing_plan&amp;id={$user->_id}">{'BILLING_PLAN'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=monthly_bills&amp;id={$user->_id}">{'MONTHLY_BILLS'|onapp_string}</a>
-                   <a href="{$_ALIASES["users_and_groups"]}?action=user_statistics&amp;id={$user->_id}">{'USER_STATISTICS'|onapp_string}</a>
+                   <a href="{$_ALIASES["users_and_groups"]}?action=statistics&amp;id={$user->_id}">{'USER_STATISTICS'|onapp_string}</a>
                </td>
                <td class="one_icon_td">
-                   
+               {if $user->_status != 'deleted'}
                    <a href="{$_ALIASES["users_and_groups"]}?action=edit&amp;id={$user->_id}">
                        <img title="{'EDIT_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                    </a>
@@ -58,6 +58,11 @@
                    <a href="{$_ALIASES["users_and_groups"]}?action=white_ip_list&amp;id={$user->_id}&amp;virtual_machine_id={$virtual_machine_id}">
                        <img title="{'WHITE_IP_LIST'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/network.png" />
                    </a>
+               {else}
+                   <a href="{$_ALIASES["users_and_groups"]}?action=delete&amp;id={$user->_id}">
+                       <img title="{'DELETE_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
+                   </a>erase all
+               {/if}
                    
                </td>
            </tr>

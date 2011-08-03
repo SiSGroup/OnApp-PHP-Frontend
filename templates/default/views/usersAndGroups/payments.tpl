@@ -1,7 +1,9 @@
 {include file="default/views/header.tpl"}
 
+     {if $payment_obj == null}
+        <p class="not_found">No payments found</p>
+     {else}
     <table class="table_my" cellpadding="0" cellspacing="0" border="0">
-
         <tr>
             <th>{'PAYMENT_DATE'|onapp_string}</th>
             <th>{'INVOICE_NUMBER'|onapp_string}</th>
@@ -9,9 +11,7 @@
             <th></th>
 
         </tr>
-     {if $payment_obj == null}
-        <tr><td><p class="not_found">No payments found<p></td></tr>
-     {else}
+     
      {foreach from=$payment_obj item=payment}
         <tr>
             <td>
@@ -21,7 +21,7 @@
                 {$payment->_invoice_number}
             </td>
             <td>
-                {$payment->_amount} {$billing_plan_obj->_currency_code}
+                {$payment->_amount|onapp_format_money} {$billing_plan_obj->_currency_code}
             </td>
             <td class="dark_td">
                 <a href="{$_ALIASES["users_and_groups"]}?action=payment_edit&amp;id={$payment->_id}&amp;user_id={$user_id}">
@@ -33,8 +33,9 @@
             </td>
         </tr>
      {/foreach}
+    </table>
      {/if}
-        </table>
+        
         <form style="float:right" action='{$_ALIASES["users_and_groups"]}' method="post">
             <input type="hidden" name = "id" value="{$user_id}" />
             <input type="hidden" name = "action" value="payment_create" />

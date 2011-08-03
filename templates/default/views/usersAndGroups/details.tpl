@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <td class="label">{'MONTHLY_FEE'|onapp_string}</td>
-            <td>{$billing_plan_obj->_monthly_price}</td>
+            <td>{$billing_plan_obj->_monthly_price|onapp_format_money}</td>
         </tr>
         <tr>
             <td class="label">{'OUTSTANDING_AMOUNT'|onapp_string}</td>
@@ -44,7 +44,7 @@
         </tr>
         <tr>
             <td class="label">{'PAYMENTS_'|onapp_string}</td>
-            <td>{$user_obj->_payment_amount}</td>
+            <td>{$user_obj->_payment_amount|onapp_format_money}</td>
         </tr>
         <tr>
             <td class="label">{'TOTAL_COST'|onapp_string}</td>
@@ -57,7 +57,7 @@
     <tr>
         <td>
             {foreach from=$user_obj->_roles item=role}
-                {$role->_label}
+                {$role->_label} <br />
             {/foreach}
         </td>
     </tr>
@@ -73,21 +73,10 @@
 </table>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <h1>{'USER_PAYMENTS'|onapp_string}</h1>
+    {if $payment_obj == null}
+        <p class="not_found">No payments found</p>
+    {else}
     <table class="table_my" cellpadding="0" cellspacing="0" border="0">
 
         <tr>
@@ -97,9 +86,9 @@
             <th></th>
 
         </tr>
-     {if $payment_obj == null}
-        <tr><td><p class="not_found">No payments found<p></td></tr>
-     {else}
+     
+        
+     
      {foreach from=$payment_obj item=payment}
         <tr>
             <td>
@@ -109,7 +98,7 @@
                 {$payment->_invoice_number}
             </td>
             <td>
-                {$payment->_amount} {$billing_plan_obj->_currency_code}
+                {$payment->_amount|onapp_format_money} {$billing_plan_obj->_currency_code}
             </td>
             <td class="dark_td">
                 <a href="{$_ALIASES["users_and_groups"]}?action=payment_edit&amp;id={$payment->_id}&amp;user_id={$user_obj->_id}">
@@ -121,8 +110,9 @@
             </td>
         </tr>
      {/foreach}
+     </table>
      {/if}
-        </table>
+        
     
         
     
