@@ -503,6 +503,84 @@ $_LANG['USER_MENU'] = 'User Menu';
 $_LANG['USER_GROUPS'] = 'User Groups';
 $_LANG['BILLING_PLANS'] = 'Billing Plans';
 $_LANG['ROLES_'] = 'Roles';
+$_LANG['USER_STATISTICS'] = 'User Statistics';
+$_LANG['USER_STATISTICS_INFO'] = 'A summary of the resources used by users';
+$_LANG['BACKUPS_TEMPLATES_COST'] = 'Backups/Templates Cost';
+$_LANG['BACKUPS_COSTS'] = 'Backups Costs';
+
+$_LANG['MONITIS_FEE'] = 'Monitis Fee';
+$_LANG['STORAGE_DISKS_SIZE_COSTS'] = 'Storage Disks Size Costs';
+$_LANG['TEMPLATES_COSTS'] = 'Templates Costs';
+$_LANG['VIRTUAL_MACHINES_COST'] = 'Virtual Machines Cost';
+
+$_LANG['RESOURCES_COST'] = 'Resources Cost';
+$_LANG['USAGE_COST'] = 'Usage Cost';
+$_LANG['TOTAL_'] = 'Total';
+$_LANG['VM_DELETED'] = 'VM Deleted';
+$_LANG['WHITE_LIST_IPS_FOR_THIS_USER'] = 'Whitelist IPs for this user';
+$_LANG['WHITE_LIST_IPS_FOR_THIS_USER_INFO'] = 
+    'The IPs from which this user can log in to the Control Panel. To add a
+    new IP to the list, click the New Whitelist IP button. Edit and delete IPs
+    using the icons on the right';
+$_LANG['IP_'] = 'IP';
+$_LANG['DESCRIPTION_'] = 'Description';
+$_LANG['NEW_WHITE_LIST_IP'] = 'New Whitelist IP';
+$_LANG['ADD_NEW_WHITE_IP'] = 'Add new white IP';
+$_LANG['ADD_NEW_WHITE_IP_INFO'] = 
+    'To add a new white IP to the list of addresses from which this user can
+    log in to the Control Panel, fill in details in the form below and click 
+    Add New White IP';
+$_LANG['USER_WHITE_IP_WAS_SUCCESSFULLY_CREATED'] = 'User white IP was successfully created';
+$_LANG['USER_WHITE_IP_WAS_SUCCESSFULLY_DELETED'] = 'User white IP was successfully deleted';
+$_LANG['EDIT_WHITE_IP'] = 'Edit white IP';
+$_LANG['EDIT_WHITE_IP_INFO'] =
+    'Edit the selected white IP for this user, and click the Save White IP button';
+$_LANG['USER_WHITE_IP_WAS_SUCCESSFULLY_UPDATED'] = 'User white IP was successfully updated';
+$_LANG['EDIT_USER'] = 'Edit user';
+$_LANG['EDIT_USER_INFO'] =
+    'To edit the selected user, change the details on this screen, then click the Save button';
+$_LANG['FIRST_NAME'] = 'First Name';
+$_LANG['LAST_NAME'] = 'Last Name';
+$_LANG['LOGIN_PASSWORD'] = 'Login Password';
+$_LANG['REPEAT_PASSWORD'] = 'Repeat Password';
+$_LANG['AUTO_SUSPENDING'] = 'Auto Suspending';
+$_LANG['SUSPEND_AT'] = 'Suspend at';
+$_LANG['USER_PROFILE_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'User profile has been updated successfully';
+$_LANG['ADD_A_NEW_USER_INFO'] = 
+    'To add a user, complete the form below. Provide login information and
+    password, choose a billing plan, set the role, then click the Save button';
+$_LANG['USER_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'User has been created successfully';
+$_LANG['DELETE_'] = 'Delete';
+$_LANG['SUSPEND_'] = 'Suspend';
+$_LANG['WHITE_IP_LIST'] = 'White Ip List';
+$_LANG['USER_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'User has been deleted successfully';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
