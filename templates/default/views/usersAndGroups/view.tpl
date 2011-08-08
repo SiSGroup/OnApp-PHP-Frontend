@@ -45,7 +45,7 @@
                    <a href="{$_ALIASES["users_and_groups"]}?action=statistics&amp;id={$user->_id}">{'USER_STATISTICS'|onapp_string}</a>
                </td>
                <td class="one_icon_td">
-               {if $user->_status != 'deleted'}
+               {if $user->_status != 'deleted' && $user->_status != 'suspended'}
                    <a href="{$_ALIASES["users_and_groups"]}?action=edit&amp;id={$user->_id}">
                        <img title="{'EDIT_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                    </a>
@@ -53,10 +53,14 @@
                        <img title="{'DELETE_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                    </a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=suspend&amp;id={$user->_id}">
-                       <img title="{'SUSPEND_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/stop.png" />
+                       <img title="{'SUSPEND_USER'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/stop.png" />
                    </a>
-                   <a href="{$_ALIASES["users_and_groups"]}?action=white_ip_list&amp;id={$user->_id}&amp;virtual_machine_id={$virtual_machine_id}">
+                   <a href="{$_ALIASES["users_and_groups"]}?action=white_list&amp;id={$user->_id}">
                        <img title="{'WHITE_IP_LIST'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/network.png" />
+                   </a>
+               {elseif $user->_status == 'suspended'}
+                   <a href="{$_ALIASES["users_and_groups"]}?action=activate&amp;id={$user->_id}">
+                       <img title="{'ACTIVATE_USER'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/play.png" />
                    </a>
                {else}
                    <a href="{$_ALIASES["users_and_groups"]}?action=delete&amp;id={$user->_id}">
