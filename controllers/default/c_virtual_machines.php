@@ -1,21 +1,8 @@
 <?php
-class Virtual_Machines
+require_once( ONAPP_PATH . ONAPP_DS . 'controllers' . ONAPP_DS . ONAPP_CONTROLLERS . ONAPP_DS . 'controller.php');
+
+class Virtual_Machines extends Controller
 {
-    private $factory_instance;
-
-    private function get_factory() {
-        if ( !isset($this->factory_instance) ) {
-            //require_once "wrapper/Factory.php";
-
-            $this->factory_instance = new ONAPP_Factory(
-                $_SESSION["host"],
-                $_SESSION["login"],
-                onapp_cryptData($_SESSION["password"], 'decrypt')
-            );
-       }
-       return $this->factory_instance;
-   }
-
    /**
     * Main controller function
     *
@@ -257,7 +244,6 @@ class Virtual_Machines
            'error'             =>    onapp_string( $error ),
            'message'           =>    onapp_string( $message )
        );
-
        onapp_show_template( 'vm_view', $params );
      }
 
@@ -275,30 +261,18 @@ class Virtual_Machines
 
         onapp_debug('id => ' .$id. ' error => '. $error );
 
-        $onapp = $this->get_factory();
-
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load($id);
-
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);
-
-        $vm_backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_backup_obj = $vm_backup->getList($id);
-
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load($vm_obj->_user_id);
+        $vm_obj = $this->load( 'VirtualMachine', array( $id ) );
 
         $size_and_quantity = $this->calculateBackups($vm_backup_obj);
 
         $params = array(
             'virtual_machine_id'  =>  $id,
-            'user_obj'            =>  $user_obj,
+            'user_obj'            =>  $this->load( 'User', array( $vm_obj->_user_id) ),
             'backups_quantity'    =>  $size_and_quantity['quantity'],
             'backups_total_size'  =>  $size_and_quantity['size'],
             'profile_obj'         =>  $_SESSION['profile_obj'],
-            'vm_backup_obj'       =>  $vm_backup_obj,
-            'hypervisor_obj'      =>  $hypervisor_obj,
+            'vm_backup_obj'       =>  $this->getList( 'VirtualMachine_Backup', array( $id ) ),
+            'hypervisor_obj'      =>  $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) ),
             'vm_obj'              =>  $vm_obj,
             'title'               =>  onapp_string('VIRTUAL_MACHINE_DETAILS'),
             'info_title'          =>  onapp_string('VIRTUAL_MACHINE_DETAILS'),
@@ -322,33 +296,12 @@ class Virtual_Machines
 
         onapp_debug( 'error => '. $error );
 
-        $onapp = $this->get_factory();
-
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->getList();
-
-        $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $vm->getList();
-
-        $templates = $onapp->factory('Template', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $templates_obj = $templates->getList();
-
-        $data_store_zone = $onapp->factory('DataStoreZone', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $data_store_zone_obj = $data_store_zone->getList();
-
-        $network_zone = $onapp->factory('NetworkZone', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_zone_obj = $network_zone->getList();
-
-        $hypervisor_zones = $onapp->factory('HypervisorZone', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_zones_obj = $hypervisor_zones->getList();
-
         $params = array(
-            'network_zone_obj'      =>     $network_zone_obj,
-            'data_store_zone_obj'   =>     $data_store_zone_obj,
-            'hypervisor_zones_obj'  =>     $hypervisor_zones_obj,
-            'templates_obj'         =>     $templates_obj,
-            'hypervisor_obj'        =>     $hypervisor_obj,
-            'vm_obj'                =>     $vm,
+            'network_zone_obj'      =>     $this->getList( 'NetworkZone' ),
+            'data_store_zone_obj'   =>     $this->getList( 'DataStoreZone' ),
+            'hypervisor_zones_obj'  =>     $this->getList( 'HypervisorZone' ),
+            'templates_obj'         =>     $this->getList( 'Template' ),
+            'hypervisor_obj'        =>     $this->getList( 'Hypervisor' ),
             'title'                 =>     onapp_string('CREATE_VIRTUAL_MACHINE'),
             'info_title'            =>     onapp_string('CREATE_VIRTUAL_MACHINE'),
             'info_body'             =>     onapp_string('CREATE_VIRTUAL_MACHINE_INFO'),
@@ -425,25 +378,15 @@ class Virtual_Machines
 
         onapp_permission(array('backups.read.own', 'backups.read', 'backups'));
 
-        $onapp = $this->get_factory();
-
-        $backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $backup->virtual_machine_id = $id;
-        $backup_obj = $backup->getList($id);
-
-        if( is_null($backup_obj->_id) && ! is_array( $backup_obj ) )
-            $backup_obj = NULL;
-
         $params = array(
             'virtual_machine_id'  =>     $id,
-            'backup_obj'          =>     $backup_obj,
+            'backup_obj'          =>     $this->getList( 'VirtualMachine_Backup', array( $id ) ),
             'title'               =>     onapp_string('BACKUPS_FOR_THIS_VM'),
             'info_title'          =>     onapp_string('BACKUPS_FOR_THIS_VM'),
             'info_body'           =>     onapp_string('BACKUPS_FOR_THIS_VM_INFO'),
             'error'               =>     onapp_string( $error ),
             'message'             =>     onapp_string( $message ),
         );
-
         onapp_show_template( 'vm_backup', $params );
      }
 
@@ -461,13 +404,9 @@ class Virtual_Machines
 
         onapp_permission(array('schedules', 'schedules.read', 'schedules.read.own'));
 
-        $onapp = $this->get_factory();
+        $schedule_obj = $this->load( 'Disk_Schedule', array( $id ) );
 
-        $schedule = $onapp->factory('Disk_Schedule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $schedule_obj = $schedule->load( $id );                                                            //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
-
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load( $schedule_obj->_user_id );                                                             // print('<pre>'); print_r($user_obj); print('</pre>'); die();
+        $user_obj = $this->load( 'User', array( $schedule_obj->_user_id ) );
 
         $params = array(
             'user_first_name'     =>     $user_obj->_first_name,
@@ -477,7 +416,6 @@ class Virtual_Machines
             'info_title'          =>     onapp_string('SCHEDULE_DETAILS'),
             'info_body'           =>     onapp_string('SCHEDULE_DETAILS_INFO'),
         );
-
         onapp_show_template( 'vm_diskBackupsScheduleDetails', $params );
      }
 
@@ -494,21 +432,16 @@ class Virtual_Machines
         onapp_debug('id => ' .$id);
 
         onapp_permission(array('firewall_rules.read.own', 'firewall_rules.read', 'firewall_rules'));
+        
+        $firewall_obj = $this->getList( 'VirtualMachine_FirewallRule',  array( $id ) );                                                         
 
-        $onapp = $this->get_factory();
-
-        $firewall = $onapp->factory('VirtualMachine_FirewallRule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $firewall->_virtual_machine_id = $id;
-        $firewall_obj = $firewall->getList();                                                           // print('<pre>'); print_r($firewall_obj); print('</pre>'); die();
-
-        $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_interface_obj = $network_interface->getList( $id );
+        $network_interface_obj = $this->getList( 'VirtualMachine_NetworkInterface', array( $id ) );
 
         foreach($network_interface_obj as $network_interface)
-            $network_interface_object[$network_interface->_id] = $network_interface;                //    print('<pre>'); print_r($network_interface_obj); print('</pre>'); die();
+            $network_interface_object[$network_interface->_id] = $network_interface;                     //    print('<pre>'); print_r($network_interface_obj); print('</pre>'); die();
 
         foreach($firewall_obj as $firewall)
-            $firewall_by_network[$firewall->_network_interface_id][] = $firewall;                      //print('<pre>'); print_r($firewall_by_network); print('</pre>'); die();
+            $firewall_by_network[$firewall->_network_interface_id][] = $firewall;                         //print('<pre>'); print_r($firewall_by_network); print('</pre>'); die();
 
         if( is_null($firewall_obj->_id) && ! is_array( $firewall_obj ) )
             $firewall_obj = NULL;
@@ -525,7 +458,6 @@ class Virtual_Machines
             'error'                  =>     onapp_string( $error ),
             'message'                =>     onapp_string( $message ),
         );
-
         onapp_show_template( 'vm_firewall', $params );
      }
 
@@ -544,10 +476,10 @@ class Virtual_Machines
         onapp_permission(array('schedules', 'schedules.read', 'schedules.read.own'));
 
         $onapp = $this->get_factory();
+        
         $schedule = $onapp->factory('Disk_Schedule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $schedule_obj = $schedule->getListByDiskId( $id );                                         //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
-
-                                                                                      //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
+                                                                                                  //  print('<pre>'); print_r($schedule_obj); print('</pre>'); die();
         $params = array(
             'schedule_obj'    =>     $schedule_obj,
             'disk_id'         =>     $id,
@@ -558,7 +490,6 @@ class Virtual_Machines
             'message'         =>     onapp_string( $message ),
 
         );
-
         onapp_show_template( 'vm_diskBackupsSchedule', $params );
      }
 
@@ -581,9 +512,6 @@ class Virtual_Machines
         $backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $backup_obj = $backup->diskBackups($id);                                                  // print('<pre>'); print_r($backup_obj); print('</pre>'); die();
 
-        if( is_null($backup_obj->_id) && ! is_array( $backup_obj ) )
-            $backup_obj = NULL;
-
         $params = array(
             'disk_id'              =>     $id,
             'virtual_machine_id'   =>     onapp_get_arg('virtual_machine_id'),
@@ -595,7 +523,6 @@ class Virtual_Machines
             'message'              =>     onapp_string( $message ),
 
         );
-
         onapp_show_template( 'vm_diskBackup', $params );
      }
 
@@ -611,28 +538,16 @@ class Virtual_Machines
 
         onapp_debug('id => ' .$id);
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('virtual_machines', 'virtual_machines.change_owner'));
 
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load($id);                                                              //  print('<pre>'); print_r($vm_obj); print('</pre>'); die();
-
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->getList( );                                                                      // print('<pre>'); print_r($user_obj); print('</pre>'); die();
-
-        if( is_null($user_obj[0]->_id) )
-            $user_obj = NULL;
-
         $params = array(
-            'vm_obj'          =>     $vm_obj,
-            'user_obj'        =>     $user_obj,
+            'vm_obj'          =>     $this->load( 'VirtualMachine', array( $id ) ),
+            'user_obj'        =>     $this->getList( 'User' ),
             'title'           =>     onapp_string('CHANGE_THIS_VIRTUAL_MACHINE_OWNER'),
             'info_title'      =>     onapp_string('CHANGE_THIS_VIRTUAL_MACHINE_OWNER'),
             'info_body'       =>     onapp_string('CHANGE_THIS_VIRTUAL_MACHINE_OWNER_INFO'),
 
         );
-
         onapp_show_template( 'vm_changeOwner', $params );
      }
 
@@ -652,25 +567,20 @@ class Virtual_Machines
 
         onapp_permission(array('disks', 'disks.read', 'disks.read.own'));
 
-        $disk = $onapp->factory('Disk', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $disk->virtual_machine_id = $id;
-        $disk_obj = $disk->getList($id);                                                                // print('<pre>'); print_r($disk_obj); print('</pre>'); die();
+        $disk_obj = $this->getList( 'Disk', array( $id ) );
 
-        $data_store = $onapp->factory('DataStore', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $data_store_obj = $data_store->getList();
+        $data_store_obj = $this->getList( 'DataStore' );
 
         foreach($data_store_obj as $data_store)
-            $data_store_object[$data_store->_id] = $data_store;                                          //print('<pre>'); print_r($data_store_object); print('</pre>'); die();
+            $data_store_object[$data_store->_id] = $data_store;                                              //print('<pre>'); print_r($data_store_object); print('</pre>'); die();
 
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->getList();
+        $vm_obj = $this->getList( 'VirtualMachine' );
 
         foreach($vm_obj as $vm)
             $vm_object[$vm->_id] = $vm;
                                                                                                               //print('<pre>'); print_r($vm_object); print('</pre>'); die();
         $backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-       // $backup_obj = $backup->diskBackups();
-                                                                                                  // print('<pre>'); print_r($backup_obj); print('</pre>'); die();
+
         foreach($disk_obj as $disk)
         {
             $backup_obj = $backup->diskBackups($disk->_id);
@@ -679,10 +589,7 @@ class Virtual_Machines
             else
                 $backup_object[$disk->_id] = 0;
         }
-                                                                                                         // print('<pre>'); print_r($backup_object); print('</pre>'); die();
-        if( is_null($disk_obj[0]->_id) )
-            $disk_obj = NULL;
-                                                                                                         // print('<pre>'); print_r($disk_obj); print('</pre>'); die();
+
         $params = array(
             'backup_quantity'   =>   $backup_object,
             'vm_obj'            =>   $vm_object,
@@ -713,45 +620,27 @@ class Virtual_Machines
 
         onapp_permission(array('ip_address_joins', 'ip_address_joins.read', 'ip_address_joins.read.own'));
 
-        $onapp = $this->get_factory();
+        $vm_obj = $this->load( 'VirtualMachine', array( $id ) );
 
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load($id);
-
-        $ip_address = $onapp->factory('VirtualMachine_IpAddressJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $ip_address_obj = $ip_address->getList($id);                                                                     // print('<pre>');  print_r($ip_address_obj); print('</pre>'); die();
-
-        $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_interface_obj = $network_interface->getList($id);                                                     //  print_r($network_interface_obj); die();
-
-        foreach( $network_interface_obj as $network_interface )
+        foreach( $this->getList( 'VirtualMachine_NetworkInterface', array( $id ) ) as $network_interface )
             $network_interface_array[$network_interface->_id] = $network_interface;
 
-        $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_obj = $network->getList();                                                                         //  print('<pre>');print_r($network_obj);print('</pre>');
-
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                             //echo   $vm_obj->_hypervisor_id; die();             print_r($hypervisor);    //print_r($hypervisor_obj->_label); die();
-
-        foreach($network_obj as $network)
+        foreach( $this->getList( 'Network' ) as $network )
             $network_array[$network->_id] = $network;
-        if( $ip_address_obj->_id == NULL && ! is_array( $ip_address_obj) )
-                $ip_address_obj = NULL;
-                                                                                                                                 //print('<pre>');print_r($network_array);print('</pre>'); die();
+                                                                                                               
         $params = array(
             'virtual_machine_id'    =>     $id,
-            'hypervisor_label'      =>     $hypervisor_obj->_label,
+            'hypervisor_label'      =>     $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) )->_label,
             'network_obj'           =>     $network_array,
-            'ip_address_obj'        =>     $ip_address_obj,
+            'ip_address_obj'        =>     $this->getList( 'VirtualMachine_IpAddressJoin', array( $id )),
             'network_interface_obj' =>     $network_interface_array,
             'title'                 =>     onapp_string('IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE'),
             'info_title'            =>     onapp_string('IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE'),
             'info_body'             =>     onapp_string('IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE_INFO'),
             'error'                 =>     onapp_string( $error ),
             'message'               =>     onapp_string( $message ),
-        );
-                                                                                                                                  //   print_r($network_interface_array);die();
-        onapp_show_template( 'vm_ipAddress', $params );           //print('<pre>');  print_r($network_interface_obj); print('</pre>');
+        );                                                                                                                                
+        onapp_show_template( 'vm_ipAddress', $params );          
      }
 
     /**
@@ -775,7 +664,6 @@ class Virtual_Machines
             'info_body'       =>     onapp_string('CONVERT_THIS_BACKUP_TO_TEMPLATE_INFO'),
 
         );
-
         onapp_show_template( 'vm_backupConvert', $params );
      }
 
@@ -793,21 +681,14 @@ class Virtual_Machines
 
         onapp_permission('virtual_machines', 'sysadmin_tools');
 
-        $onapp = $this->get_factory();
-
-        $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $vm->load($id);                                                    // print('<pre>'); print_r($vm_obj); print('</pre>');die();
-
-
         $params = array(
-            'current_admin_note'  =>     $vm_obj->_admin_note,
+            'current_admin_note'  =>     $this->load( 'VirtualMachine', array( $id ) )->_admin_note,
             'id'                  =>     $id,
             'title'               =>     onapp_string('EDIT_ADMIN_NOTE'),
             'info_title'          =>     onapp_string('EDIT_ADMIN_NOTE'),
             'info_body'           =>     onapp_string('EDIT_ADMIN_NOTE_INFO'),
 
         );
-
         onapp_show_template( 'vm_editAdminNote', $params );
      }
 
@@ -825,23 +706,17 @@ class Virtual_Machines
 
         onapp_permission(array('disks', 'disks.update', 'disks.update.own'));
 
-        $onapp = $this->get_factory();
-
-        $disk = $onapp->factory('Disk', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $disk_obj = $disk->load($id);                                              //print('<pre>'); print_r($disk_obj); print('</pre>');die();
-
         $params = array(
-            'disk_obj'        =>     $disk_obj,
+            'disk_obj'        =>     $this->load( 'Disk', array( $id ) ),
             'title'           =>     onapp_string('EDIT_DISK'),
             'info_title'      =>     onapp_string('EDIT_DISK'),
             'info_body'       =>     onapp_string('EDIT_DISK_INFO'),
 
         );
-
         onapp_show_template( 'vm_diskEdit', $params );
      }
 
-     /**
+    /**
      * Shows virtual machine disk edit page
      *
      * @param integer virtual machine disk id
@@ -855,27 +730,17 @@ class Virtual_Machines
 
         onapp_permission(array('virtual_machines', 'virtual_machines.migrate.own', 'virtual_machines.migrate'));
 
-        $onapp = $this->get_factory();
-
-        $hypervisors = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisors_obj = $hypervisors->getList( );                                            //  print('<pre>'); print_r($hypervisor_obj); print('</pre>');die();
-
-        $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $vm->load($id);                                                                     //print('<pre>'); print_r($vm_obj); print('</pre>');die();
-
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                            //  print('<pre>'); print_r($hypervisor_obj); print('</pre>');die();
+        $vm_obj = $this->load( 'VirtualMachine', array( $id ) );                                                                   
 
         $params = array(
             'virtual_machine_id' =>     $id,
-            'hypervisor_obj'     =>     $hypervisor_obj,
-            'hypervisors_obj'    =>     $hypervisors_obj,
+            'hypervisor_obj'     =>     $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) ),
+            'hypervisors_obj'    =>     $this->getList( 'Hypervisor' ),
             'title'              =>     onapp_string('MIGRATE_VIRTUAL_MACHINE'),
             'info_title'         =>     onapp_string('MIGRATE_VIRTUAL_MACHINE'),
             'info_body'          =>     onapp_string('MIGRATE_VIRTUAL_MACHINE_INFO'),
 
         );
-
         onapp_show_template( 'vm_migrate', $params );
      }
 
@@ -893,26 +758,19 @@ class Virtual_Machines
 
         onapp_permission(array('schedules', 'schedules.update'));
 
-        $onapp = $this->get_factory();
-
-        $schedule = $onapp->factory('Disk_Schedule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $schedule_obj = $schedule->load( $id );                                              //print('<pre>'); print_r($schedule_obj); print('</pre>');die();
-
         $periods = array(
-                'days'    =>    'Days',
-                'weeks'   =>    'Weeks',
-                'months'  =>    'Months',
-                'years'   =>    'Years'
-            );
+            'days'    =>    'Days',
+            'weeks'   =>    'Weeks',
+            'months'  =>    'Months',
+            'years'   =>    'Years'
+        );
         $params = array(
             'periods'         =>     $periods,
-            'schedule_obj'    =>     $schedule_obj,
+            'schedule_obj'    =>     $this->load( 'Disk_Schedule', array( $id ) ),
             'title'           =>     onapp_string('EDIT_SCHEDULE'),
             'info_title'      =>     onapp_string('EDIT_SCHEDULE'),
             'info_body'       =>     onapp_string('EDIT_SCHEDULE_INFO'),
-
         );
-
         onapp_show_template( 'vm_diskBackupsScheduleEdit', $params );
      }
 
@@ -930,29 +788,19 @@ class Virtual_Machines
 
         onapp_permission(array('firewall_rules', 'firewall_rules.update'));
 
-        $onapp = $this->get_factory();
-
         $virtual_machine_id = onapp_get_arg('virtual_machine_id');
 
-        $firewall = $onapp->factory('VirtualMachine_FirewallRule', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $firewall->_virtual_machine_id = $virtual_machine_id;
-        $firewall_obj = $firewall->load( $id );                                             // print('<pre>'); print_r($firewall_obj); print('</pre>');die();
-
-        $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_interface_obj = $network_interface->getList( $virtual_machine_id );
-                                                                                         // print('<pre>'); print_r($network_interface_obj); print('</pre>'); die();
         $params = array(
             'virtual_machine_id'     =>     $virtual_machine_id,
-            'network_interface_obj'  =>     $network_interface_obj,
+            'network_interface_obj'  =>     $this->getList( 'VirtualMachine_NetworkInterface', array( $virtual_machine_id ) ),
             'protocols'              =>     array('TCP', 'UDP'),
             'commands'               =>     array('ACCEPT', 'DROP'),
-            'firewall_obj'           =>     $firewall_obj,
+            'firewall_obj'           =>     $this->load( 'VirtualMachine_FirewallRule', array( $id, $virtual_machine_id ) ),
             'title'                  =>     onapp_string('UPDATE_FIREWALL_RULE'),
             'info_title'             =>     onapp_string('UPDATE_FIREWALL_RULE'),
             'info_body'              =>     onapp_string('UPDATE_FIREWALL_RULE_INFO'),
 
         );
-
         onapp_show_template( 'vm_firewallRuleEdit', $params );
      }
 
@@ -969,8 +817,6 @@ class Virtual_Machines
         onapp_debug('id => ' .$id );
 
         onapp_permission(array('schedules', 'schedules.create'));
-
-        $onapp = $this->get_factory();
 
         $params = array(
             'disk_id'         =>     $id,
@@ -996,20 +842,13 @@ class Virtual_Machines
 
         onapp_permission(array('disks', 'disks.create'));
 
-        $onapp = $this->get_factory();
-
-        $data_store = $onapp->factory('DataStore', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $data_store_obj = $data_store->getList( );                                             // print('<pre>'); print_r($data_store_obj); print('</pre>');die();
-
         $params = array(
-            'data_store_obj'      =>   $data_store_obj,
+            'data_store_obj'      =>   $this->getList( 'DataStore' ),
             'virtual_machine_id'  =>   $id,
             'title'               =>   onapp_string('ADD_NEW_DISK'),
             'info_title'          =>   onapp_string('ADD_NEW_DISK'),
             'info_body'           =>   onapp_string('ADD_NEW_DISK_INFO'),
-
         );
-
         onapp_show_template( 'vm_diskCreate', $params );
      }
 
@@ -1029,17 +868,13 @@ class Virtual_Machines
 
         $onapp = $this->get_factory();
 
-        $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $vm->load($id);                                                                     //print('<pre>'); print_r($vm_obj); print('</pre>');die();
+        $vm_obj = $this->load( 'VirtualMachine', array( $id ) );                                                                     
 
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                //  print('<pre>'); print_r($hypervisor); print('</pre>');die();
+        $hypervisor_obj = $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) );                               
 
-        $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);                           // print('<pre>'); print_r($network_join_obj); print('</pre>');die();
-
-        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
+        $network_join_obj = $this->getList( 'Hypervisor_NetworkJoin', array( $vm_obj->_hypervisor_id ) );                           
+       
+        $networkzone_join_obj = $this->getList( 'HypervisorZone_NetworkJoin', array( $hypervisor_obj->_hypervisor_group_id ) );
 
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);                        //print('<pre>'); print_r($network); print('</pre>');die();
 
@@ -1071,7 +906,7 @@ class Virtual_Machines
                     $ip_addresses_array[$network_interface_object[$interface_id]->_id][$object->_id] = $object->_address. '/' . $object->_netmask . '/' .$object->_gateway ;
             }
         }                                                                                                // print('<pre>'); print_r($ip_addresses_array); print('</pre>');die();
-
+        
         $params = array(
             'ip_addresses'           =>     json_encode( $ip_addresses_array ),
             'network_interface_obj'  =>     $network_interface_obj,
@@ -1081,7 +916,6 @@ class Virtual_Machines
             'info_body'              =>     onapp_string('ALLOCATE_NEW_IP_ADDRESS_ASSIGNMENT_INFO'),
 
         );
-
         onapp_show_template( 'vm_IpAddressJoinNew', $params );
      }
 
@@ -1101,30 +935,22 @@ class Virtual_Machines
 
         $onapp = $this->get_factory();
 
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load($id);                                                                       // print('<pre>'); print_r($vm_obj); print('</pre>');die();
+        $vm_obj = $this->load( 'VirtualMachine', array( $id ) );                                                                       
 
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                             //echo   $vm_obj->_hypervisor_id; die();
-                                                                                                              //  print('<pre>'); print_r($hypervisor_obj); print('</pre>');die();
-        $hypervisor_zone = $onapp->factory('HypervisorZone', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_zone_obj = $hypervisor_zone->load($hypervisor_obj->_hypervisor_group_id);                                             //echo   $vm_obj->_hypervisor_id; die();
-                                                                                                               //  print('<pre>'); print_r($hypervisor_zone_obj); print('</pre>');die();
-        $ip_address = $onapp->factory('VirtualMachine_IpAddressJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $ip_address_obj = $ip_address->getList($id);                                                                   // print('<pre>'); print_r($ip_address_obj); print('</pre>');die();
+        $hypervisor_obj = $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) );                                            
 
-        $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_interface_obj = $network_interface->getList($id);                                               //  print('<pre>'); print_r($network_interface_obj); print('</pre>');die();
+        $hypervisor_zone_obj = $this->load( 'HypervisorZone', array( $hypervisor_obj->_hypervisor_group_id ) );                                             
+
+        $ip_address_obj = $this->getList( 'VirtualMachine_IpAddressJoin', array( $id ) );                                                                   
+
+        $network_interface_obj = $this->getList( 'VirtualMachine_NetworkInterface', array( $id ) );                                              
 
         foreach ( $network_interface_obj as $network_interface)
             $network_interface_array[$network_interface->_network_join_id] = $network_interface;
-
                                                                                                                  // print('<pre>');print_r($network_interface_array);print('</pre>'); die();
-        $hypervisor_network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_network_join_obj = $hypervisor_network_join->getList($vm_obj->_hypervisor_id);                  // print('<pre>');print_r($hypervisor_network_join_obj);print('</pre>'); die();
+        $hypervisor_network_join_obj = $this->getList( 'Hypervisor_NetworkJoin', array( $vm_obj->_hypervisor_id ) );                 
 
-        $hypervisor_zone_network_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_zone_network_join_obj = $hypervisor_zone_network_join->getList($hypervisor_obj->_hypervisor_group_id);           //     print('<pre>');print_r($hypervisor_zone_network_join_obj);print('</pre>'); die();
+        $hypervisor_zone_network_join_obj = $this->getList( 'HypervisorZone_NetworkJoin', array( $hypervisor_obj->_hypervisor_group_id ) );          
 
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
 
@@ -1146,9 +972,6 @@ class Virtual_Machines
             }                                                                                            // print('<pre>'); print_r($hypervisor_zone_network_interfaces); print('</pre>');die();
         }                                                                                  //     print('<pre>'); print_r($targets_by_interface_ids); print('</pre>');die();
                                                                                         //   print('<pre>');  print_r($target_labels); die();
-        if( ! is_array($network_interface_obj) )
-            $network_interface_obj = NULL;
-
         $params = array(
             'virtual_machine_id'          =>     $vm_obj->_id,
             'hypervisor_label'            =>     $hypervisor_obj->_label,
@@ -1161,7 +984,6 @@ class Virtual_Machines
             'info_body'                   =>     onapp_string('NETWORK_INTERFACE_FOR_THIS_VIRTUAL_MACHINE_INFO'),
             'error'                       =>     $error,
         );                                                                                                   //print('<pre>');print_r($network_array);print('</pre>'); die();
-
         onapp_show_template( 'vm_networkInterface', $params );                                              // print('<pre>');  print_r($ip_address_obj); print('</pre>');
      }
 
@@ -1183,24 +1005,18 @@ class Virtual_Machines
 
         $onapp = $this->get_factory();
 
-        $network_interface = $onapp->factory('VirtualMachine_NetworkInterface', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_interface_obj = $network_interface->load($id, $virtual_machine_id);                                                         //  print('<pre>'); print_r($network_interface_obj); print('</pre>');die();
+        $network_interface_obj = $this->load( 'VirtualMachine_NetworkInterface', array( $id, $virtual_machine_id ) );                                                        
 
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load( $virtual_machine_id );
+        $vm_obj = $this->load( 'VirtualMachine', array( $virtual_machine_id ) );
 
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);
+        $hypervisor_obj = $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) );
 
-        $hypervisor_zone = $onapp->factory('HypervisorZone', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_zone_obj = $hypervisor_zone->load($hypervisor_obj->_hypervisor_group_id);                                             //echo   $vm_obj->_hypervisor_id; die();
-                                                                                                               //  print('<pre>'); print_r($hypervisor_zone_obj); print('</pre>');die();
-        $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);                               // print('<pre>'); print_r($network_join_obj); print('</pre>');die();
+        $hypervisor_zone_obj = $this->load( 'HypervisorZone', array( $hypervisor_obj->_hypervisor_group_id ) );                                             
+ 
+        $network_join_obj = $this->getList( 'Hypervisor_NetworkJoin', array( $vm_obj->_hypervisor_id ) );                              
 
-        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
-
+        $networkzone_join_obj = $this->getList( 'HypervisorZone_NetworkJoin', array( $hypervisor_obj->_hypervisor_group_id ) );
+        
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
 
         if (  is_array( $network_join_obj ) ) {
@@ -1221,10 +1037,6 @@ class Virtual_Machines
             }                                                                                            //   print('<pre>'); print_r($network_obj_array); print('</pre>');die();
         }                                                                                             //  print('<pre>'); print_r($network_obj_array); print('</pre>');die();
                                                                                                         //  print('<pre>'); print_r($target_labels); print('</pre>');die();
-
-        if( ! is_array($network_obj_array) )
-            $network_obj_array = NULL;
-
         $params = array(
             'target_labels'         =>     $target_labels,
             'hypervisor_label'      =>     $hypervisor_obj->_label,
@@ -1236,7 +1048,6 @@ class Virtual_Machines
             'info_body'             =>     onapp_string('EDIT_NETWORK_INTERFACE_INFO'),
 
         );
-
         onapp_show_template( 'vm_networkInterfaceEdit', $params );
     }
 
@@ -1254,20 +1065,15 @@ class Virtual_Machines
 
         $onapp = $this->get_factory();
 
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load( $id );                                                                // print('<pre>'); print_r($vm_obj); print('</pre>');die();
+        $vm_obj = $this->load( 'VirtualMachine', array( $id ) );                                                                
 
-        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_obj = $hypervisor->load($vm_obj->_hypervisor_id);                                       //  print('<pre>'); print_r($hypervisor_obj); print('</pre>');die();
+        $hypervisor_obj = $this->load( 'Hypervisor', array( $vm_obj->_hypervisor_id ) );
 
-        $hypervisor_zone = $onapp->factory('HypervisorZone', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $hypervisor_zone_obj = $hypervisor_zone->load($hypervisor_obj->_hypervisor_group_id);                                             //echo   $vm_obj->_hypervisor_id; die();
-                                                                                                               //  print('<pre>'); print_r($hypervisor_zone_obj); print('</pre>');die();
-        $network_join = $onapp->factory('Hypervisor_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $network_join_obj = $network_join->getList($vm_obj->_hypervisor_id);                               // print('<pre>'); print_r($network_join_obj); print('</pre>');die();
+        $hypervisor_zone_obj = $this->load( 'HypervisorZone', array( $hypervisor_obj->_hypervisor_group_id ) );                                            
 
-        $networkzone_join = $onapp->factory('HypervisorZone_NetworkJoin', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $networkzone_join_obj = $networkzone_join->getList($hypervisor_obj->_hypervisor_group_id);                     //     print('<pre>');print_r($networkzone_join_obj);print('</pre>'); die();
+        $network_join_obj = $this->getList( 'Hypervisor_NetworkJoin', array( $vm_obj->_hypervisor_id ) );                              
+
+        $networkzone_join_obj = $this->getList( 'HypervisorZone_NetworkJoin', array( $hypervisor_obj->_hypervisor_group_id ) );                    
 
         $network = $onapp->factory('Network', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
 
@@ -1289,9 +1095,6 @@ class Virtual_Machines
             }                                                                                            //   print('<pre>'); print_r($network_obj_array); print('</pre>');die();
         }  
 
-        if( ! is_array($network_obj_array) )
-            $network_obj_array = NULL;
-
         $params = array(
             'target_labels'         =>     $target_labels,
             'hypervisor_label'      =>     $hypervisor_obj->_label,
@@ -1302,7 +1105,6 @@ class Virtual_Machines
             'info_body'             =>     onapp_string('ADD_NEW_NETWORK_INTERFACE_INFO'),
 
         );
-
         onapp_show_template( 'vm_networkInterfaceCreate', $params );
      }
 
@@ -1320,19 +1122,13 @@ class Virtual_Machines
 
         onapp_permission(array('virtual_machines', 'virtual_machines.update.own', 'virtual_machines.update'));
 
-        $onapp = $this->get_factory();
-
-        $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $virtual_machine->load($id);                                                                  //   print('<pre>'); print_r($vm_obj); print('</pre>');die();
-
         $params = array(
-            'vm_obj'                =>     $vm_obj,
+            'vm_obj'                =>     $this->load( 'VirtualMachine', array( $id ) ),
             'title'                 =>     onapp_string('ADJUST_RESOURCE_ALLOCATIONS'),
             'info_title'            =>     onapp_string('ADJUST_RESOURCE_ALLOCATIONS'),
             'info_body'             =>     onapp_string('ADJUST_RESOURCE_ALLOCATIONS_INFO'),
 
         );
-
         onapp_show_template( 'vm_edit', $params );
      }
 

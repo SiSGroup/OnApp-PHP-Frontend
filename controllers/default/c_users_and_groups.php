@@ -1,21 +1,8 @@
 <?php
-class Users_and_Groups
-{
-    private $factory_instance;
+require_once( ONAPP_PATH . ONAPP_DS . 'controllers' . ONAPP_DS . ONAPP_CONTROLLERS . ONAPP_DS . 'controller.php');
 
-    private function get_factory() {
-        if ( !isset($this->factory_instance) ) {
-            require_once "wrapper/Factory.php";
-
-            $this->factory_instance = new ONAPP_Factory(
-                $_SESSION["host"],
-                $_SESSION["login"],
-                onapp_cryptData($_SESSION["password"], 'decrypt')
-            );
-       }
-       return $this->factory_instance;
-   }
-
+class Users_and_Groups extends Controller
+{  
    /**
     * Main controller function
     *
@@ -74,6 +61,12 @@ class Users_and_Groups
             case 'delete':
                 $this->delete( $id );
                 break;
+            case 'suspend':
+                $this->suspend( $id );
+                break;
+            case 'activate':
+                $this->activate( $id );
+                break;
             default:
                 $this->show_template_view();
                 break;
@@ -93,19 +86,38 @@ class Users_and_Groups
         onapp_debug( 'error => '. $error );
 
         $onapp = $this->get_factory();
+       // *****************TESTING LOAD BALANCERS!
+      // $vm = $this->getList('VirtualMachine', NULL, true );
+       // $load_balancer = $this->getList( 'LoadBalancer', NULL, true );
+       //  $load_balancer = $this->load( 'LoadBalancingCluster', array( 13 ), true );
+       //
+       //
+       //
 
+     //  $load_balancer =  $onapp->factory('LoadBalancingCluster', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+    //   $load_balancer->_load_balancing_cluster_load_balancer_attributes = array('rate_limit' => 0);
+    //   $load_balancer->_port = 80;
+    //   $load_balancer->_load_balancer_attributes = array('label' => "Pasha", 'hostname' => "Pasha", 'rate_limit' => "1");
+    //   $load_balancer->_cluster_type = 'cluster';
+    //   $load_balancer->_tagRoot = '';
+    //   $load_balancer->save();                                                           print('<pre>'); print_r($load_balancer); die();
+
+
+
+
+
+//********************************
         onapp_permission(array('users', 'users.read.own', 'users.read'));
 
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->getList();                                               //   print('<pre>'); print_r($user_obj);die();
-
+        $user_obj = $this->getList( 'User' );                                          
+                                                      
         foreach ( $user_obj as $user) {
             $user_group = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             if( $user->_user_group_id ) {
                 $user_group_obj = $user_group->load($user->_user_group_id);
                 $user_group_labels[$user->_id] = $user_group_obj->_label;
             }
-        }                                                                              //   print('<pre>'); print_r($user_group_labels);die();
+        }                                                                               //   print('<pre>'); print_r($user_group_labels);die();
 
        $params = array(
            'user_group_labels' =>    $user_group_labels,
@@ -132,40 +144,19 @@ class Users_and_Groups
 
         onapp_debug( 'error => '. $error );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('users', 'users.read.own', 'users.read'));
 
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load($id);                                                 //print('<pre>'); print_r($user_obj);die();
-
-        $user_group = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_group_obj = $user_group->load($user_obj->_user_group_id);                                               //  print('<pre>'); print_r($user_group_obj->_label);die();
-
-        $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );       // print('<pre>'); print_r($billing_plan_obj);die();
-
-                                                                                      // print('<pre>');print_r($billing_plan_obj->_base_resources); die();
-
-        $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $vm_obj = $vm->getList( $user_obj->_id );                                    // print('<pre>'); print_r($vm_obj);die();
-        //TODO
-        //$billing_statistics = $onapp->factory('User_BillingStatistics', ONAPP_WRAPPER_LOG_REPORT_ENABLE);  //print('<pre>'); print_r($billing_statistics);die();
-       // $billing_statistics_obj = $billing_statistics->getList( $user_obj->_id );            print('<pre>'); print_r($billing_statistics_obj);print('<pre>'); print_r($billing_statistics);die();
-
-        $payment = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $payment_obj = $payment->getList( $user_obj->_id );                          // print('<pre>'); print_r($payment_obj);die();
-        
-        $statistics = $onapp->factory('User_Statistics', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $statistics_obj = $statistics->getList( 1 );                                          // print('<pre>'); print_r($statistics_obj);die();
-                             
+        $user_obj = $this->load( 'User', array( $id ) );                                                            
+                                                                                        
+        //TODO Add resource table
+                          
         $params = array(
-	    'user_statistics'   =>    $user_statistics,	
+	        'user_statistics'   =>    $user_statistics,
             'user_id'           =>    $user_obj->_id,
-            'payment_obj'       =>    $payment_obj,
-            'user_group_obj'    =>    $user_group_obj,
+            'payment_obj'       =>    $this->getList( 'Payment', array( $user_obj->_id) ),
+            'user_group_obj'    =>    $this->load( 'UserGroup', array( $user_obj->_user_group_id ) ),
             'user_obj'          =>    $user_obj,
-            'billing_plan_obj'  =>    $billing_plan_obj,
+            'billing_plan_obj'  =>    $this->load( 'BillingPlan', array( $user_obj->_billing_plan_id ) ),
             'title'             =>    onapp_string('USER_INFORMATION' ),
             'info_title'        =>    onapp_string('USER_INFORMATION'),
             'info_body'         =>    onapp_string('USER_INFORMATION_INFO'),
@@ -187,26 +178,17 @@ class Users_and_Groups
 
         onapp_debug( 'error => '. $error, 'id  =>' . $id );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('payments', 'payments.read.own', 'payments.read'));
-        
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load( $id );                                                   //print('<pre>'); print_r($user_obj);die();
 
-        $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );           // print('<pre>'); print_r($billing_plan_obj);die();
-
-        $payment = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $payment_obj = $payment->getList( $id );                                           // print('<pre>'); print_r($payment_obj);die();
-
+        $user_obj = $this->load( 'User', array( $id ) );
+                                                                                      
         $params = array(
             'user_id'           =>    $id,
-            'payment_obj'       =>    $payment_obj,
-            'billing_plan_obj'  =>    $billing_plan_obj,
-            'title'             =>    onapp_string('PAYMENTS_FOR_THIS_USER' ),
-            'info_title'        =>    onapp_string('PAYMENTS_FOR_THIS_USER'),
-            'info_body'         =>    onapp_string('PAYMENTS_FOR_THIS_USER_INFO'),
+            'payment_obj'       =>    $this->getList( 'Payment', array( $id ) ),
+            'billing_plan_obj'  =>    $this->load( 'BillingPlan', array ( $user_obj->_billing_plan_id ) ),
+            'title'             =>    onapp_string( 'PAYMENTS_FOR_THIS_USER' ),
+            'info_title'        =>    onapp_string( 'PAYMENTS_FOR_THIS_USER' ),
+            'info_body'         =>    onapp_string( 'PAYMENTS_FOR_THIS_USER_INFO' ),
             'error'             =>    onapp_string( $error ),
         );
 
@@ -220,23 +202,15 @@ class Users_and_Groups
     * @return void
     */
     private function show_template_payment_create( $id )
-    {
+    { 
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
         onapp_debug( 'id  =>' . $id );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('payments', 'payments.create'));
-        
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load( $id );                                                   //print('<pre>'); print_r($user_obj);die();
-
-        $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );           // print('<pre>'); print_r($billing_plan_obj);die();
-
+                                                                       
         $params = array(
-            'user_obj'          =>    $user_obj,
+            'user_obj'          =>    $this->load( 'User', array( $id ) ),
             'user_id'           =>    $id,
             'title'             =>    onapp_string('ADD_NEW_PAYMENT' ),
             'info_title'        =>    onapp_string('ADD_NEW_PAYMENT'),
@@ -257,8 +231,6 @@ class Users_and_Groups
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
         onapp_debug( 'id  =>' . $id );
-
-        $onapp = $this->get_factory();
 
         onapp_permission(array('user_white_lists', 'user_white_lists.create'));
 
@@ -284,20 +256,15 @@ class Users_and_Groups
 
         onapp_debug( 'id  =>' . $id );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('payments', 'payments.update'));
 
         $user_id = onapp_get_arg( 'user_id' );
 
         onapp_debug( 'user_id => ' . $user_id );
 
-        $payment = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $payment_obj = $payment->load( $id, $user_id );                                          //  print('<pre>'); print_r($payment_obj);die();
-
         $params = array(
             'id'                =>    $id,
-            'payment_obj'       =>    $payment_obj,
+            'payment_obj'       =>    $this->load( 'Payment', array( $id, $user_id ) ),
             'user_id'           =>    $user_id,
             'title'             =>    onapp_string('EDIT_PAYMENT' ),
             'info_title'        =>    onapp_string('EDIT_PAYMENT'),
@@ -319,20 +286,15 @@ class Users_and_Groups
 
         onapp_debug( 'id  =>' . $id );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('user_white_lists', 'user_white_lists.update'));
 
         $user_id = onapp_get_arg( 'user_id' );
 
         onapp_debug( 'user_id => ' . $user_id );
 
-        $white_list = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $white_list_obj = $white_list->load( $id, $user_id );                                          //  print('<pre>'); print_r($payment_obj);die();
-
         $params = array(
             'id'                =>    $id,
-            'white_list_obj'    =>    $white_list_obj,
+            'white_list_obj'    =>    $this->load( 'User_WhiteList', array( $id, $user_id ) ),
             'user_id'           =>    $user_id,
             'title'             =>    onapp_string('EDIT_WHITE_IP' ),
             'info_title'        =>    onapp_string('EDIT_WHITE_IP'),
@@ -354,40 +316,23 @@ class Users_and_Groups
 
         onapp_debug( 'id  =>' . $id );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('users', 'users.update'));
 
-        onapp_debug( 'user_id => ' . $user_id );
+        require_once( ONAPP_PATH . ONAPP_DS . 'constants' . ONAPP_DS . 'time_zones.php');   
 
-        require_once( ONAPP_PATH . ONAPP_DS . 'constants' . ONAPP_DS . 'time_zones.php');   //print('<pre>');print_r($time_zones); die();
-
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load( $id );                                            //print('<pre>'); print_r($user_obj);die();
-        
-        $role = $onapp->factory('Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $role_obj = $role->getList(  );                                           // print('<pre>'); print_r($role_obj);die();
-        
-        $billing_plans = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plans_obj = $billing_plans->getList( );                                           // print('<pre>'); print_r($billing_plans_obj);die();
-
-        $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );                                           // print('<pre>'); print_r($billing_plan_obj);die();
-
-        $user_group = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_group_obj = $user_group->getList( );                                           // print('<pre>'); print_r($user_group_obj);die();
-
+        $user_obj = $this->load( 'User', array( $id ) );
+                                                                
         foreach ( $user_obj->_roles as $role ) {
             $user_role_ids[] = $role->_id;
-        }                                                                                   //  print('<pre>'); print_r($user_role_ids);die();
+        }                                                                                 
         
         $params = array(
             'user_id'           =>    $id,
-            'user_group_obj'    =>    $user_group_obj,
+            'user_group_obj'    =>    $this->getList( 'UserGroup' ),
             'user_role_ids'     =>    $user_role_ids,
-            'role_obj'          =>    $role_obj,
-            'billing_plans_obj' =>    $billing_plans_obj,
-            'billing_plan_obj'  =>    $billing_plan_obj,
+            'role_obj'          =>    $this->getList( 'Role' ),
+            'billing_plans_obj' =>    $this->getList( 'BillingPlan' ),
+            'billing_plan_obj'  =>    $this->load( 'BillingPlan', array( $user_obj->_billing_plan_id) ),
             'time_zones'        =>    $time_zones,
             'user_obj'          =>    $user_obj,
             'user_id'           =>    $id,
@@ -409,25 +354,14 @@ class Users_and_Groups
     {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('users', 'users.create'));
 
-        require_once( ONAPP_PATH . ONAPP_DS . 'constants' . ONAPP_DS . 'time_zones.php');   //print('<pre>');print_r($time_zones); die();
-
-        $role = $onapp->factory('Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $role_obj = $role->getList(  );                                           // print('<pre>'); print_r($role_obj);die();
-
-        $billing_plans = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plans_obj = $billing_plans->getList( );                                           // print('<pre>'); print_r($billing_plans_obj);die();
-
-        $user_group = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_group_obj = $user_group->getList( );                                           // print('<pre>'); print_r($user_group_obj);die();
-
+        require_once( ONAPP_PATH . ONAPP_DS . 'constants' . ONAPP_DS . 'time_zones.php');   
+                                                                  
         $params = array(
-            'user_group_obj'    =>    $user_group_obj,
-            'role_obj'          =>    $role_obj,
-            'billing_plans_obj' =>    $billing_plans_obj,
+            'user_group_obj'    =>    $this->gitList( 'UserGroup' ),
+            'role_obj'          =>    $this->getList( 'Role' ),
+            'billing_plans_obj' =>    $this->getList( 'BillingPlan' ),
             'time_zones'        =>    $time_zones,
             'title'             =>    onapp_string('ADD_A_NEW_USER' ),
             'info_title'        =>    onapp_string('ADD_A_NEW_USER'),
@@ -437,7 +371,7 @@ class Users_and_Groups
         onapp_show_template( 'usersAndGroups_create', $params );
     }
 
-    /**
+   /**
     * Shows user statistics page
     *
     * @param integer user id
@@ -453,15 +387,8 @@ class Users_and_Groups
 
         onapp_permission(array('vm_stats', 'vm_stats.read', 'vm_stats.read.own'));
 
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load( $id );                                                   //print('<pre>'); print_r($user_obj);die();
-        
-        $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );           // print('<pre>'); print_r($billing_plan_obj);die();
-        
-        $statistics = $onapp->factory('User_Statistics', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $statistics_obj = $statistics->getList( $user_obj->_id );                                         //  print('<pre>'); print_r($statistics_obj);die();
-
+        $user_obj = $this->load( 'User', array( $id ) );
+                                                                              
         $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         foreach ($statistics_obj[0]->_vm_stats as $v_m) {
             if ( $v_m->_virtual_machine_id != 0 ){
@@ -471,14 +398,14 @@ class Users_and_Groups
                     $vm_labels[$v_m->_virtual_machine_id] = $vm_obj->_label;
                 }      
             }
-        }                                                                                          //   print('<pre>'); print_r($vm_labels);die();
+        }                                                                                       
 
         $params = array(
-            'currency'          =>    $billing_plan_obj->_currency_code,
+            'currency'          =>    $this->load( 'BillingPlan', $user_obj->_billing_plan_id )->_currency_code,
             'vm_labels'         =>    $vm_labels,
             'user_obj'          =>    $user_obj,
             'user_id'           =>    $id,
-            'statistics_obj'    =>    $statistics_obj,
+            'statistics_obj'    =>    $this->getList( 'User_Statistics', $user_obj->_id ),
             'title'             =>    onapp_string('USER_STATISTICS' ),
             'info_title'        =>    onapp_string('USER_STATISTICS'),
             'info_body'         =>    onapp_string('USER_STATISTICS_INFO'),
@@ -518,8 +445,6 @@ class Users_and_Groups
 
        // print('<pre>'); print_r($billing_plan_obj->_base_resources);die();
 
-        $white_list = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $white_list_obj = $white_list->load(3, 38 );                   print('<pre>'); print_r($white_list_obj);die();
 
         $statistics = $onapp->factory('User_Statistics', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $statistics_obj = $statistics->getList( $user_obj->_id );                                         //  print('<pre>'); print_r($statistics_obj);die();
@@ -532,7 +457,6 @@ class Users_and_Groups
                 if ( $vm_obj->_label ){
                     $vm_labels[$v_m->_virtual_machine_id] = $vm_obj->_label;
                 }
-
             }
         }                                                                                          //   print('<pre>'); print_r($vm_labels);die();
 
@@ -562,19 +486,14 @@ class Users_and_Groups
 
         onapp_debug( 'error => '. $error, 'id  =>' . $id );
 
-        $onapp = $this->get_factory();
-
         onapp_permission(array('user_white_lists', 'user_white_lists.read.own', 'user_white_lists.read'));
-
-        $white_list = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $white_list_obj = $white_list->getList( $id );                                                   //print('<pre>'); print_r($white_list_obj);die();
-
+                                                                             
         $params = array(
             'user_id'           =>    $id,
-            'white_list_obj'    =>    $white_list_obj,
-            'title'             =>    onapp_string('WHITE_LIST_IPS_FOR_THIS_USER' ),
-            'info_title'        =>    onapp_string('WHITE_LIST_IPS_FOR_THIS_USER'),
-            'info_body'         =>    onapp_string('WHITE_LIST_IPS_FOR_THIS_USER_INFO'),
+            'white_list_obj'    =>    $this->getList( 'User_WhiteList', array( $id ) ),
+            'title'             =>    onapp_string( 'WHITE_LIST_IPS_FOR_THIS_USER' ),
+            'info_title'        =>    onapp_string( 'WHITE_LIST_IPS_FOR_THIS_USER' ),
+            'info_body'         =>    onapp_string( 'WHITE_LIST_IPS_FOR_THIS_USER_INFO' ),
             'error'             =>    onapp_string( $error ),
         );
 
@@ -616,7 +535,7 @@ class Users_and_Groups
     }
 
     /**
-     * Deletes user (but not erase)
+     * Deletes user (erase completly when user for the second time)
      *
      * @param integer user id
      * @return void
@@ -639,6 +558,68 @@ class Users_and_Groups
         if( is_null( $user->error ))
         {
             $_SESSION['message'] = 'USER_HAS_BEEN_DELETED_SUCCESSFULLY';
+            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view' );
+        }
+        else
+            $this->show_template_view( $user->error );
+
+    }
+
+    /**
+     * Suspends user
+     *
+     * @param integer user id
+     * @return void
+     */
+    private function suspend( $id ){
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        onapp_debug( 'id => '. $id );
+
+        onapp_permission( array('users', 'users.suspend') );
+
+        global $_ALIASES;
+
+        $onapp = $this->get_factory();
+
+        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $user->_id = $id;
+
+        $user->suspend( );                                                            //print('<pre>'); print_r($user);die();
+
+        if( is_null( $user->error ))
+        {
+            $_SESSION['message'] = 'USER_STATUS_CHANGED_TO_SUSPENDED';
+            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view' );
+        }
+        else
+            $this->show_template_view( $user->error );
+
+    }
+
+    /**
+     * Activates user
+     *
+     * @param integer user id
+     * @return void
+     */
+    private function activate( $id ){
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        onapp_debug( 'id => '. $id );
+
+        onapp_permission( array('users', 'users.activate') );
+
+        global $_ALIASES;
+
+        $onapp = $this->get_factory();
+
+        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $user->_id = $id;
+
+        $user->activate_user( );                                                           // print('<pre>'); print_r($user);die();
+
+        if( is_null( $user->error ))
+        {
+            $_SESSION['message'] = 'USER_ACTIVATION_SUCCESSFULL';
             onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view' );
         }
         else
@@ -673,7 +654,7 @@ class Users_and_Groups
 
             $payment_obj->_user_id = $id;
             $payment_obj->save( );
-                                                                                             // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                            //  print('<pre>');print_r($payment_obj); print('</pre>'); die();
             if( is_null($payment_obj->error))
             {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY';
@@ -871,7 +852,6 @@ class Users_and_Groups
 
             $user['_role_ids'] = array_values( $user['_role_ids'] );
                                                                                         //print_r($user); die();
-
             $user_obj = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach( $user as $key => $value )
                 $user_obj->$key = $value;
