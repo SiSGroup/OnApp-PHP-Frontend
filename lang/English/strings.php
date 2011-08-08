@@ -554,6 +554,12 @@ $_LANG['DELETE_'] = 'Delete';
 $_LANG['SUSPEND_'] = 'Suspend';
 $_LANG['WHITE_IP_LIST'] = 'White Ip List';
 $_LANG['USER_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'User has been deleted successfully';
+$_LANG['USER_ACTIVATION_SUCCESSFULL'] = 'User activation successful';
+$_LANG['USER_STATUS_CHANGED_TO_SUSPENDED'] = 'User status changed to suspended';
+$_LANG['ACTIVATE_USER'] = 'Activate User';
+$_LANG['SUSPEND_USER'] = 'Suspend User';
+
+
 
 
 
