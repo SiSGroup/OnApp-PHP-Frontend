@@ -87,20 +87,38 @@ class Users_and_Groups extends Controller
 
         $onapp = $this->get_factory();
        // *****************TESTING LOAD BALANCERS!
-      // $vm = $this->getList('VirtualMachine', NULL, true );
-       // $load_balancer = $this->getList( 'LoadBalancer', NULL, true );
-       //  $load_balancer = $this->load( 'LoadBalancingCluster', array( 13 ), true );
+       // $vm = $this->getList('VirtualMachine', NULL, true );
+      //  $load_balancer =  $onapp->factory('LoadBalancingCluster', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+       // $load_balancer_obj = $load_balancer->getListByUserId( 1 );                                     //  print('<pre>'); print_r($load_balancer_obj); die();
+     //   $load_balancer = $this->load( 'LoadBalancingCluster', array( 13 ), true );
        //
        //
        //
 
-     //  $load_balancer =  $onapp->factory('LoadBalancingCluster', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-    //   $load_balancer->_load_balancing_cluster_load_balancer_attributes = array('rate_limit' => 0);
-    //   $load_balancer->_port = 80;
-    //   $load_balancer->_load_balancer_attributes = array('label' => "Pasha", 'hostname' => "Pasha", 'rate_limit' => "1");
-    //   $load_balancer->_cluster_type = 'cluster';
-    //   $load_balancer->_tagRoot = '';
-    //   $load_balancer->save();                                                           print('<pre>'); print_r($load_balancer); die();
+
+
+     //  $load_balancer =  $onapp->factory('LoadBalancer', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+
+      //$load_balancer->_port = 27;
+    //   $load_balancer->_id = 153;
+
+   //   $load_balancer->_load_balancer_attributes = array("label" => "Try1", "hostname" => "hostname", "rate_limit" => "58");
+ //    $load_balancer->_cluster_type = 'autoscaleout';
+ //     $load_balancer->_config = array( "min_node_amount"=>"1", "max_node_amount"=>"2" );
+//     $load_balancer->_node_attributes =array("memory"=>"128", "cpus"=>"1", "cpu_shares"=>"1", "rate_limit"=>"");
+//       $load_balancer->_auto_scaling_out_cpu_attributes = array("enabled"=>"1", "value"=>"90", "for_minutes"=>"5", "units"=>"1");
+//      $load_balancer->_auto_scaling_out_memory_attributes = array( "enabled"=>"1", "value"=>"40", "for_minutes"=>"5", "units"=>"1" );
+ //      $load_balancer->_image_template_id = 17;
+ //      $load_balancer->_auto_scaling_in_cpu_attributes = array( "enabled"=>"1", "value"=>"20", "for_minutes"=>"5", "units"=>"1" );
+ //     $load_balancer->_auto_scaling_in_memory_attributes = array("enabled"=>"1", "value"=>"72", "for_minutes"=>"5", "units"=>"1");
+       
+       
+       
+       // not the same as in get request!
+      // $load_balancer->_tagRoot = 'load_balancing_cluster';
+      // $load_balancer->delete();
+       //  $load_balancer->save();
+                                                                                           // print('<pre>'); print_r($load_balancer); die();
 
 
 
@@ -125,7 +143,7 @@ class Users_and_Groups extends Controller
            'title'             =>    onapp_string('USERS_' ),
            'info_title'        =>    onapp_string('USERS_AND_GROUPS'),
            'info_body'         =>    onapp_string('USERS_AND_GROUPS_INFO'),
-           'error'             =>    onapp_string( $error ),
+           'error'             =>    $error,
            'message'           =>    onapp_string( $message )
        );
 
@@ -160,7 +178,7 @@ class Users_and_Groups extends Controller
             'title'             =>    onapp_string('USER_INFORMATION' ),
             'info_title'        =>    onapp_string('USER_INFORMATION'),
             'info_body'         =>    onapp_string('USER_INFORMATION_INFO'),
-            'error'             =>    onapp_string( $error ),
+            'error'             =>    $error,
         );
 
         onapp_show_template( 'usersAndGroups_details', $params );
@@ -189,7 +207,7 @@ class Users_and_Groups extends Controller
             'title'             =>    onapp_string( 'PAYMENTS_FOR_THIS_USER' ),
             'info_title'        =>    onapp_string( 'PAYMENTS_FOR_THIS_USER' ),
             'info_body'         =>    onapp_string( 'PAYMENTS_FOR_THIS_USER_INFO' ),
-            'error'             =>    onapp_string( $error ),
+            'error'             =>    $error,
         );
 
         onapp_show_template( 'usersAndGroups_payments', $params );
@@ -494,7 +512,7 @@ class Users_and_Groups extends Controller
             'title'             =>    onapp_string( 'WHITE_LIST_IPS_FOR_THIS_USER' ),
             'info_title'        =>    onapp_string( 'WHITE_LIST_IPS_FOR_THIS_USER' ),
             'info_body'         =>    onapp_string( 'WHITE_LIST_IPS_FOR_THIS_USER_INFO' ),
-            'error'             =>    onapp_string( $error ),
+            'error'             =>    $error,
         );
 
         onapp_show_template( 'usersAndGroups_whiteList', $params );
@@ -648,20 +666,20 @@ class Users_and_Groups extends Controller
             global $_ALIASES;
             $onapp = $this->get_factory();
 
-            $payment_obj = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+            $payment_obj = $onapp->factory( 'Payment' );
             foreach( $payment as $key => $value )
                 $payment_obj->$key = $value;                                                          // print('<pre>');print_r($payment_obj); print('</pre>'); die();
 
             $payment_obj->_user_id = $id;
             $payment_obj->save( );
-                                                                                            //  print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                           //   print('<pre>');print_r($payment_obj->error); print('</pre>'); die();
             if( is_null($payment_obj->error))
             {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $id  );
             }
             else
-                $this->show_template_payments( $id, $payment_obj->error);
+                $this->show_template_payments( $id, $payment_obj->error );
         }
 
     }

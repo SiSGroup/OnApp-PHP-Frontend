@@ -241,7 +241,7 @@ class Virtual_Machines extends Controller
            'title'             =>    onapp_string('VIRTUAL_MACHINES' ),
            'info_title'        =>    onapp_string('VIRTUAL_MACHINES'),
            'info_body'         =>    onapp_string('VIRTUAL_MACHINE_INFO'),
-           'error'             =>    onapp_string( $error ),
+           'error'             =>    $error,
            'message'           =>    onapp_string( $message )
        );
        onapp_show_template( 'vm_view', $params );
@@ -277,7 +277,7 @@ class Virtual_Machines extends Controller
             'title'               =>  onapp_string('VIRTUAL_MACHINE_DETAILS'),
             'info_title'          =>  onapp_string('VIRTUAL_MACHINE_DETAILS'),
             'info_body'           =>  onapp_string('VIRTUAL_MACHINE_DETAILS_INFO'),
-            'error'               =>  onapp_string( $error ),
+            'error'               =>  $error,
             'message'             =>  onapp_string( $message ),
         );
         onapp_show_template( 'vm_details', $params );
@@ -305,7 +305,7 @@ class Virtual_Machines extends Controller
             'title'                 =>     onapp_string('CREATE_VIRTUAL_MACHINE'),
             'info_title'            =>     onapp_string('CREATE_VIRTUAL_MACHINE'),
             'info_body'             =>     onapp_string('CREATE_VIRTUAL_MACHINE_INFO'),
-            'error'                 =>     onapp_string( $error ),
+            'error'                 =>     $error,
             'message'               =>     onapp_string( $message ),
         );
         onapp_show_template( 'vm_create', $params );
@@ -384,7 +384,7 @@ class Virtual_Machines extends Controller
             'title'               =>     onapp_string('BACKUPS_FOR_THIS_VM'),
             'info_title'          =>     onapp_string('BACKUPS_FOR_THIS_VM'),
             'info_body'           =>     onapp_string('BACKUPS_FOR_THIS_VM_INFO'),
-            'error'               =>     onapp_string( $error ),
+            'error'               =>     $error,
             'message'             =>     onapp_string( $message ),
         );
         onapp_show_template( 'vm_backup', $params );
@@ -455,7 +455,7 @@ class Virtual_Machines extends Controller
             'title'                  =>     onapp_string('FIREWALL_RULES'),
             'info_title'             =>     onapp_string('FIREWALL_RULES'),
             'info_body'              =>     onapp_string('FIREWALL_RULES_INFO'),
-            'error'                  =>     onapp_string( $error ),
+            'error'                  =>     $error,
             'message'                =>     onapp_string( $message ),
         );
         onapp_show_template( 'vm_firewall', $params );
@@ -519,7 +519,7 @@ class Virtual_Machines extends Controller
             'title'                =>     onapp_string('BACKUPS_FOR_THIS_DISK'),
             'info_title'           =>     onapp_string('BACKUPS_FOR_THIS_DISK'),
             'info_body'            =>     onapp_string('BACKUPS_FOR_THIS_DISK_INFO'),
-            'error'                =>     onapp_string( $error ),
+            'error'                =>     $error,
             'message'              =>     onapp_string( $message ),
 
         );
@@ -598,7 +598,7 @@ class Virtual_Machines extends Controller
             'title'             =>   onapp_string('DISK_SETTINGS'),
             'info_title'        =>   onapp_string('DISK_SETTINGS'),
             'info_body'         =>   onapp_string('DISK_SETTINGS_INFO'),
-            'error'             =>   onapp_string( $error ),
+            'error'             =>   $error,
             'message'           =>   onapp_string( $message ),
 
         );
@@ -637,7 +637,7 @@ class Virtual_Machines extends Controller
             'title'                 =>     onapp_string('IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE'),
             'info_title'            =>     onapp_string('IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE'),
             'info_body'             =>     onapp_string('IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE_INFO'),
-            'error'                 =>     onapp_string( $error ),
+            'error'                 =>     $error,
             'message'               =>     onapp_string( $message ),
         );                                                                                                                                
         onapp_show_template( 'vm_ipAddress', $params );          

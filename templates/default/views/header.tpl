@@ -21,7 +21,13 @@
 
     {if isset($error)}
         <div id="onapp_error">
-            {$error}
+            {if ! is_array($error)}
+                {$error}
+            {else}
+                {foreach from=$error item=er}
+                    {$er}<br />
+                {/foreach}
+            {/if}
         </div>
     {/if}
 
