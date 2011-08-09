@@ -38,7 +38,7 @@
                           {/if}
                </td>
                <td class="blue">
-                   <a href="{$_ALIASES["users_and_groups"]}?action=virtual_machines&amp;id={$user->_id}">{'VIRTUAL_MACHINES'|onapp_string}</a>
+                   <a href="{$_ALIASES["virtual_machines"]}?action=view&amp;user_id={$user->_id}">{'VIRTUAL_MACHINES'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=payments&amp;id={$user->_id}">{'PAYMENTS_'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=billing_plan&amp;id={$user->_id}">{'BILLING_PLAN'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=monthly_bills&amp;id={$user->_id}">{'MONTHLY_BILLS'|onapp_string}</a>

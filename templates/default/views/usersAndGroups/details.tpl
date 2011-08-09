@@ -36,19 +36,19 @@
         </tr>
         <tr>
             <td class="label">{'MONTHLY_FEE'|onapp_string}</td>
-            <td>{$billing_plan_obj->_monthly_price|onapp_format_money}</td>
+            <td>{round( $billing_plan_obj->_monthly_price, 2 )|onapp_format_money}</td>
         </tr>
         <tr>
             <td class="label">{'OUTSTANDING_AMOUNT'|onapp_string}</td>
-            <td>{($user_obj->_total_amount - $user_obj->_payment_amount)|onapp_format_money}</td>
+            <td>{round( $user_obj->_total_amount - $user_obj->_payment_amount, 2)|onapp_format_money}</td>
         </tr>
         <tr>
             <td class="label">{'PAYMENTS_'|onapp_string}</td>
-            <td>{$user_obj->_payment_amount|onapp_format_money}</td>
+            <td>{round( $user_obj->_payment_amount, 2)|onapp_format_money}</td>
         </tr>
         <tr>
             <td class="label">{'TOTAL_COST'|onapp_string}</td>
-            <td>{$user_obj->_total_amount|onapp_format_money}</td>
+            <td>{round( $user_obj->_total_amount, 2)|onapp_format_money}</td>
         </tr>
     </table>
 
@@ -67,7 +67,11 @@
 <table style="border-bottom:none" class="form-table" width="50%" cellpadding="0" cellspacing="0" >
     <tr>
         <td>
-            {$user_group_obj->_label}
+            {if $user_group_obj == true}
+                {$user_group_obj->_label}
+            {else}
+                {'UNDEFINED_'|onapp_string}
+            {/if}
         </td>
     </tr>
 </table>
