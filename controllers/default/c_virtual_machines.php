@@ -193,6 +193,9 @@ class Virtual_Machines extends Controller
 
         $hypervisor_id    = onapp_get_arg('hypervisor_id');
         $hypervisor_label = onapp_get_arg('hypervisor_label');
+        $user_id = onapp_get_arg('user_id');
+
+        onapp_debug( 'hypervisor_id => '. $hypervisor_id . ' hypervisor_label => ' . $hypervisor_label . ' user_id => '  . $user_id );
 
         onapp_permission(array('virtual_machines', 'virtual_machines.read.own', 'virtual_machines.read'));
 
@@ -202,38 +205,32 @@ class Virtual_Machines extends Controller
         $virtual_machines = $virtual_machines_array;
 
         $vm_backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-
-        if( is_array($virtual_machines) && $virtual_machines[0]->_id != '')
-        {
-            foreach($virtual_machines as $virtual_machine)
-            {
+ 
+        foreach ($virtual_machines as $virtual_machine) {
                 $vm_backup_obj = $vm_backup->getList($virtual_machine->_id);
                 $size_and_quantity = $this->calculateBackups($vm_backup_obj);
                 $vm_backups [] = $size_and_quantity;
-            }
-        }
-        else if( ! is_array($virtual_machines) && $virtual_machines->_id != '')
-        {
-            $vm_backup_obj = $vm_backup->getList($virtual_machines->_id);
-            $size_and_quantity = $this->calculateBackups($vm_backup_obj);
-            $vm_backups = $size_and_quantity;
         }
 
-        if( ! is_null($hypervisor_id) && is_array($virtual_machines))
+        //TODO refactor when bug is fixed Ticket #2508
+        if( ! is_null($hypervisor_id) )
         {
             foreach($virtual_machines as $virtual_machine)
                 if($virtual_machine->_hypervisor_id == $hypervisor_id)
                     $hypervisor_vms[] = $virtual_machine;
             $virtual_machines = $hypervisor_vms;
         }
-        elseif(! is_null($hypervisor_id) && ! is_array($virtual_machines))
-            if($virtual_machines->_hypervisor_id == $hypervisor_id)
-                $hypervisor_vms = $virtual_machines;
 
-       if( is_null($virtual_machines->_id) && ! is_array( $virtual_machines ) )
-            $virtual_machines = NULL;
-
+        if( ! is_null($user_id) )
+        {
+            foreach($virtual_machines as $virtual_machine)
+                if($virtual_machine->_user_id == $user_id)
+                    $user_vms[] = $virtual_machine;
+            $virtual_machines = $user_vms;
+        }
+       
        $params = array(
+           'user_id'           =>    $user_id,
            'hypervisor_id'     =>    $hypervisor_id,
            'vm_backups'        =>    $vm_backups,
            'virtual_machines'  =>    $virtual_machines,
