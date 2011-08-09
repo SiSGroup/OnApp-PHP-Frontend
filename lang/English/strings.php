@@ -558,6 +558,31 @@ $_LANG['USER_ACTIVATION_SUCCESSFULL'] = 'User activation successful';
 $_LANG['USER_STATUS_CHANGED_TO_SUSPENDED'] = 'User status changed to suspended';
 $_LANG['ACTIVATE_USER'] = 'Activate User';
 $_LANG['SUSPEND_USER'] = 'Suspend User';
+$_LANG['YEARLY_USER_BILLS_PER_A_MONTH'] = 'Yearly User bills per a month';
+$_LANG['MONTH_'] = 'Month';
+$_LANG['COST_'] = 'Cost';
+
+$_LANG['JANUARY_'] = 'January';
+$_LANG['FABRUARY_'] = 'Fabruary';
+$_LANG['MARCH_'] = 'March';
+$_LANG['APRIL_'] = 'April';
+$_LANG['MAY_'] = 'March';
+$_LANG['JUNE_'] = 'June';
+$_LANG['JULY_'] = 'July';
+$_LANG['AUGUST_'] = 'August';
+$_LANG['SEPTEMBER_'] = 'September';
+$_LANG['OCTOBER_'] = 'October';
+$_LANG['NOVEMBER_'] = 'November';
+$_LANG['DESEMBER_'] = 'Desember';
+$_LANG['TOTAL_AMOUNT'] = 'Total Amount';
+$_LANG['USER_GROUPS'] = 'User Groups';
+$_LANG['USER_GROUPS_INFO'] = 
+    'Here are all the groups of users. Click the links in each entry to view
+    the list of users';
+$_LANG['GROUP_'] = 'Group';
+$_LANG['ADD_NEW_GROUP'] = 'Add New Group';
+
+
 
 
 
