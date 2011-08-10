@@ -72,6 +72,27 @@ class Users_and_Groups extends Controller {
             case 'groups':
                 $this->show_template_groups(  );
                 break;
+            case 'group_delete':
+                $this->group_delete( $id );
+                break;
+            case 'group_create':
+                $this->group_create(  );
+                break;
+            case 'group_edit':
+                $this->group_edit( $id );
+                break;
+            case 'roles':
+                $this->show_template_roles(  );
+                break;
+            case 'role_edit':
+                $this->role_edit( $id );
+                break;
+            case 'role_delete':
+                $this->role_delete( $id );
+                break;
+            case 'role_create':
+                $this->role_create(  );
+                break;
             default:
                 $this->show_template_view();
                 break;
@@ -213,6 +234,29 @@ class Users_and_Groups extends Controller {
     }
 
     /**
+     * Shows user roles page
+     *
+     * @param string error message
+     * @return void
+     */
+    private function show_template_roles( $error = NULL ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_debug('error => ' . $error, 'id  =>' . $id);
+
+        onapp_permission(array('roles', 'roles.read.own', 'roles.read'));
+
+        $params = array(
+            'roles_obj' => $this->getList( 'Role' ),
+            'title' => onapp_string('ROLES_'),
+            'info_title' => onapp_string('ROLES_'),
+            'info_body' => onapp_string('ROLES_INFO'),
+            'error' => $error,
+        );
+        onapp_show_template('usersAndGroups_roles', $params);
+    }
+
+    /**
      * Shows user payment create page
      *
      * @param integer user id
@@ -237,35 +281,82 @@ class Users_and_Groups extends Controller {
     }
 
     /**
+     * Shows user role create page
+     *
+     * @return void
+     */
+    private function show_template_role_create(  ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_permission( array ( 'roles', 'roles.create' ) );
+
+        $params = array(
+            'permission_obj' => $this->getList( 'Role_Permission' ),
+            'title' => onapp_string('CREATE_NEW_ROLE'),
+            'info_title' => onapp_string('CREATE_NEW_ROLE'),
+            'info_body' => onapp_string('CREATE_NEW_ROLE_INFO'),
+        );
+
+        onapp_show_template('usersAndGroups_roleCreate', $params);
+    }
+   
+
+    /**
+     * Shows user group create page
+     *
+     * @param integer user id
+     * @return void
+     */
+    private function show_template_group_create( ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_permission(array('groups', 'groups.create'));
+
+        $params = array(
+            'title' => onapp_string('ADD_A_NEW_USER_GROUP'),
+            'info_title' => onapp_string('ADD_A_NEW_USER_GROUP'),
+            'info_body' => onapp_string('ADD_A_NEW_USER_GROUP_INFO'),
+        );
+
+        onapp_show_template('usersAndGroups_groupCreate', $params);
+    }
+
+    /**
      * Shows user groups page
      *
      * @param integer user id
      * @return void
      */
-    private function show_template_groups( ) {
+    private function show_template_groups( $error =  NULL ) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
         onapp_permission( array( 'groups', 'groups.read', 'groups.read.own' ) );
 
         $onapp = $this->get_factory();
 
-        $user_group_obj = $this->getList( 'UserGroup' );
+        $user_group_obj = $this->getList( 'UserGroup');
 
         $user =  $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         foreach ( $user_group_obj as $group ) {
-            $user_obj = $user->getListByGroupId( $group->_id );
-            $group_users_quantity [$group->_id] = count($user_obj);
+            $user_obj = $user->getListByGroupId( $group->_id );   //print('<pre>'); print_r($user_obj);
+            if ( $user_obj[0] ) {
+                $group_users_quantity [$group->_id] = count($user_obj);
+            }
+            else {
+                $group_users_quantity [$group->_id] = 0;
+            }
+            
         }      
-                                                                                       //print('<pre>'); print_r($group_users_quantity); die();
-
+                                                                                        //print('<pre>'); print_r($group_users_quantity); die();
         $params = array(
+           'group_users_quantity' => $group_users_quantity,
            'group_users' => $group_users,
            'user_groups_obj' => $user_group_obj,
            'title' => onapp_string('USER_GROUPS'),
            'info_title' => onapp_string('USER_GROUPS'),
-           'info_body' => onapp_string('USER_GROUPS_INFO')
+           'info_body' => onapp_string('USER_GROUPS_INFO'),
+           'error'=> $error,
         );
-
         onapp_show_template('usersAndGroups_groups', $params);
     }
 
@@ -343,8 +434,6 @@ class Users_and_Groups extends Controller {
         onapp_show_template('usersAndGroups_monthlyBills', $params);
     }
 
-
-
     /**
      * Shows user payment edit page
      *
@@ -372,6 +461,62 @@ class Users_and_Groups extends Controller {
         );
 
         onapp_show_template('usersAndGroups_paymentEdit', $params);
+    }
+
+    /**
+     * Shows user role edit page
+     *
+     * @param integer user role id
+     * @return void
+     */
+    private function show_template_role_edit( $id ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_debug('id  =>' . $id);
+
+        onapp_permission(array('roles', 'roles.update'));
+
+        $role_obj = $this->load('Role', array( $id ) );                  //print('<pre>'); print_r($role_obj->_permissions); die();
+
+        foreach ( $role_obj->_permissions as $permission ) {
+            $checked_role_ids [] = $permission->_id;
+        }                                                                    //print('<pre>'); print_r($checked_role_ids); die();
+
+        $params = array(
+            'role_obj' => $role_obj,
+            'checked_role_ids' => $checked_role_ids,
+            'permission_obj' => $this->getList( 'Role_Permission' ),
+            'id' => $id,
+            'title' => onapp_string('EDIT_ROLE'),
+            'info_title' => onapp_string('EDIT_ROLE'),
+            'info_body' => onapp_string('EDIT_ROLE_INFO'),
+        );
+
+        onapp_show_template('usersAndGroups_roleEdit', $params);
+    }
+
+    /**
+     * Shows user group edit page
+     *
+     * @param integer user group id
+     * @return void
+     */
+    private function show_template_group_edit($id) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_debug('id  =>' . $id);
+
+        onapp_permission(array('groups', 'groups.update'));
+
+        $params = array(
+            'id' => $id,
+            'group_obj' => $this->load('UserGroup', array( $id ) ),
+            'title' => onapp_string('EDIT_USER_GROUP'),
+            'info_title' => onapp_string('EDIT_USER_GROUP'),
+            'info_body' => onapp_string('EDIT_USER_GROUP_INFO'),
+        );
+
+        onapp_show_template('usersAndGroups_groupEdit', $params);
     }
 
     /**
@@ -607,7 +752,7 @@ class Users_and_Groups extends Controller {
      * @param integer user payment id
      * @return void
      */
-    private function payment_delete($id) {
+    private function payment_delete( $id ) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -631,6 +776,62 @@ class Users_and_Groups extends Controller {
         }
         else
             $this->show_template_payments($payment->error);
+    }
+
+    /**
+     * Deletes user role
+     *
+     * @param integer user role id
+     * @return void
+     */
+    private function role_delete( $id ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+        onapp_debug('id => ' . $id);
+
+        onapp_permission(array('roles', 'roles.delete'));
+
+        global $_ALIASES;
+
+        $onapp = $this->get_factory();
+
+        $role = $onapp->factory( 'Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $role->_id = $id;
+        $role->delete();                                                       //      print('<pre>'); print_r($role);die();
+
+        if ( is_null( $role->error ) ) {
+            $_SESSION['message'] = 'ROLE_HAS_BEEN_DELETED_SUCCESSFULLY';
+            onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
+        }
+        else
+            $this->show_template_roles( $role->error );
+    }
+
+    /**
+     * Deletes user group
+     *
+     * @param integer user group id
+     * @return void
+     */
+    private function group_delete ( $id ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+        onapp_debug('id => ' . $id);
+
+        onapp_permission(array('groups', 'groups.delete'));
+
+        global $_ALIASES;
+
+        $onapp = $this->get_factory();
+
+        $group = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $group->_id = $id;
+        $group->delete();                                                       //      print('<pre>'); print_r($group);die();
+
+        if (is_null($group->error)) {
+            $_SESSION['message'] = 'GROUP_HAS_BEEN_DELETED_SUCCESSFULLY';
+            onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
+        }
+        else
+            $this->show_template_groups($group->error);
     }
 
     /**
@@ -726,7 +927,7 @@ class Users_and_Groups extends Controller {
      * @param integer user id
      * @return void
      */
-    private function payment_create($id) {
+    private function payment_create( $id ) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -740,12 +941,12 @@ class Users_and_Groups extends Controller {
             global $_ALIASES;
             $onapp = $this->get_factory();
 
-            $payment_obj = $onapp->factory('Payment');
+            $payment_obj = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($payment as $key => $value)
-                $payment_obj->$key = $value;                                                          // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                $payment_obj->$key = $value;                                                         
 
                 $payment_obj->_user_id = $id;
-            $payment_obj->save();
+            $payment_obj->save();                                                                  //  print('<pre>');print_r($payment_obj); print('</pre>'); die();
             //   print('<pre>');print_r($payment_obj->error); print('</pre>'); die();
             if (is_null($payment_obj->error)) {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY';
@@ -753,6 +954,85 @@ class Users_and_Groups extends Controller {
             }
             else
                 $this->show_template_payments($id, $payment_obj->error);
+        }
+    }
+
+    /**
+     * Creates new user role
+     *
+     * @return void
+     */
+    private function role_create(  ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_permission( array( 'roles', 'roles.create' ) );
+
+        $role = onapp_get_arg( 'role' );
+
+        if ( is_null( $role ) ) {
+            $this->show_template_role_create(  );
+        } else {
+            
+            foreach ( $role['_permission_ids'] as $key => $field) {
+                if ($field == 0) {
+                    unset($role['_permission_ids'][$key]);
+                }
+            }
+
+            $role['_permission_ids'] = array_values( $role['_permission_ids'] );                                                                          // print_r($role); die();
+            global $_ALIASES;
+            $onapp = $this->get_factory();
+
+            $role_obj = $onapp->factory('Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+            foreach ($role as $key => $value)
+                $role_obj->$key = $value;
+                                                                                         // print('<pre>');print_r($role_obj); print('</pre>'); die();
+            $role_obj->save();
+                                                                                              //  print('<pre>');print_r($role_obj); print('</pre>'); die();
+            if ( is_null($role_obj->error) ) {
+                $_SESSION['message'] = 'ROLE_HAS_BEEN_CREATED_SUCCESSFULLY';
+                onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
+            }
+            else
+                $this->show_template_roles( $role_obj->error);
+        }
+    }
+
+    /**
+     * Creates new user group
+     *
+     * @param integer user id
+     * @return void
+     */
+    private function group_create(  ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+
+        onapp_permission(array('groups', 'groups.create'));
+
+        $group = onapp_get_arg('group');
+
+        if (is_null($group)) {
+            $this->show_template_group_create( );
+        } else {                                                                               //  print_r($group); die();
+            global $_ALIASES;
+            $onapp = $this->get_factory();
+
+            $group_obj = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+            foreach ($group as $key => $value)
+                $group_obj->$key = $value;
+            
+            //delete this when fixed Ticket #2511
+            $group_obj->_tagRoot = 'pack';
+            //*****************************
+            
+            $group_obj->save();                                                                            //print('<pre>');print_r($group_obj); die();
+            
+            if (is_null($group_obj->error)) {
+                $_SESSION['message'] = 'GROUP_HAS_BEEN_CREATED_SUCCESSFULLY';
+                onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
+            }
+            else
+                $this->show_template_groups( $group_obj->error );
         }
     }
 
@@ -958,7 +1238,7 @@ class Users_and_Groups extends Controller {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
-        onapp_permission(array('payments', 'payments.create'));
+        onapp_permission(array('payments', 'payments.update'));
 
         $user_id = onapp_get_arg('user_id');
         $payment = onapp_get_arg('payment');
@@ -983,6 +1263,92 @@ class Users_and_Groups extends Controller {
             }
             else
                 $this->show_template_payments($user_id, $payment_obj->error);
+        }
+    }
+    
+
+    /**
+     * Edits user role
+     *
+     * @param integer user role id
+     * @return void
+     */
+    private function role_edit( $id ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+        onapp_debug('id => ' . $id);
+
+        onapp_permission(array('roles', 'roles.update'));
+        
+        $role = onapp_get_arg( 'role' );
+
+        if ( is_null( $role ) ) {
+            $this->show_template_role_edit( $id );
+        } else {
+
+            foreach ( $role['_permission_ids'] as $key => $field) {
+                if ($field == 0) {
+                    unset($role['_permission_ids'][$key]);
+                }
+            }
+
+            $role['_permission_ids'] = array_values( $role['_permission_ids'] );                                                                          // print_r($role); die();
+            global $_ALIASES;
+            $onapp = $this->get_factory();
+
+            $role_obj = $onapp->factory('Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+            foreach ($role as $key => $value)
+                $role_obj->$key = $value;
+                                                                                         // print('<pre>');print_r($role_obj); print('</pre>'); die();
+            $role_obj->_id = $id;
+            $role_obj->save();
+                                                                                              //  print('<pre>');print_r($role_obj); print('</pre>'); die();
+            if ( is_null($role_obj->error) ) {
+                $_SESSION['message'] = 'ROLE_HAS_BEEN_UPDATED_SUCCESSFULLY';
+                onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
+            }
+            else
+                $this->show_template_roles( $role_obj->error);
+        }
+    }
+
+    /**
+     * Edits user group
+     *
+     * @param integer user group id
+     * @return void
+     */
+    private function group_edit( $id ) {
+        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
+        onapp_debug('id => ' . $id);
+
+        onapp_permission(array('groups', 'groups.update'));
+
+        $group = onapp_get_arg('group');
+
+        if ( is_null( $group ) ) {
+            $this->show_template_group_edit( $id );
+        } else {                                                                                // print_r($group); die();
+            global $_ALIASES;
+            $onapp = $this->get_factory();
+
+            $group_obj = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+            foreach ($group as $key => $value)
+                $group_obj->$key = $value;                                           // print('<pre>');print_r($group_obj); print('</pre>'); die();
+            
+            $group_obj->_id = $id;
+
+            //delete this when fixed Ticket #2511
+            $group_obj->_tagRoot = 'pack';
+            //*****************************
+
+            $group_obj->save();                                                      // print('<pre>');print_r($group_obj); print('</pre>'); die();
+            
+            if (is_null($group_obj->error)) {
+                $_SESSION['message'] = 'GROUP_HAS_BEEN_UPDATED_SUCCESSFULLY';
+                onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
+            }
+            else
+                $this->show_template_groups( $group_obj->error );
         }
     }
 
