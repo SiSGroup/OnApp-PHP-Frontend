@@ -573,7 +573,7 @@ $_LANG['AUGUST_'] = 'August';
 $_LANG['SEPTEMBER_'] = 'September';
 $_LANG['OCTOBER_'] = 'October';
 $_LANG['NOVEMBER_'] = 'November';
-$_LANG['DESEMBER_'] = 'Desember';
+$_LANG['DECEMBER_'] = 'December';
 $_LANG['TOTAL_AMOUNT'] = 'Total Amount';
 $_LANG['USER_GROUPS'] = 'User Groups';
 $_LANG['USER_GROUPS_INFO'] = 
@@ -581,6 +581,44 @@ $_LANG['USER_GROUPS_INFO'] =
     the list of users';
 $_LANG['GROUP_'] = 'Group';
 $_LANG['ADD_NEW_GROUP'] = 'Add New Group';
+$_LANG['DESTROY_GROUP'] = 'Edit Group';
+$_LANG['EDIT_GROUP'] = 'Destroy Group';
+$_LANG['GROUP_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Group has been deleted successfully';
+$_LANG['ADD_A_NEW_USER_GROUP'] = 'Add a New User Group';
+$_LANG['ADD_A_NEW_USER_GROUP_INFO'] = 'Add a New User Group';
+$_LANG['GROUP_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Group has been created successfylly';
+$_LANG['EDIT_USER_GROUP'] = 'Edit User Group';
+$_LANG['EDIT_USER_GROUP_INFO'] = 'Edit the group for users';
+$_LANG['GROUP_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Group has been updated successfully';
+$_LANG['ROLES_'] = 'Roles';
+$_LANG['ROLES_INFO'] = 
+    'The following roles have been set up in this cloud. A role is a set of
+    actions that users are allowed to perform, and are assigned during the
+    user creation process. There are two default roles in OnApp: Administrator
+    and User. To create your own role, click the Add New Role button. You can
+    create as many as you need.';
+$_LANG['ADD_NEW_ROLE'] = 'Add New Role';
+$_LANG['EDIT_ROLE'] = 'Edit Role';
+$_LANG['EDIT_ROLE_INFO'] =
+    'To edit the selected role, change its properties and permissions and click
+    the Save button';
+$_LANG['ROLE_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Role has been updated successfully';
+$_LANG['PERMISSIONS_'] = 'Permissions';
+$_LANG['ROLE_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Role has been deleted successfully';
+$_LANG['CREATE_NEW_ROLE'] = 'Create New Role';
+$_LANG['CREATE_NEW_ROLE_INFO'] =
+    'To create a new role, give it a description, put ticks next to the
+    permissions you would like this role to have, and click the Save button';
+$_LANG['ROLE_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Role has been created successfully';
+
+
+
+
+
+
+
+
+
 
 
 
