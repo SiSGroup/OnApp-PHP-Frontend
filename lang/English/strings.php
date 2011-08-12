@@ -207,23 +207,17 @@ $_LANG['RAM_'] = 'RAM';
 $_LANG['DISK_'] = 'Disk';
 $_LANG['BACKUP_SIZE'] = 'Backup Size';
 $_LANG['BACKUP_TYPE'] = 'Backup Type';
-
 $_LANG['CONVERT_TO_TEMPLATE'] = 'Convert to template';
 $_LANG['RESTORE_'] = 'Restore';
 $_LANG['BACKUP_HAS_BEEN_SQUEDULED_FOR_REMOVAL'] = 'Backup has been scheduled for removal';
-
 $_LANG['BACKUP_HAS_BEEN_SQUEDULED_FOR_RESTORE'] = 'Backup has been scheduled for restore';
-
 $_LANG['CONVERT_THIS_BACKUP_TO_TEMPLATE'] = 'Convert this Backup to a Template';
-
 $_LANG['CONVERT_THIS_BACKUP_TO_TEMPLATE_INFO'] = 
     'Converting a backup lets you create a template from an
     existing virtual machine configuration, which you can then use
     to redeploy new virtual machines. To convert your backup, enter a
     label name for your new template and click the Convert Backup button.';
-
 $_LANG['CONVERT_BACKUP'] = 'Convert Backup';
-
 $_LANG['BACKUP_HAS_BEEN_SQUEDULED_FOR_CONVERTION'] = 'Backup has been Scheduled for conversion';
 $_LANG['OVERVIEW_'] = 'Overview';
 $_LANG['NETWORKING_'] = 'Networking';
@@ -241,11 +235,9 @@ $_LANG['IP_ADDRESSES_FOR_THIS_VIRTUAL_MACHINE_INFO'] =
     if they are allocated after the machine had been built, you will need to
     additionally configure a network by yourself. To do this, click
     \'Rebuild Network\' button at the bottom of the page.';
-
 $_LANG['NO_ADDRESSES'] = 'No Addresses';
 $_LANG['ON_'] = 'ON';
 $_LANG['OFF_'] = 'OFF';
-
 $_LANG['IP_ADDRESS'] = 'IP Address';
 $_LANG['NETMASK_'] = 'Netmask';
 $_LANG['GATEWAY_'] = 'Gateway';
@@ -357,7 +349,6 @@ $_LANG['SCHEDULES_INFO'] =
     backups of your disks over a set period of time. Click a schedule date to see
     details of that task, and the icons to the right to edit or delete that schedule.';
 $_LANG['DURATION_'] = 'Duration';
-
 $_LANG['PERIOD_'] = 'Period';
 $_LANG['NEXT_START'] = 'Next Start';
 $_LANG['DURATION_'] = 'Duration';
@@ -466,12 +457,10 @@ $_LANG['USER_INFORMATION_INFO'] =
 $_LANG['ADD_A_NEW_USER'] = 'Add A New User';
 $_LANG['BILLING_DETAILS'] = 'Billing Details';
 $_LANG['OUTSTANDING_AMOUNT'] = 'Outstanding amount';
-
 $_LANG['TOTAL_COST'] = 'Total cost';
 $_LANG['BILLING_PLAN_FOR'] = 'Billing plan for';
 $_LANG['MONTHLY_FEE'] = 'Monthly fee';
 $_LANG['USER_GROUP'] = 'User Group';
-
 $_LANG['USER_PAYMENTS'] = 'User Payments';
 $_LANG['PAYMENT_DATE'] = 'Payment Date';
 $_LANG['INVOICE_NUMBER'] = 'Invoice Number';
@@ -490,13 +479,11 @@ $_LANG['ADD_NEW_PAYMENT'] = 'Add New Payment';
 $_LANG['ADD_NEW_PAYMENT_INFO'] = 
     'To add a new payment to the system, fill in the form below and then click 
     the Save button';
-
 $_LANG['EDIT_PAYMENT'] = 'Edit Payment';
 $_LANG['EDIT_PAYMENT_INFO'] =
     'To edit the selected payment, change its properties in the form below and
     then click the Save button';
 $_LANG['PAYMENT_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Payment has been updated successfully';
-
 $_LANG['WHITE_LIST'] = 'White List';
 $_LANG['EDIT_PROFILE'] = 'Edit Profile';
 $_LANG['USER_MENU'] = 'User Menu';
@@ -507,12 +494,10 @@ $_LANG['USER_STATISTICS'] = 'User Statistics';
 $_LANG['USER_STATISTICS_INFO'] = 'A summary of the resources used by users';
 $_LANG['BACKUPS_TEMPLATES_COST'] = 'Backups/Templates Cost';
 $_LANG['BACKUPS_COSTS'] = 'Backups Costs';
-
 $_LANG['MONITIS_FEE'] = 'Monitis Fee';
 $_LANG['STORAGE_DISKS_SIZE_COSTS'] = 'Storage Disks Size Costs';
 $_LANG['TEMPLATES_COSTS'] = 'Templates Costs';
 $_LANG['VIRTUAL_MACHINES_COST'] = 'Virtual Machines Cost';
-
 $_LANG['RESOURCES_COST'] = 'Resources Cost';
 $_LANG['USAGE_COST'] = 'Usage Cost';
 $_LANG['TOTAL_'] = 'Total';
@@ -561,7 +546,6 @@ $_LANG['SUSPEND_USER'] = 'Suspend User';
 $_LANG['YEARLY_USER_BILLS_PER_A_MONTH'] = 'Yearly User bills per a month';
 $_LANG['MONTH_'] = 'Month';
 $_LANG['COST_'] = 'Cost';
-
 $_LANG['JANUARY_'] = 'January';
 $_LANG['FABRUARY_'] = 'Fabruary';
 $_LANG['MARCH_'] = 'March';
@@ -610,57 +594,3 @@ $_LANG['CREATE_NEW_ROLE_INFO'] =
     'To create a new role, give it a description, put ticks next to the
     permissions you would like this role to have, and click the Save button';
 $_LANG['ROLE_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Role has been created successfully';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
