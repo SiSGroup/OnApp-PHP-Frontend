@@ -83,9 +83,6 @@ class Virtual_Machines extends Controller
             case 'network_interfaces':
                 $this->show_template_network_interface( $id );
                 break;
-            case 'interface_usage':
-                $this->show_template_interface_usage( $id );
-                break;
             case 'network_interface_edit':
                 $this->network_interface_edit( $id );
                 break;

@@ -31,6 +31,11 @@
         <td>{round( $statistics_obj[0]->_total_cost, 2 )|onapp_format_money}</td>
     </tr>
 </table>
+
+     {if $statistics_obj[0]->_vm_stats == null}
+    <p class="not_found">No resources found</p>
+     {else}
+     {foreach from=$statistics_obj[0]->_vm_stats item=stat}
 <table class="table_my" cellpadding="0" cellspacing="0" border="0">
 
     <tr>
@@ -40,10 +45,6 @@
         <th>{'TOTAL_'|onapp_string}</th>
 
     </tr>
-     {if $statistics_obj[0]->_vm_stats == null}
-    <p class="not_found">No resources found</p>
-     {else}
-     {foreach from=$statistics_obj[0]->_vm_stats item=stat}
     <tr>
         <td>
             {if  $vm_labels[$stat->_virtual_machine_id] != '0'}

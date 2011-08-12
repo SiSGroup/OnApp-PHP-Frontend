@@ -32,7 +32,7 @@ class Controller {
         $_obj = $obj->getList( $params[0], $params[1] );
 
        if ( $debug ) {
-           print('<pre>'); print_r( $obj );
+          // print('<pre>'); print_r( $obj );
            print('<pre>'); print_r( $_obj );
            die();
        }
@@ -55,7 +55,7 @@ class Controller {
        $_obj = $obj->load( $params[0], $params[1], $params[2] );
 
        if ( $debug ) {
-           print('<pre>'); print_r( $obj );
+           //print('<pre>'); print_r( $obj );
            print('<pre>'); print_r( $_obj );
            die();
        }

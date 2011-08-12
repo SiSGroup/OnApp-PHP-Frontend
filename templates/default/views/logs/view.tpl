@@ -42,8 +42,7 @@
     
    {/foreach}
     </table>
-
-    
+ 
 {include file="default/views/pagination.tpl"}
 {include file="default/views/navigation.tpl"}
 {include file="default/views/footer.tpl"}

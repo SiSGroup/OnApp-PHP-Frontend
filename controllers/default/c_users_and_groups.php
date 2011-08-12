@@ -111,36 +111,7 @@ class Users_and_Groups extends Controller {
         onapp_debug('error => ' . $error);
 
         $onapp = $this->get_factory();
-         // *****************TESTING LOAD BALANCERS!
-       // $user =  $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        //$user_obj = $user->getListByGroupId( 8 );                                print('<pre>'); print_r($user_obj); die();
-
-        
-        // $vm = $this->getList('VirtualMachine', NULL, true );
-        //  $load_balancer =  $onapp->factory('LoadBalancingCluster', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        // $load_balancer_obj = $load_balancer->getListByUserId( 1 );                                     //  print('<pre>'); print_r($load_balancer_obj); die();
-        //   $load_balancer = $this->load( 'LoadBalancingCluster', array( 13 ), true );
-        //
-        //
-        //
-        //  $load_balancer =  $onapp->factory('LoadBalancer', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        //$load_balancer->_port = 27;
-        //   $load_balancer->_id = 153;
-        //   $load_balancer->_load_balancer_attributes = array("label" => "Try1", "hostname" => "hostname", "rate_limit" => "58");
-        //    $load_balancer->_cluster_type = 'autoscaleout';
-        //     $load_balancer->_config = array( "min_node_amount"=>"1", "max_node_amount"=>"2" );
-//     $load_balancer->_node_attributes =array("memory"=>"128", "cpus"=>"1", "cpu_shares"=>"1", "rate_limit"=>"");
-//       $load_balancer->_auto_scaling_out_cpu_attributes = array("enabled"=>"1", "value"=>"90", "for_minutes"=>"5", "units"=>"1");
-//      $load_balancer->_auto_scaling_out_memory_attributes = array( "enabled"=>"1", "value"=>"40", "for_minutes"=>"5", "units"=>"1" );
-        //      $load_balancer->_image_template_id = 17;
-        //      $load_balancer->_auto_scaling_in_cpu_attributes = array( "enabled"=>"1", "value"=>"20", "for_minutes"=>"5", "units"=>"1" );
-        //     $load_balancer->_auto_scaling_in_memory_attributes = array("enabled"=>"1", "value"=>"72", "for_minutes"=>"5", "units"=>"1");
-        // not the same as in get request!
-        // $load_balancer->_tagRoot = 'load_balancing_cluster';
-        // $load_balancer->delete();
-        //  $load_balancer->save();
-        // print('<pre>'); print_r($load_balancer); die();
-//********************************
+         
         onapp_permission(array('users', 'users.read.own', 'users.read'));
 
         $user_obj = $this->getList('User');
@@ -182,7 +153,7 @@ class Users_and_Groups extends Controller {
         $user_obj = $this->load('User', array($id) );
 
         if( $user_obj->_user_group_id ) {
-            $user_group_obj = $this->load('UserGroup', array($user_obj->_user_group_id), true);
+            $user_group_obj = $this->load('UserGroup', array($user_obj->_user_group_id) );
         }
         else {
             $user_group_obj = NULL;
@@ -290,8 +261,19 @@ class Users_and_Groups extends Controller {
 
         onapp_permission( array ( 'roles', 'roles.create' ) );
 
+        $permission_obj = $this->getList( 'Role_Permission' );
+
+        foreach ( $permission_obj as $permission) {
+            $permission_array [$permission->_id] = array( '_label' => $permission->_label, 'identifier' => $permission->_identifier, 'id' => $permission->_id ) ;
+        }
+                                                                                    //print('<pre>'); print_r($permission_array); die();
+        $items_per_page = 15;
+
         $params = array(
-            'permission_obj' => $this->getList( 'Role_Permission' ),
+            'checked_role_ids_js' => json_encode( array() ),
+            'items_per_page' => $items_per_page,
+            'pages_quantity' => round( count( $permission_obj ) / $items_per_page ) ,
+            'permission_array' => json_encode( $permission_array ),
             'title' => onapp_string('CREATE_NEW_ROLE'),
             'info_title' => onapp_string('CREATE_NEW_ROLE'),
             'info_body' => onapp_string('CREATE_NEW_ROLE_INFO'),
@@ -482,10 +464,20 @@ class Users_and_Groups extends Controller {
             $checked_role_ids [] = $permission->_id;
         }                                                                    //print('<pre>'); print_r($checked_role_ids); die();
 
+        $permission_obj = $this->getList( 'Role_Permission' );
+
+        foreach ( $permission_obj as $permission) {
+            $permission_array [$permission->_id] = array( '_label' => $permission->_label, 'identifier' => $permission->_identifier, 'id' => $permission->_id ) ;
+        }
+                                                                                    //print('<pre>'); print_r($permission_array); die();
+        $items_per_page = 15;
+
         $params = array(
+            'items_per_page' => $items_per_page,
+            'pages_quantity' => round( count( $permission_obj ) / $items_per_page ) ,
+            'permission_array' => json_encode( $permission_array ),
             'role_obj' => $role_obj,
-            'checked_role_ids' => $checked_role_ids,
-            'permission_obj' => $this->getList( 'Role_Permission' ),
+            'checked_role_ids_js' => json_encode( $checked_role_ids ),
             'id' => $id,
             'title' => onapp_string('EDIT_ROLE'),
             'info_title' => onapp_string('EDIT_ROLE'),
@@ -1025,8 +1017,8 @@ class Users_and_Groups extends Controller {
             $group_obj->_tagRoot = 'pack';
             //*****************************
             
-            $group_obj->save();                                                                            //print('<pre>');print_r($group_obj); die();
-            
+            $group_obj->save();                                                                         //   print('<pre>');print_r($group_obj); die();
+
             if (is_null($group_obj->error)) {
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
