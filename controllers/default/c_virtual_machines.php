@@ -53,9 +53,6 @@ class Virtual_Machines extends Controller
             case 'build':
                 $this->build($id);
                 break;
-            case 'manage_network_interfaces':
-                $this->manage_network_interfaces( $id );
-                break;
             case 'backup':
                 $this->show_template_backup( $id );
                 break;
@@ -925,7 +922,7 @@ class Virtual_Machines extends Controller
 
         onapp_debug('id => ' .$id . ' error => ' . $error );
 
-        onapp_permission(array('networks.read', 'networks', 'virtual_machines'));
+        onapp_permission(array( 'networks', 'virtual_machines'));
 
         $onapp = $this->get_factory();
 

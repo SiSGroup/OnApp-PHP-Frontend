@@ -99,6 +99,7 @@ class Logs
      *
      * @param object logs object
      * @return pages quantity
+     * TODO create a ticket if there is no such page it should return empty false result not the last page !
      */
     public function get_pages_quantity($logs)
     {

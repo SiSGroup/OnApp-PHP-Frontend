@@ -26,6 +26,7 @@
                 <dt><label for="user_time_zone">{'TIME_ZONE'|onapp_string}</label></dt>
                 <dd>
                     <select id="user_time_zone" name="user[_time_zone]">
+                        <option></option>
                     {foreach from=$time_zones key=zone_key item=zone_value}
                         <option value="{$zone_key}">{$zone_value}</option>
                     {/foreach}     
@@ -56,6 +57,7 @@
                 <dt><label for="billing_plan_field">{'BILLING_PLAN'|onapp_string}</label></dt>
                 <dd>
                     <select id="billing_plan_field" name="user[_billing_plan_id]">
+                        <option></option>
                     {foreach from=$billing_plans_obj item=plan}
                         <option value="{$plan->_id}">{$plan->_label} [{$plan->_currency_code}]</option>
                     {/foreach}
@@ -86,6 +88,7 @@
                 <dt><label for="user_group_select">{'USER_GROUP'|onapp_string}</label></dt>
                 <dd>
                     <select id="user_group_select" name="user[_user_group_id]">
+                        <option></option>
                     {foreach from=$user_group_obj item=group}
                         <option value="{$group->_id}" >{$group->_label}</option>
                     {/foreach}

@@ -36,14 +36,14 @@
                 {/if}
             </td>
             <td class="tree_icon_td">
-                <a href="{$_ALIASES["virtual_machines"]}?action=interface_usage&amp;id={$network_interface->_id}&amp;virtual_machine_id={$virtual_machine_id}">
+              <!--TODO  <a href="{$_ALIASES["virtual_machines"]}?action=interface_usage&amp;id={$network_interface->_id}&amp;virtual_machine_id={$virtual_machine_id}">
                     <img title="{'INTERFACE_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
-                </a>
+                </a> -->
                 <a href="{$_ALIASES["virtual_machines"]}?action=network_interface_edit&amp;id={$network_interface->_id}&amp;virtual_machine_id={$virtual_machine_id}">
-                    <img title="{'EDIT_INTERFACE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
+                    <img alt="{'EDIT_INTERFACE'|onapp_string}" title="{'EDIT_INTERFACE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                 </a>
                 <a href="{$_ALIASES["virtual_machines"]}?action=network_interface_delete&amp;id={$network_interface->_id}&amp;virtual_machine_id={$virtual_machine_id}">
-                    <img title="{'DELETE_INTERFACE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
+                    <img  alt = "{'DELETE_INTERFACE'|onapp_string}" title="{'DELETE_INTERFACE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                 </a>
             </td>
         </tr>

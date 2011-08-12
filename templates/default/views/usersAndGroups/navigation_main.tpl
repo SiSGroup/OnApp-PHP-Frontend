@@ -5,9 +5,7 @@
         <tr>
             <td class="action_edit"><a href="{$_ALIASES["users_and_groups"]}">{'USERS_'|onapp_string}</a></td>
             <td class="action_edit"><a href="{$_ALIASES["users_and_groups"]}?action=groups">{'USER_GROUPS'|onapp_string}</a></td>
-            <td class="action_edit"><a href="{$_ALIASES["users_and_groups"]}?action=billing_plans">{'BILLING_PLANS'|onapp_string}</a></td>
-        </tr>
-        <tr>
+            <!-- <td class="action_edit"><a href="{$_ALIASES["users_and_groups"]}?action=billing_plans">{'BILLING_PLANS'|onapp_string}</a></td>  TODO Ticket #-->
             <td class="action_edit"><a href="{$_ALIASES["users_and_groups"]}?action=roles">{'ROLES_'|onapp_string}</a></td>
         </tr>
     </table>

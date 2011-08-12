@@ -1,4 +1,5 @@
 {include file="default/views/header.tpl"}
+{include file="default/views/usersAndGroups/navigation_main.tpl"}
 
    {if is_null($user_obj)}
        <p class="not_found">No Users found<p>
@@ -40,7 +41,7 @@
                <td class="blue">
                    <a href="{$_ALIASES["virtual_machines"]}?action=view&amp;user_id={$user->_id}">{'VIRTUAL_MACHINES'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=payments&amp;id={$user->_id}">{'PAYMENTS_'|onapp_string}</a>
-                   <a href="{$_ALIASES["users_and_groups"]}?action=billing_plan&amp;id={$user->_id}">{'BILLING_PLAN'|onapp_string}</a>
+                   <!-- <a href="{$_ALIASES["users_and_groups"]}?action=billing_plan&amp;id={$user->_id}">{'BILLING_PLAN'|onapp_string}</a> TODO Ticket # -->
                    <a href="{$_ALIASES["users_and_groups"]}?action=monthly_bills&amp;id={$user->_id}">{'MONTHLY_BILLS'|onapp_string}</a>
                    <a href="{$_ALIASES["users_and_groups"]}?action=statistics&amp;id={$user->_id}">{'USER_STATISTICS'|onapp_string}</a>
                </td>
@@ -78,6 +79,6 @@
             <input type="submit" value="{'ADD_A_NEW_USER'|onapp_string}" />
         </form>
 
-{include file="default/views/usersAndGroups/navigation_main.tpl"}
+
 {include file="default/views/navigation.tpl"}
 {include file="default/views/footer.tpl"}

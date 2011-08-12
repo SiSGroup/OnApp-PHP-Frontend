@@ -155,7 +155,7 @@
             <tr>
                 <td class="action_build"><a href="{$_ALIASES["virtual_machines"]}?action=build&amp;id={$vm_obj->_id}">Build Virtual Machine</a></td>
                 <td  class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=firewall&amp;id={$vm_obj->_id}">Edit Firewall Rules</a></td>
-                <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=manage_network_interfaces&amp;id={$vm_obj->_id}">Manage Network Interfaces</a></td>
+                <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=network_interfaces&amp;id={$vm_obj->_id}">Manage Network Interfaces</a></td>
             </tr>
             <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit&amp;id={$vm_obj->_id}">Adjust Resource Allocation</a></td>

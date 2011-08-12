@@ -50,7 +50,7 @@ class Hypervisors
 
         $hypervisor_vm_count = $this->get_vms_quantity($hypervisor_obj, $vm_obj);    //print('<pre>');print_r($hypervisor_vm_count); print('</pre>');die();
 
-        $hypervisor_xm_info = $this->get_hv_xm_info($hypervisor_obj);  print('<pre>');print_r($hypervisor_xm_info); print('</pre>');die();
+        $hypervisor_xm_info = $this->get_hv_xm_info($hypervisor_obj);               //print('<pre>');print_r($hypervisor_xm_info); print('</pre>');die();
 
         $params = array(
             'hypervisor_obj'        =>     $hypervisor_obj,
@@ -75,7 +75,7 @@ class Hypervisors
         return $hypervisor_vms_quatity;
     }
 
-  /*  private function get_hv_xm_info($hypervisor_obj)
+    private function get_hv_xm_info($hypervisor_obj)
     {
         foreach($hypervisor_obj as $key => $value)
         {
@@ -87,9 +87,9 @@ class Hypervisors
             }
         }
         return $hypervisor_xm_info;
-    }*/
-
-    private function get_hv_xm_info($hypervisor_obj) {
+    }
+       // Don't delete this function please
+    /*private function get_hv_xm_info($hypervisor_obj) {
         foreach ( $hypervisor_obj as $hv_id => $hv ) {
             foreach ( $hv->_health as $label => $info ) {
                 $xm = explode("\n", $info);
@@ -100,7 +100,7 @@ class Hypervisors
             }
         }
         return $hypervisor_xm_info;
-    }
+    }*/
 
 
   /**

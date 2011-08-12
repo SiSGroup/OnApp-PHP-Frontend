@@ -66,29 +66,29 @@
                <td class="five_icon_td">
                    {if $disk->_is_swap != true}
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_edit&amp;id={$disk->_id}">
-                           <img title="{'EDIT_DISK_PARAMS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
+                           <img alt= "{'EDIT_DISK_PARAMS'|onapp_string}" title="{'EDIT_DISK_PARAMS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                        </a>
-                       <a href="{$_ALIASES["virtual_machines"]}?action=disk_usage&amp;id={$disk->_id}">
+                      <!--TODO <a href="{$_ALIASES["virtual_machines"]}?action=disk_usage&amp;id={$disk->_id}">
                            <img title="{'DISK_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
-                       </a>
+                       </a> -->
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_backups&amp;id={$disk->_id}&amp;virtual_machine_id={$virtual_machine_id}">
-                           <img title="{'BACKUPS_LIST'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/backup.png" />
+                           <img alt= "{'BACKUPS_LIST'|onapp_string}" title="{'BACKUPS_LIST'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/backup.png" />
                        </a>
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_backups_schedule&amp;id={$disk->_id}">
-                           <img title="{'SCHEDULE_FOR_BACKUPS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/tasks.png" />
+                           <img alt = "{'SCHEDULE_FOR_BACKUPS'|onapp_string}" title="{'SCHEDULE_FOR_BACKUPS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/tasks.png" />
                        </a>
-                       <a href="{$_ALIASES["virtual_machines"]}?action=disk_delete&amp;id={$disk->_id}">
-                           <img title="{'DESTROY_DISK'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
+                       <a  href="{$_ALIASES["virtual_machines"]}?action=disk_delete&amp;id={$disk->_id}">
+                           <img alt = "{'DESTROY_DISK'|onapp_string}" title="{'DESTROY_DISK'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                        </a>
                    {else}
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_edit&amp;id={$disk->_id}">
-                           <img title="{'EDIT_DISK_PARAMS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
+                           <img alt = "{'EDIT_DISK_PARAMS'|onapp_string}" title="{'EDIT_DISK_PARAMS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                        </a>
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_usage&amp;id={$disk->_id}">
-                           <img title="{'DISK_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
+                           <img alt = "{'DISK_USAGE'|onapp_string}" title="{'DISK_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
                        </a>
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_delete&amp;id={$disk->_id}&amp;virtual_machine_id={$disk->_virtual_machine_id}">
-                           <img title="{'DESTROY_DISK'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
+                           <img alt = "{'DESTROY_DISK'|onapp_string}" title="{'DESTROY_DISK'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                        </a>
                    {/if}
                </td>

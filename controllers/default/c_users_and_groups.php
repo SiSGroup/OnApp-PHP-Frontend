@@ -133,7 +133,6 @@ class Users_and_Groups extends Controller {
             'error' => $error,
             'message' => onapp_string($message)
         );
-
         onapp_show_template('usersAndGroups_view', $params);
     }
 
@@ -158,7 +157,7 @@ class Users_and_Groups extends Controller {
         else {
             $user_group_obj = NULL;
         }
-        //TODO Add resource table
+        //TODO Add resource table Ticket #
 
         $params = array(
             'user_statistics' => $user_statistics,
@@ -200,7 +199,6 @@ class Users_and_Groups extends Controller {
             'info_body' => onapp_string('PAYMENTS_FOR_THIS_USER_INFO'),
             'error' => $error,
         );
-
         onapp_show_template('usersAndGroups_payments', $params);
     }
 
@@ -247,7 +245,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('ADD_NEW_PAYMENT'),
             'info_body' => onapp_string('ADD_NEW_PAYMENT_INFO'),
         );
-
         onapp_show_template('usersAndGroups_paymentCreate', $params);
     }
 
@@ -278,7 +275,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('CREATE_NEW_ROLE'),
             'info_body' => onapp_string('CREATE_NEW_ROLE_INFO'),
         );
-
         onapp_show_template('usersAndGroups_roleCreate', $params);
     }
    
@@ -299,7 +295,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('ADD_A_NEW_USER_GROUP'),
             'info_body' => onapp_string('ADD_A_NEW_USER_GROUP_INFO'),
         );
-
         onapp_show_template('usersAndGroups_groupCreate', $params);
     }
 
@@ -326,8 +321,7 @@ class Users_and_Groups extends Controller {
             }
             else {
                 $group_users_quantity [$group->_id] = 0;
-            }
-            
+            }    
         }      
                                                                                         //print('<pre>'); print_r($group_users_quantity); die();
         $params = array(
@@ -361,7 +355,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('ADD_NEW_WHITE_IP'),
             'info_body' => onapp_string('ADD_NEW_WHITE_IP_INFO'),
         );
-
         onapp_show_template('usersAndGroups_whiteListCreate', $params);
     }
     
@@ -390,7 +383,7 @@ class Users_and_Groups extends Controller {
             '9' => 'SEPTEMBER_',
             '10' => 'OCTOBER_',
             '11' => 'NOVEMBER_',
-            '12' => 'DESEMBER_',
+            '12' => 'DECEMBER_',
         );
 
         $user_obj = $this->load( 'User', array( $id) );
@@ -410,9 +403,8 @@ class Users_and_Groups extends Controller {
             'monthly_bills_obj' => $monthly_bills_obj,
             'title' => onapp_string('YEARLY_USER_BILLS_PER_A_MONTH'),
             'info_title' => onapp_string('YEARLY_USER_BILLS_PER_A_MONTH'),
-           // 'info_body' => onapp_string('YEARLY_USER_BILLS_PER_A_MONTH'),
+            'info_body' => onapp_string('YEARLY_USER_BILLS_PER_A_MONTH'),
         );
-
         onapp_show_template('usersAndGroups_monthlyBills', $params);
     }
 
@@ -441,7 +433,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('EDIT_PAYMENT'),
             'info_body' => onapp_string('EDIT_PAYMENT_INFO'),
         );
-
         onapp_show_template('usersAndGroups_paymentEdit', $params);
     }
 
@@ -483,7 +474,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('EDIT_ROLE'),
             'info_body' => onapp_string('EDIT_ROLE_INFO'),
         );
-
         onapp_show_template('usersAndGroups_roleEdit', $params);
     }
 
@@ -507,7 +497,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('EDIT_USER_GROUP'),
             'info_body' => onapp_string('EDIT_USER_GROUP_INFO'),
         );
-
         onapp_show_template('usersAndGroups_groupEdit', $params);
     }
 
@@ -536,7 +525,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('EDIT_WHITE_IP'),
             'info_body' => onapp_string('EDIT_WHITE_IP_INFO'),
         );
-
         onapp_show_template('usersAndGroups_whiteListEdit', $params);
     }
 
@@ -560,7 +548,7 @@ class Users_and_Groups extends Controller {
         foreach ($user_obj->_roles as $role) {
             $user_role_ids[] = $role->_id;
         }
-
+        
         $params = array(
             'user_id' => $id,
             'user_group_obj' => $this->getList('UserGroup'),
@@ -575,7 +563,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('EDIT_USER'),
             'info_body' => onapp_string('EDIT_USER_INFO'),
         );
-
         onapp_show_template('usersAndGroups_edit', $params);
     }
 
@@ -601,7 +588,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('ADD_A_NEW_USER'),
             'info_body' => onapp_string('ADD_A_NEW_USER_INFO'),
         );
-
         onapp_show_template('usersAndGroups_create', $params);
     }
 
@@ -653,7 +639,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('USER_STATISTICS'),
             'info_body' => onapp_string('USER_STATISTICS_INFO'),
         );
-
         onapp_show_template('usersAndGroups_statistics', $params);
     }
 
@@ -673,8 +658,8 @@ class Users_and_Groups extends Controller {
         onapp_permission(array('billing_plans', 'billing_plans.read', 'billing_plans.read.own'));
 
         $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load($id);  //TODO                                                  //print('<pre>'); print_r($user_obj);die();
-//**************************** Ask Liova's help ****************************************************
+        $user_obj = $user->load($id);  //TODO Ticket #                                                  //print('<pre>'); print_r($user_obj);die();
+//*******************************************************************************
 //
         //    $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         //    $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );                 //   print('<pre>'); print_r($billing_plan_obj->_base_resources);die();
@@ -683,7 +668,6 @@ class Users_and_Groups extends Controller {
         //   } die();
 //****************************************************************************************************
         // print('<pre>'); print_r($billing_plan_obj->_base_resources);die();
-
 
         $statistics = $onapp->factory('User_Statistics', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $statistics_obj = $statistics->getList($user_obj->_id);                                         //  print('<pre>'); print_r($statistics_obj);die();
@@ -709,7 +693,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('USER_STATISTICS'),
             'info_body' => onapp_string('USER_STATISTICS_INFO'),
         );
-
         onapp_show_template('usersAndGroups_statistics', $params);
     }
 
@@ -734,7 +717,6 @@ class Users_and_Groups extends Controller {
             'info_body' => onapp_string('WHITE_LIST_IPS_FOR_THIS_USER_INFO'),
             'error' => $error,
         );
-
         onapp_show_template('usersAndGroups_whiteList', $params);
     }
 
@@ -1013,7 +995,7 @@ class Users_and_Groups extends Controller {
             foreach ($group as $key => $value)
                 $group_obj->$key = $value;
             
-            //delete this when fixed Ticket #2511
+            //TODO delete this when fixed Ticket #2511
             $group_obj->_tagRoot = 'pack';
             //*****************************
             
@@ -1054,7 +1036,7 @@ class Users_and_Groups extends Controller {
 
                 $white_list_obj->_user_id = $id;
             $white_list_obj->save();
-            // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                                             // print('<pre>');print_r($payment_obj); print('</pre>'); die();
             if (is_null($white_list_obj->error)) {
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_CREATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $id);
@@ -1120,11 +1102,11 @@ class Users_and_Groups extends Controller {
             $white_list_obj = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($white_list as $key => $value)
                 $white_list_obj->$key = $value;
-            // print('<pre>');print_r($white_list_obj); print('</pre>'); die();
+                                                                                                    // print('<pre>');print_r($white_list_obj); print('</pre>'); die();
             $white_list_obj->_user_id = $user_id;
             $white_list_obj->_id = $id;
             $white_list_obj->save();
-            // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                                // print('<pre>');print_r($payment_obj); print('</pre>'); die();
             if (is_null($white_list_obj->error)) {
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_UPDATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $user_id);
@@ -1168,7 +1150,7 @@ class Users_and_Groups extends Controller {
 
             $user_obj->_id = $id;                                                           //  print('<pre>');print_r($user_obj); print('</pre>'); die();
             $user_obj->save();
-            // print('<pre>');print_r($user_obj); print('</pre>'); die();
+                                                                                                // print('<pre>');print_r($user_obj); print('</pre>'); die();
             if (is_null($user_obj->error)) {
                 $_SESSION['message'] = 'USER_PROFILE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $id);
@@ -1196,7 +1178,7 @@ class Users_and_Groups extends Controller {
         } else {
             global $_ALIASES;
             $onapp = $this->get_factory();
-            // print_r($user); die();
+                                                                                             // print_r($user); die();
             foreach ($user['_role_ids'] as $key => $field) {
                 if ($field == 0) {
                     unset($user['_role_ids'][$key]);
@@ -1244,11 +1226,11 @@ class Users_and_Groups extends Controller {
             $payment_obj = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($payment as $key => $value)
                 $payment_obj->$key = $value;
-            // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                                // print('<pre>');print_r($payment_obj); print('</pre>'); die();
             $payment_obj->_user_id = $user_id;
             $payment_obj->_id = $id;
             $payment_obj->save();
-            // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                                 // print('<pre>');print_r($payment_obj); print('</pre>'); die();
             if (is_null($payment_obj->error)) {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $user_id);
@@ -1329,7 +1311,7 @@ class Users_and_Groups extends Controller {
             
             $group_obj->_id = $id;
 
-            //delete this when fixed Ticket #2511
+            //TODO delete this when fixed Ticket #2511
             $group_obj->_tagRoot = 'pack';
             //*****************************
 

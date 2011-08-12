@@ -7,7 +7,7 @@ class Controller {
 
     protected function get_factory() {
         if ( !isset($this->factory_instance) ) {
-            //require_once "wrapper/Factory.php";
+            require_once "wrapper/Factory.php";
 
             $this->factory_instance = new ONAPP_Factory(
                 $_SESSION["host"],
