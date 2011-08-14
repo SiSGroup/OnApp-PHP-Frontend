@@ -16,7 +16,10 @@
 
 <div id="container">
     
-    <div style="height:44px;" id="header2"></div>
+    <div style="height:44px;" id="header2">
+        <div id="header2_left"></div >
+        <div id="header2_right">{'HELLO_THERE'|onapp_string}, {$smarty.session.login}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {'HOST_'|onapp_string}: {$smarty.session.host} </div>
+    </div>
     <div id="content">
 
     {if isset($error)}

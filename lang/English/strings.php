@@ -594,3 +594,4 @@ $_LANG['CREATE_NEW_ROLE_INFO'] =
     'To create a new role, give it a description, put ticks next to the
     permissions you would like this role to have, and click the Save button';
 $_LANG['ROLE_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Role has been created successfully';
+$_LANG['HELLO_THERE'] = 'Hello There';

@@ -503,6 +503,7 @@ class Virtual_Machines extends Controller
         $backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $backup_obj = $backup->diskBackups($id);                                                  // print('<pre>'); print_r($backup_obj); print('</pre>'); die();
 
+        //if ( ! $backup_obj[0]->_id ) $backup_obj = NULL;
         $params = array(
             'disk_id'              =>     $id,
             'virtual_machine_id'   =>     onapp_get_arg('virtual_machine_id'),
@@ -1323,7 +1324,7 @@ class Virtual_Machines extends Controller
         $onapp = $this->get_factory();
 
         $disk = $onapp->factory('Disk', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $disk->disableAutobackup( $id );
+        $disk->disableAutobackup( $id );                                         // print('<pre>'); print_r($disk); die();
 
         if( is_null($disk->error))
         {

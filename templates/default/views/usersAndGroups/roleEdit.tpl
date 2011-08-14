@@ -15,8 +15,6 @@
         <div id="all_roles" class="div_page"></div>
         <div style="position:inherit" id="pagination"></div>
          
-<div style="position:inherit" id="pagination"></div>
-         
         <input type="hidden" name = "id" value="{$id}" />
         <input type="hidden" name = "action" value="role_edit" />
         <input type="submit" value="{'SAVE_'|onapp_string}" />

@@ -114,13 +114,9 @@
             </tr>
             <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=rebuild_network&amp;id={$vm_obj->_id}">Rebuild Network</a></td>
-                <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td>
+                <!--TODO <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td>-->
                 <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
-            </tr>
-            <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit_admin_note&amp;id={$vm_obj->_id}">Edit Administrator's Note</a></td>
-                <td></td>
-                <td></td>
             </tr>
 
         {elseif $vm_obj->_booted != '1' && $vm_obj->_built == '1'}
@@ -142,11 +138,11 @@
             </tr>
             <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=rebuild_network&amp;id={$vm_obj->_id}">Rebuild Network</a></td>
-                <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td>
+                <!-- TODO<td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td> -->
                 <td class="action_delete"><a href="{$_ALIASES["virtual_machines"]}?action=delete&amp;id={$vm_obj->_id}">Delete Virtual Machine</a></td>
+                <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
             </tr>
             <tr>
-                <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit_admin_note&amp;id={$vm_obj->_id}">Edit Administrator's Note</a></td>
             </tr>
 
@@ -164,16 +160,11 @@
 
             </tr>
             <tr>
-                <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td>
+               <!--TODO <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td> -->
                 <td class="action_delete"><a href="{$_ALIASES["virtual_machines"]}?action=delete&amp;id={$vm_obj->_id}">Delete Virtual Machine</a></td>
                 <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
-            </tr>
-            <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit_admin_note&amp;id={$vm_obj->_id}">Edit Administrator's Note</a></td>
-                <td></td>
-                <td></td>
             </tr>
-
         {/if}
 
     {else}

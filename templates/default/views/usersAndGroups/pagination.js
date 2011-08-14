@@ -21,8 +21,8 @@ function in_array (needle, haystack, argStrict) {
 
 function paginate ( page ) {
     item_id = 1
-    from = 1
     var style
+    roles_html = ''
     
     if ( page != 1 ) {
         from = ( page -1 ) * items_per_page + 1
@@ -33,8 +33,6 @@ function paginate ( page ) {
         untill = items_per_page
     }
 
-    roles_html = ''
-    
     for ( permission in permission_array) {
         style = ( item_id < from || item_id > untill ) ? 'style = "position:absolute; left: -2011px"' : ''
 
@@ -58,7 +56,6 @@ function paginate ( page ) {
     //insert pagination html
     cpage = page
     pagedisprange=3
-    
     stpage=cpage - pagedisprange
 
     if ( stpage < 1 ) {
