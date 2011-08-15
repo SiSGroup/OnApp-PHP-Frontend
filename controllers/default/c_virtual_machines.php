@@ -923,7 +923,7 @@ class Virtual_Machines extends Controller
 
         onapp_debug('id => ' .$id . ' error => ' . $error );
 
-        onapp_permission(array( 'networks', 'virtual_machines'));
+        onapp_permission( array( 'networks', 'virtual_machines.update.own', 'networks.read', 'virtual_machines' ));
 
         $onapp = $this->get_factory();
 

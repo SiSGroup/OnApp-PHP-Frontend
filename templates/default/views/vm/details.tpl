@@ -113,10 +113,14 @@
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=change_owner&amp;id={$vm_obj->_id}">Change Owner</a></td>
             </tr>
             <tr>
+                {if onapp_has_permission( array( 'virtual_machines' ) ) == true}
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=rebuild_network&amp;id={$vm_obj->_id}">Rebuild Network</a></td>
+                {/if}
                 <!--TODO <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td>-->
+                {if onapp_has_permission( array( 'virtual_machines' ) ) == true}
                 <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit_admin_note&amp;id={$vm_obj->_id}">Edit Administrator's Note</a></td>
+                {/if}
             </tr>
 
         {elseif $vm_obj->_booted != '1' && $vm_obj->_built == '1'}
@@ -137,13 +141,19 @@
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=change_owner&amp;id={$vm_obj->_id}">Change Owner</a></td>
             </tr>
             <tr>
+                {if onapp_has_permission( array( 'virtual_machines', 'virtual_machines.rebuild_network' ) ) == true}
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=rebuild_network&amp;id={$vm_obj->_id}">Rebuild Network</a></td>
+                {/if}
                 <!-- TODO<td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td> -->
                 <td class="action_delete"><a href="{$_ALIASES["virtual_machines"]}?action=delete&amp;id={$vm_obj->_id}">Delete Virtual Machine</a></td>
+                {if onapp_has_permission( array( 'virtual_machines', 'virtual_machines.suspend' ) ) == true}
                 <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
+                {/if}
             </tr>
             <tr>
+                {if onapp_has_permission( array( 'virtual_machines' ) ) == true}
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit_admin_note&amp;id={$vm_obj->_id}">Edit Administrator's Note</a></td>
+                {/if}
             </tr>
 
         {elseif $vm_obj->_booted != '1' && $vm_obj->_built != '1'}
@@ -156,14 +166,18 @@
             <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit&amp;id={$vm_obj->_id}">Adjust Resource Allocation</a></td>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=change_owner&amp;id={$vm_obj->_id}">Change Owner</a></td>
+                {if onapp_has_permission( array( 'virtual_machines', 'virtual_machines.rebuild_network' ) ) == true}
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=rebuild_network&amp;id={$vm_obj->_id}">Rebuild Network</a></td>
+                {/if}
 
             </tr>
             <tr>
                <!--TODO <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=segregate&amp;id={$vm_obj->_id}">Segregate Virtual Machine</a></td> -->
                 <td class="action_delete"><a href="{$_ALIASES["virtual_machines"]}?action=delete&amp;id={$vm_obj->_id}">Delete Virtual Machine</a></td>
+                {if onapp_has_permission( array( 'virtual_machines', 'virtual_machines.suspend' ) ) == true}
                 <td class="action_reboot"><a href="{$_ALIASES["virtual_machines"]}?action=suspend&amp;id={$vm_obj->_id}">Suspend Virtual Machine</a></td>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit_admin_note&amp;id={$vm_obj->_id}">Edit Administrator's Note</a></td>
+                {/if}
             </tr>
         {/if}
 

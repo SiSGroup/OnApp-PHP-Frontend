@@ -17,10 +17,10 @@
             </td>
             <td class="dark_td">
                 <a href="{$_ALIASES["users_and_groups"]}?action=role_edit&amp;id={$role->_id}">
-                    <img title="{'EDIT_PAYMENT'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
+                    <img alt="{'EDIT_PAYMENT'|onapp_string}" title="{'EDIT_PAYMENT'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                 </a>
                 <a href="{$_ALIASES["users_and_groups"]}?action=role_delete&amp;id={$role->_id}">
-                    <img title="{'DESTROY_PAYMENT'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
+                    <img alt="{'DESTROY_PAYMENT'|onapp_string}" title="{'DESTROY_PAYMENT'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                 </a>
             </td>
         </tr>
