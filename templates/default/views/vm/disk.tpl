@@ -84,9 +84,9 @@
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_edit&amp;id={$disk->_id}">
                            <img alt = "{'EDIT_DISK_PARAMS'|onapp_string}" title="{'EDIT_DISK_PARAMS'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
                        </a>
-                       <a href="{$_ALIASES["virtual_machines"]}?action=disk_usage&amp;id={$disk->_id}">
+                     <!--TODO  <a href="{$_ALIASES["virtual_machines"]}?action=disk_usage&amp;id={$disk->_id}">
                            <img alt = "{'DISK_USAGE'|onapp_string}" title="{'DISK_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
-                       </a>
+                       </a> -->
                        <a href="{$_ALIASES["virtual_machines"]}?action=disk_delete&amp;id={$disk->_id}&amp;virtual_machine_id={$disk->_virtual_machine_id}">
                            <img alt = "{'DESTROY_DISK'|onapp_string}" title="{'DESTROY_DISK'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                        </a>
