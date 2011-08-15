@@ -69,4 +69,13 @@ class Base {
 		}                                                                              
 		onapp_debug( '_load_profile: profile => ' . print_r( $profile_obj, true ) );
 	}
+
+    /**
+     * Checks permission for displaying MENU item
+     *
+     * @return boolean if has permission to see menu item
+     */
+    static function  access(){
+        return true;
+    }
 }

@@ -122,4 +122,16 @@ class Logs
 
         return $result;
     }
+
+    /**
+     * Checks permission for displaying MENU item
+     *
+     * @return boolean if has permission to see menu item
+     */
+    static function  access () {
+        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+        $return = onapp_has_permission( array( 'log_items', 'log_items.list', 'log_items.list.own' ) );
+        onapp_debug( 'return => '.$return );
+        return $return;
+    }
 }

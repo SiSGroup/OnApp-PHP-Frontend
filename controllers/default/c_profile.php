@@ -35,6 +35,15 @@ class Profile
                 )
         );
     }
+
+    /**
+     * Checks permission for displaying MENU item
+     *
+     * @return boolean if has permission to see menu item
+     */
+    static function  access () {
+        return true;
+    }
 }
 
 ?>

@@ -155,8 +155,8 @@ class Base_Settings
      */
     static function  access(){
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
-        $return = onapp_has_permission(array('roles'));
-        onapp_debug('return => '.$return);
+        $return = onapp_has_permission( array( 'roles' ) );
+        onapp_debug( 'return => '.$return );
         return $return;
     }
 
