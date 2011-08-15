@@ -199,17 +199,16 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
 
         if(isset($_SCREEN_IDS["$current_id"]['title'])){
 
-// TODO move on onapp_show_template function
-//            $file_path = 'controllers/c_'.strtolower($_SCREEN_IDS["$current_id"]['class']).'.php';
-//            if(file_exists($file_path))
-//            {
-//                require_once $file_path;
-                    //todo verify if exists class and function
-//                $_SCREEN_IDS["$current_id"]['show'] = call_user_func(array($_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access']));
-                $_SCREEN_IDS["$current_id"]['show'] = true;
-//            }
-//            else
-//                die('File '.$file_path.' doesn\'t exists');
+            // TODO move on onapp_show_template function
+            $file_path = 'controllers'. ONAPP_DS .  ONAPP_CONTROLLERS . ONAPP_DS . 'c_'.strtolower($_SCREEN_IDS["$current_id"]['class']).'.php';
+            if( file_exists( $file_path ) )
+            {   
+                require_once $file_path;
+                $_SCREEN_IDS["$current_id"]['show'] = call_user_func( array( $_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access'] ) );
+                // $_SCREEN_IDS["$current_id"]['show'] = true;
+            }
+                else
+                    die('File '.$file_path.' doesn\'t exists');
 
         }
         $_ALIASES[$_SCREEN_IDS["$current_id"]["alias"]] = $current_id;
@@ -226,8 +225,7 @@ function onapp_init_screen_ids() {
 
     onapp_debug('Load Screen IDs');
 
-    onapp_load_screen_ids();
-
+    onapp_load_screen_ids();             
     onapp_debug(print_r($_ALIASES, true));
     onapp_debug(print_r($_SCREEN_IDS, true));
 }
@@ -433,17 +431,17 @@ function onapp_permission($permissions) {
  * @return boolean [true|false]
  *
  */
-function onapp_has_permission($permissions) {
+function onapp_has_permission( $permissions ) { //print('<pre>'); print_r( $_SESSION['permissions'] ); die();
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
-    if(is_array($permissions))
+    if( is_array( $permissions ) )
     {
-           foreach($permissions as $permission)
-               if(in_array($permission, $_SESSION['permissions']))
+           foreach( $permissions as $permission )
+               if( in_array( $permission, $_SESSION['permissions'] ) )
                        return true;
 
                return false;
     }
-    return in_array($permissions, $_SESSION['permissions']);
+    return in_array($permissions, $_SESSION['permissions'] );
 }
 /**
  * Gets the list of file names in target directory
