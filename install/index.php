@@ -81,7 +81,7 @@ table{
                 Curl
             </td>
             <td>
-                <?php echo (  in_array( 'curl', get_loaded_extensions() ) ) ? '<span class="yes">.......Passed</span>' : '<span class="red">You have to install and enable Curl extension on your server </span>';?>
+                <?php echo (  extension_loaded ( 'curl' ) ) ? '<span class="yes">.......Passed</span>' : '<span class="red">You have to install and enable Curl extension on your server </span>';?>
             </td>
         </tr>
         <tr>
@@ -89,7 +89,7 @@ table{
                 Mctypt
             </td>
             <td>
-               <?php echo (  in_array( 'mcrypt', get_loaded_extensions() ) ) ? '<span class="yes">.......Passed</span>' : '<span class="red">You have to install and enable Mcrypt extension on your server </span>';?>
+               <?php echo (  extension_loaded ( 'mcrypt' ) ) ? '<span class="yes">.......Passed</span>' : '<span class="red">You have to install and enable Mcrypt extension on your server </span>';?>
             </td>
         </tr>
         <tr>
