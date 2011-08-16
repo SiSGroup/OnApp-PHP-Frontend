@@ -372,6 +372,13 @@ function onapp_startSession($ses = 'MYSES') {
 
     onapp_debug('Start SESSION');
 
+    // rotates error log files
+    onapp_rotate_error_log();
+
+    // rotates debug log file
+    onapp_rotate_debug_log();
+    
+
     // Reset the expiration time upon page load
     if (isset($_COOKIE[$ses]))
       setcookie($ses, $_COOKIE[$ses], time() + $time, "/");
@@ -451,7 +458,7 @@ function onapp_has_permission( $permissions ) { //print('<pre>'); print_r( $_SES
  */
 function onapp_scan_dir( $path ){
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
-    if ($handle = opendir( $path )) {
+    if ( $handle = opendir( $path ) ) {
         while (false !== ($file = readdir($handle))) {
             if( ! is_dir($file) ) {
                 $files_list[] = $file;

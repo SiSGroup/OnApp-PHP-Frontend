@@ -88,7 +88,7 @@ function onapp_file_read( $path ){
  *
  */
 function onapp_init_log() {
-    $_SESSION['log_id'] = substr(md5($_SESSION['id'] . date('d-m-Y H-i-s') ), -10);
+    $_SESSION['log_id'] = substr( md5 ( session_id( ) . date('d-m-Y H-i-s') ), -10 );
 
     onapp_debug('Initialise frontend loger');
     onapp_debug('onapp_init_log: log_id => ' . $_SESSION['log_id']);
@@ -187,8 +187,6 @@ function onapp_die( $message )
 
     onapp_file_write( $msg, 'frontend' );
 
-    onapp_rotate_error_log();
-
     onapp_error_handler(E_ERROR, $message);
 
     die($message);
@@ -227,8 +225,6 @@ function onapp_error_handler( $type, $message, $file = NULL, $line = NULL, $cont
 
     $last_error = error_get_last( );
     
-    onapp_rotate_debug_log();
-
     onapp_error_reporting($last_error);
 }
 
@@ -302,7 +298,6 @@ function onapp_error_reporting($error) {
 
         onapp_file_write( $msg, 'frontend' );
 
-        onapp_rotate_error_log();
     }
 }
 

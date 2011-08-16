@@ -4,9 +4,10 @@
         <tr>
             <th>{'ERROR_IDENTIFIER'|onapp_string}</th>
             <th>{'DATE_'|onapp_string}</th>
+            <th>{'SIZE_'|onapp_string}</th>
         </tr>
 
-    {foreach from=$files_list key=file_id item=file_date}
+    {foreach from=$files_list key=file_id item=value}
         <tr>
             <td>
                 <a href="{$_ALIASES["error_logs"]}?action=details&amp;id={$file_id}">
@@ -14,7 +15,10 @@
                 </a>
             </td>
             <td>
-                {$file_date}
+                {$value.date}
+            </td>
+            <td>
+                {$value.size} bytes
             </td>
         </tr>
     

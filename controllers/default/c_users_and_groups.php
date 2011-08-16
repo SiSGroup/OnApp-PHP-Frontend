@@ -105,7 +105,7 @@ class Users_and_Groups extends Controller {
      * @param string error message
      * @return void
      */
-    private function show_template_view($error = NULL) {
+    private function show_template_view( $error = NULL ) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
         onapp_debug('error => ' . $error);
@@ -122,7 +122,7 @@ class Users_and_Groups extends Controller {
                 $user_group_obj = $user_group->load($user->_user_group_id);
                 $user_group_labels[$user->_id] = $user_group_obj->_label;
             }
-        }                                                                               //   print('<pre>'); print_r($user_group_labels);die();
+        }                                                                              
 
         $params = array(
             'user_group_labels' => $user_group_labels,
@@ -131,7 +131,6 @@ class Users_and_Groups extends Controller {
             'info_title' => onapp_string('USERS_AND_GROUPS'),
             'info_body' => onapp_string('USERS_AND_GROUPS_INFO'),
             'error' => $error,
-            'message' => onapp_string($message)
         );
         onapp_show_template('usersAndGroups_view', $params);
     }
@@ -263,7 +262,7 @@ class Users_and_Groups extends Controller {
         foreach ( $permission_obj as $permission) {
             $permission_array [$permission->_id] = array( '_label' => $permission->_label, 'identifier' => $permission->_identifier, 'id' => $permission->_id ) ;
         }
-                                                                                    //print('<pre>'); print_r($permission_array); die();
+                                                                                   
         $items_per_page = 15;
 
         $params = array(
@@ -315,7 +314,7 @@ class Users_and_Groups extends Controller {
 
         $user =  $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         foreach ( $user_group_obj as $group ) {
-            $user_obj = $user->getListByGroupId( $group->_id );   //print('<pre>'); print_r($user_obj);
+            $user_obj = $user->getListByGroupId( $group->_id );   
             if ( $user_obj[0] ) {
                 $group_users_quantity [$group->_id] = count($user_obj);
             }
@@ -323,7 +322,7 @@ class Users_and_Groups extends Controller {
                 $group_users_quantity [$group->_id] = 0;
             }    
         }      
-                                                                                        //print('<pre>'); print_r($group_users_quantity); die();
+                                                                                       
         $params = array(
            'group_users_quantity' => $group_users_quantity,
            'group_users' => $group_users,
@@ -449,18 +448,18 @@ class Users_and_Groups extends Controller {
 
         onapp_permission(array('roles', 'roles.update'));
 
-        $role_obj = $this->load('Role', array( $id ) );                  //print('<pre>'); print_r($role_obj->_permissions); die();
+        $role_obj = $this->load('Role', array( $id ) );                  
 
         foreach ( $role_obj->_permissions as $permission ) {
             $checked_role_ids [] = $permission->_id;
-        }                                                                    //print('<pre>'); print_r($checked_role_ids); die();
+        }                                                                   
 
         $permission_obj = $this->getList( 'Role_Permission' );
 
         foreach ( $permission_obj as $permission) {
             $permission_array [$permission->_id] = array( '_label' => $permission->_label, 'identifier' => $permission->_identifier, 'id' => $permission->_id ) ;
         }
-                                                                                    //print('<pre>'); print_r($permission_array); die();
+                                                                                  
         $items_per_page = 15;
 
         $params = array(
@@ -612,11 +611,11 @@ class Users_and_Groups extends Controller {
 
         $billing_plan_obj = $this->load('BillingPlan', array($user_obj->_billing_plan_id));
 
-        $user_vms = $this->getList('VirtualMachine', array( $id ) );                          // print('<pre>'); print_r($user_vms); die();
+        $user_vms = $this->getList('VirtualMachine', array( $id ) );                          
 
         foreach ( $user_vms as $virtual_machine ) {
             $vm_ids [$virtual_machine->_id] = $virtual_machine->_label;
-        }                                                                                     // print('<pre>'); print_r($vm_ids); die();
+        }                                                                                     
 
         $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         foreach ($statistics_obj[0]->_vm_stats as $v_m) {
@@ -626,7 +625,7 @@ class Users_and_Groups extends Controller {
             else {
                 $vm_labels[$v_m->_virtual_machine_id] = 0;
             }
-        }                                                                                    //  print('<pre>'); print_r($vm_labels); die();
+        }                                                                                   
 
         $params = array(
             'currency' => $billin_plan_obj->_currency_code,
@@ -643,62 +642,9 @@ class Users_and_Groups extends Controller {
     }
 
     /**
-     * Shows user billing plan page
-     *
-     * @param integer user id
-     * @return void
-     */
-    private function show_template_billing_plan($id) {
-        onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
-
-        onapp_debug('id  =>' . $id);
-
-        $onapp = $this->get_factory();
-
-        onapp_permission(array('billing_plans', 'billing_plans.read', 'billing_plans.read.own'));
-
-        $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $user_obj = $user->load($id);  //TODO Ticket #                                                  //print('<pre>'); print_r($user_obj);die();
-//*******************************************************************************
-//
-        //    $billing_plan = $onapp->factory('BillingPlan', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        //    $billing_plan_obj = $billing_plan->load( $user_obj->_billing_plan_id );                 //   print('<pre>'); print_r($billing_plan_obj->_base_resources);die();
-        //   foreach ($billing_plan_obj->_base_resources as $resource){
-        //       print('<pre>');print_r( $resource );echo '<br />';
-        //   } die();
-//****************************************************************************************************
-        // print('<pre>'); print_r($billing_plan_obj->_base_resources);die();
-
-        $statistics = $onapp->factory('User_Statistics', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $statistics_obj = $statistics->getList($user_obj->_id);                                         //  print('<pre>'); print_r($statistics_obj);die();
-
-        $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        foreach ($statistics_obj[0]->_vm_stats as $v_m) {
-            if ($v_m->_virtual_machine_id != 0) {
-                $vm_obj = $vm->load($v_m->_virtual_machine_id);
-
-                if ($vm_obj->_label) {
-                    $vm_labels[$v_m->_virtual_machine_id] = $vm_obj->_label;
-                }
-            }
-        }                                                                                          //   print('<pre>'); print_r($vm_labels);die();
-
-        $params = array(
-            'currency' => $billing_plan_obj->_currency_code,
-            'vm_labels' => $vm_labels,
-            'user_obj' => $user_obj,
-            'user_id' => $id,
-            'statistics_obj' => $statistics_obj,
-            'title' => onapp_string('USER_STATISTICS'),
-            'info_title' => onapp_string('USER_STATISTICS'),
-            'info_body' => onapp_string('USER_STATISTICS_INFO'),
-        );
-        onapp_show_template('usersAndGroups_statistics', $params);
-    }
-
-    /**
      * Shows user payments page
      *
+     * @global array $_ALIASES menu page aliases
      * @param string error message
      * @return void
      */
@@ -723,16 +669,17 @@ class Users_and_Groups extends Controller {
     /**
      * Deletes user payment
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user payment id
      * @return void
      */
     private function payment_delete( $id ) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('payments', 'payments.delete'));
-
-        global $_ALIASES;
 
         $user_id = onapp_get_arg('user_id');
         onapp_debug('user_id => ' . $user_id);
@@ -742,7 +689,8 @@ class Users_and_Groups extends Controller {
         $payment = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $payment->_id = $id;
         $payment->_user_id = $user_id;
-        $payment->delete();                                                       //      print('<pre>'); print_r($payment);die();
+        $payment->delete();
+        onapp_debug( 'payment =>' . print_r( $payment, true ) );
 
         if (is_null($payment->error)) {
             $_SESSION['message'] = 'PAYMENT_HAS_BEEN_DELETED_SUCCESSFULLY';
@@ -755,22 +703,24 @@ class Users_and_Groups extends Controller {
     /**
      * Deletes user role
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user role id
      * @return void
      */
     private function role_delete( $id ) {
+        global $_ALIASES;
+
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('roles', 'roles.delete'));
 
-        global $_ALIASES;
-
         $onapp = $this->get_factory();
 
         $role = $onapp->factory( 'Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $role->_id = $id;
-        $role->delete();                                                       //      print('<pre>'); print_r($role);die();
+        $role->delete();
+        onapp_debug( 'role =>' . print_r( $role, true ) );
 
         if ( is_null( $role->error ) ) {
             $_SESSION['message'] = 'ROLE_HAS_BEEN_DELETED_SUCCESSFULLY';
@@ -783,22 +733,24 @@ class Users_and_Groups extends Controller {
     /**
      * Deletes user group
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user group id
      * @return void
      */
     private function group_delete ( $id ) {
+        global $_ALIASES;
+
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('groups', 'groups.delete'));
 
-        global $_ALIASES;
-
         $onapp = $this->get_factory();
 
         $group = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $group->_id = $id;
-        $group->delete();                                                       //      print('<pre>'); print_r($group);die();
+        $group->delete();
+        onapp_debug( 'group =>' . print_r( $group, true ) );
 
         if (is_null($group->error)) {
             $_SESSION['message'] = 'GROUP_HAS_BEEN_DELETED_SUCCESSFULLY';
@@ -811,23 +763,24 @@ class Users_and_Groups extends Controller {
     /**
      * Deletes user (erase completly when user for the second time)
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function delete($id) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('users', 'users.delete'));
 
-        global $_ALIASES;
-
         $onapp = $this->get_factory();
 
         $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $user->_id = $id;
-
-        $user->delete();                                                            //print('<pre>'); print_r($user);die();
+        $user->delete();
+        onapp_debug( 'user =>' . print_r( $user, true ) );
 
         if (is_null($user->error)) {
             $_SESSION['message'] = 'USER_HAS_BEEN_DELETED_SUCCESSFULLY';
@@ -840,23 +793,24 @@ class Users_and_Groups extends Controller {
     /**
      * Suspends user
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function suspend($id) {
+        global $_ALIASES;
+
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('users', 'users.suspend'));
 
-        global $_ALIASES;
-
         $onapp = $this->get_factory();
 
         $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $user->_id = $id;
-
-        $user->suspend();                                                            //print('<pre>'); print_r($user);die();
+        $user->suspend();
+        onapp_debug( 'suspend =>' . print_r( $suspend, true ) );
 
         if (is_null($user->error)) {
             $_SESSION['message'] = 'USER_STATUS_CHANGED_TO_SUSPENDED';
@@ -869,23 +823,24 @@ class Users_and_Groups extends Controller {
     /**
      * Activates user
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function activate($id) {
+        global $_ALIASES;
+
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('users', 'users.activate'));
 
-        global $_ALIASES;
-
         $onapp = $this->get_factory();
 
         $user = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $user->_id = $id;
-
-        $user->activate_user();                                                           // print('<pre>'); print_r($user);die();
+        $user->activate_user();
+        onapp_debug( 'user =>' . print_r( $user, true ) );
 
         if (is_null($user->error)) {
             $_SESSION['message'] = 'USER_ACTIVATION_SUCCESSFULL';
@@ -898,10 +853,13 @@ class Users_and_Groups extends Controller {
     /**
      * Creates new user payment
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function payment_create( $id ) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -911,17 +869,17 @@ class Users_and_Groups extends Controller {
 
         if (is_null($payment)) {
             $this->show_template_payment_create($id);
-        } else {                                                                                // print_r($payment); die();
-            global $_ALIASES;
+        } else {                                                                               
             $onapp = $this->get_factory();
 
             $payment_obj = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($payment as $key => $value)
                 $payment_obj->$key = $value;                                                         
 
-                $payment_obj->_user_id = $id;
-            $payment_obj->save();                                                                  //  print('<pre>');print_r($payment_obj); print('</pre>'); die();
-            //   print('<pre>');print_r($payment_obj->error); print('</pre>'); die();
+            $payment_obj->_user_id = $id;
+            $payment_obj->save();
+            onapp_debug( 'payment_obj =>' . print_r( $payment_obj, true ) );
+
             if (is_null($payment_obj->error)) {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $id);
@@ -934,9 +892,12 @@ class Users_and_Groups extends Controller {
     /**
      * Creates new user role
      *
+     * @global array $_ALIASES menu page aliases
      * @return void
      */
     private function role_create(  ) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
         onapp_permission( array( 'roles', 'roles.create' ) );
@@ -953,16 +914,16 @@ class Users_and_Groups extends Controller {
                 }
             }
 
-            $role['_permission_ids'] = array_values( $role['_permission_ids'] );                                                                          // print_r($role); die();
-            global $_ALIASES;
+            $role['_permission_ids'] = array_values( $role['_permission_ids'] );                                                                         
             $onapp = $this->get_factory();
 
             $role_obj = $onapp->factory('Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($role as $key => $value)
                 $role_obj->$key = $value;
-                                                                                         // print('<pre>');print_r($role_obj); print('</pre>'); die();
+                                                                                        
             $role_obj->save();
-                                                                                              //  print('<pre>');print_r($role_obj); print('</pre>'); die();
+            onapp_debug( 'role_obj =>' . print_r( $role_obj, true ) );
+                                                                                              
             if ( is_null($role_obj->error) ) {
                 $_SESSION['message'] = 'ROLE_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
@@ -975,10 +936,13 @@ class Users_and_Groups extends Controller {
     /**
      * Creates new user group
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function group_create(  ) {
+        global $_ALIASES;
+
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
         onapp_permission(array('groups', 'groups.create'));
@@ -987,8 +951,7 @@ class Users_and_Groups extends Controller {
 
         if (is_null($group)) {
             $this->show_template_group_create( );
-        } else {                                                                               //  print_r($group); die();
-            global $_ALIASES;
+        } else {                                                                              
             $onapp = $this->get_factory();
 
             $group_obj = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
@@ -999,7 +962,8 @@ class Users_and_Groups extends Controller {
             $group_obj->_tagRoot = 'pack';
             //*****************************
             
-            $group_obj->save();                                                                         //   print('<pre>');print_r($group_obj); die();
+            $group_obj->save();
+            onapp_debug( 'group_obj =>' . print_r( $group_obj, true ) );
 
             if (is_null($group_obj->error)) {
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_CREATED_SUCCESSFULLY';
@@ -1013,10 +977,13 @@ class Users_and_Groups extends Controller {
     /**
      * Creates new user white list IP
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function white_list_create($id) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1026,17 +993,17 @@ class Users_and_Groups extends Controller {
 
         if (is_null($white_list)) {
             $this->show_template_white_list_create($id);
-        } else {                                                                               //  print_r($white_list); die();
-            global $_ALIASES;
+        } else {                                                                               
             $onapp = $this->get_factory();
 
             $white_list_obj = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($white_list as $key => $value)
-                $white_list_obj->$key = $value;                                                          // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                $white_list_obj->$key = $value;                                                          
 
-                $white_list_obj->_user_id = $id;
+            $white_list_obj->_user_id = $id;
             $white_list_obj->save();
-                                                                                                             // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+            onapp_debug( 'white_list_obj =>' . print_r( $white_list_obj, true ) );
+                                                                                                             
             if (is_null($white_list_obj->error)) {
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_CREATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $id);
@@ -1049,16 +1016,17 @@ class Users_and_Groups extends Controller {
     /**
      * Deletes user white list IP
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer white list IP id
      * @return void
      */
     private function white_list_delete($id) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
         onapp_permission(array('user_white_lists', 'user_white_lists.delete'));
-
-        global $_ALIASES;
 
         $user_id = onapp_get_arg('user_id');
         onapp_debug('user_id => ' . $user_id);
@@ -1068,7 +1036,8 @@ class Users_and_Groups extends Controller {
         $white_list = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $white_list->_id = $id;
         $white_list->_user_id = $user_id;
-        $white_list->delete();                                                       //      print('<pre>'); print_r($white_list);die();
+        $white_list->delete();
+        onapp_debug( 'white_list =>' . print_r( $white_list, true ) );
 
         if (is_null($white_list->error)) {
             $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_DELETED';
@@ -1081,10 +1050,13 @@ class Users_and_Groups extends Controller {
     /**
      * Edits user white list IP
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user white list IP id
      * @return void
      */
     private function white_list_edit($id) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1095,18 +1067,18 @@ class Users_and_Groups extends Controller {
 
         if (is_null($white_list)) {
             $this->show_template_white_list_edit($id);
-        } else {                                                                                // print_r($white_list); die();
-            global $_ALIASES;
+        } else {                                                                               
             $onapp = $this->get_factory();
 
             $white_list_obj = $onapp->factory('User_WhiteList', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($white_list as $key => $value)
                 $white_list_obj->$key = $value;
-                                                                                                    // print('<pre>');print_r($white_list_obj); print('</pre>'); die();
+                                                                                                    
             $white_list_obj->_user_id = $user_id;
             $white_list_obj->_id = $id;
             $white_list_obj->save();
-                                                                                                // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+            onapp_debug( 'white_list_obj =>' . print_r( $white_list_obj, true ) );
+                                                                                               
             if (is_null($white_list_obj->error)) {
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_UPDATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $user_id);
@@ -1119,10 +1091,13 @@ class Users_and_Groups extends Controller {
     /**
      * Edits user profile
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user id
      * @return void
      */
     private function edit($id) {
+        global $_ALIASES;
+
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1133,14 +1108,13 @@ class Users_and_Groups extends Controller {
         if (is_null($user)) {
             $this->show_template_edit($id);
         } else {
-            global $_ALIASES;
             $onapp = $this->get_factory();
-            //print_r($user); die();
+
             foreach ($user['_role_ids'] as $key => $field) {
                 if ($field == 0) {
                     unset($user['_role_ids'][$key]);
                 }
-            }                                                                         // print_r($user); die();
+            }                                                                         
 
             $user['_role_ids'] = array_values($user['_role_ids']);
             //print_r($user); die();
@@ -1148,9 +1122,10 @@ class Users_and_Groups extends Controller {
             foreach ($user as $key => $value)
                 $user_obj->$key = $value;
 
-            $user_obj->_id = $id;                                                           //  print('<pre>');print_r($user_obj); print('</pre>'); die();
+            $user_obj->_id = $id;                                                           
             $user_obj->save();
-                                                                                                // print('<pre>');print_r($user_obj); print('</pre>'); die();
+            onapp_debug( 'user_obj =>' . print_r( $user_obj, true ) );
+                                                                                                
             if (is_null($user_obj->error)) {
                 $_SESSION['message'] = 'USER_PROFILE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $id);
@@ -1163,9 +1138,12 @@ class Users_and_Groups extends Controller {
     /**
      * Creates a new user
      *
+     * @global array $_ALIASES menu page aliases
      * @return void
      */
     private function create() {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1176,23 +1154,23 @@ class Users_and_Groups extends Controller {
         if (is_null($user)) {
             $this->show_template_create($id);
         } else {
-            global $_ALIASES;
             $onapp = $this->get_factory();
-                                                                                             // print_r($user); die();
+                                                                                             
             foreach ($user['_role_ids'] as $key => $field) {
                 if ($field == 0) {
                     unset($user['_role_ids'][$key]);
                 }
-            }                                                                         // print_r($user); die();
+            }                                                                         
 
             $user['_role_ids'] = array_values($user['_role_ids']);
-            //print_r($user); die();
+            
             $user_obj = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($user as $key => $value)
                 $user_obj->$key = $value;
-            //  print('<pre>');print_r($user_obj); print('</pre>'); die();
+           
             $user_obj->save();
-            // print('<pre>');print_r($user_obj); print('</pre>'); die();
+            onapp_debug( 'user_obj =>' . print_r( $user_obj, true ) );
+
             if (is_null($user_obj->error)) {
                 $_SESSION['message'] = 'USER_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $user_obj->_id);
@@ -1205,10 +1183,13 @@ class Users_and_Groups extends Controller {
     /**
      * Edits user payment
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user payment id
      * @return void
      */
     private function payment_edit($id) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1219,18 +1200,18 @@ class Users_and_Groups extends Controller {
 
         if (is_null($payment)) {
             $this->show_template_payment_edit($id);
-        } else {                                                                                // print_r($payment); die();
-            global $_ALIASES;
+        } else {                                                                                
             $onapp = $this->get_factory();
 
             $payment_obj = $onapp->factory('Payment', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($payment as $key => $value)
                 $payment_obj->$key = $value;
-                                                                                                // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+                                                                                               
             $payment_obj->_user_id = $user_id;
             $payment_obj->_id = $id;
             $payment_obj->save();
-                                                                                                 // print('<pre>');print_r($payment_obj); print('</pre>'); die();
+            onapp_debug( 'payment_obj =>' . print_r( $payment_obj, true ) );
+                                                                                                 
             if (is_null($payment_obj->error)) {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $user_id);
@@ -1244,10 +1225,13 @@ class Users_and_Groups extends Controller {
     /**
      * Edits user role
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user role id
      * @return void
      */
     private function role_edit( $id ) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1265,17 +1249,17 @@ class Users_and_Groups extends Controller {
                 }
             }
 
-            $role['_permission_ids'] = array_values( $role['_permission_ids'] );                                                                          // print_r($role); die();
-            global $_ALIASES;
+            $role['_permission_ids'] = array_values( $role['_permission_ids'] );                                                                          
             $onapp = $this->get_factory();
 
             $role_obj = $onapp->factory('Role', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($role as $key => $value)
                 $role_obj->$key = $value;
-                                                                                         // print('<pre>');print_r($role_obj); print('</pre>'); die();
+                                                                                         
             $role_obj->_id = $id;
             $role_obj->save();
-                                                                                              //  print('<pre>');print_r($role_obj); print('</pre>'); die();
+            onapp_debug( 'role_obj =>' . print_r( $role_obj, true ) );
+                                                                                             
             if ( is_null($role_obj->error) ) {
                 $_SESSION['message'] = 'ROLE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
@@ -1288,10 +1272,13 @@ class Users_and_Groups extends Controller {
     /**
      * Edits user group
      *
+     * @global array $_ALIASES menu page aliases
      * @param integer user group id
      * @return void
      */
     private function group_edit( $id ) {
+        global $_ALIASES;
+        
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
         onapp_debug('id => ' . $id);
 
@@ -1301,13 +1288,12 @@ class Users_and_Groups extends Controller {
 
         if ( is_null( $group ) ) {
             $this->show_template_group_edit( $id );
-        } else {                                                                                // print_r($group); die();
-            global $_ALIASES;
+        } else {                                                                               
             $onapp = $this->get_factory();
 
             $group_obj = $onapp->factory('UserGroup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($group as $key => $value)
-                $group_obj->$key = $value;                                           // print('<pre>');print_r($group_obj); print('</pre>'); die();
+                $group_obj->$key = $value;                                           
             
             $group_obj->_id = $id;
 
@@ -1315,7 +1301,8 @@ class Users_and_Groups extends Controller {
             $group_obj->_tagRoot = 'pack';
             //*****************************
 
-            $group_obj->save();                                                      // print('<pre>');print_r($group_obj); print('</pre>'); die();
+            $group_obj->save();
+            onapp_debug( 'group_obj =>' . print_r( $group_obj, true ) );
             
             if (is_null($group_obj->error)) {
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_UPDATED_SUCCESSFULLY';

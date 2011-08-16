@@ -57,14 +57,13 @@
         <tr>
             <td class="label">IP Addresses: </td>
             <td>
-                 {if $vm_obj->_ip_addresses[0]->_address != ''}
+                 {if $vm_obj->_ip_addresses[0] != null}
                      {foreach from=$vm_obj->_ip_addresses key=k item=v}
                      {$vm_obj->_ip_addresses[$k]->_address}
                      {/foreach}
                  {else}
                     {'NO_ADDRESSES'|onapp_string}
                  {/if}
-
             </td>
             <td class="label">Disk backups:</td>
             <td>{$backups_quantity} / {$backups_total_size} MB</td>

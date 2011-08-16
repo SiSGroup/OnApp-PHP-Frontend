@@ -1,8 +1,12 @@
 <?php
-if( !defined( 'ONAPP_PATH' ) ) {
-	die( 'No direct script access allowed' );
-}
+if( !defined( 'ONAPP_PATH' ) ) { die( 'No direct script access allowed' ); }
 class Base {
+    /**
+     * Performs Login action
+     *
+     * @global array $_ALIASES menu page aliases
+     * @return void
+     */
 	function login( ) {
 		global $_ALIASES;
 		$login = onapp_get_arg( 'login' );
@@ -38,6 +42,13 @@ class Base {
 		}
 		onapp_show_template( 'login', $params );
 	}
+
+    /**
+     * Performs Logout action
+     *
+     * @global array $_ALIASES menu page aliases
+     * @return void
+     */
 	function logout( ) {
 		global $_ALIASES;
 		session_start( );
@@ -57,6 +68,13 @@ class Base {
 			'encrypt'
 		);
 	}
+
+    /**
+     * Loads OnApp user profile into the session
+     *
+     * @param mixed $onapp instance of ONAPP_Factory class
+     * @return void
+     */
 	private function _load_profile( $onapp ) {
 		onapp_debug( "Load OnApp user profile" );
 		$profile = $onapp->factory( 'Profile' );

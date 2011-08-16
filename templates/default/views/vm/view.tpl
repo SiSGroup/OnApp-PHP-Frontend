@@ -11,7 +11,7 @@
                 <th>{'POWER_'|onapp_string}</th>
                 <th>{'DISK_SIZE'|onapp_string}</th>
                 <th>{'RAM_'|onapp_string}</th>
-                <th>{'BACKUPS_'|onapp_string}</th>
+               <!-- <th>{'BACKUPS_'|onapp_string}</th> -->
                 <th></th>
             </tr>
     
@@ -19,20 +19,22 @@
             <tr>
                 <td class="lamp">
                     {if $v->_booted > 0}
-                        <img src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/on.png" />
+                        <img alt="{'ON_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/on.png" />
 
                     {else}
-                        <img src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/off.png" />
+                        <img alt="{'OFF_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/off.png" />
                     {/if}
                 </td>
                 <td><a href="{$_ALIASES["virtual_machines"]}?action=details&amp;id={$v->_id}">{substr($v->_label, 0, 10)}...</a></td>
 
                 <td>
-                    {if $v->_ip_addresses[0]->_address != ''}
-                        {$v->_ip_addresses[0]->_address}
+                    {if $v->_ip_addresses[0] != null}
+                    {foreach from=$v->_ip_addresses key=k item=val}
+                        {$val->_address} <br />
+                    {/foreach}
                     {else}
                         {'NO_ADDRESSES'|onapp_string}
-                    {/if}   
+                    {/if}
                 </td>
                 <td class="power_td">
                 {if $v->_booted == '1'}
@@ -47,13 +49,13 @@
                 </td>
                 <td>{$v->_total_disk_size} GB</td>
                 <td>{$v->_memory} MB</td>
-                <td> {$vm_backups[$k]["quantity"]} / {$vm_backups[$k]["size"]} MB</td>
+              <!--works to slow   <td> {$vm_backups[$k]["quantity"]} / {$vm_backups[$k]["size"]} MB</td> -->
                 <td class="dark_td">
                     <a href="{$_ALIASES["virtual_machines"]}?action=cpu_usage&amp;id={$v->_id}">
-                        <img title="{'CPU_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
+                        <img alt="{'CPU_USAGE'|onapp_string}" title="{'CPU_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
                     </a>
                     <a href="{$_ALIASES["virtual_machines"]}?action=backup&amp;id={$v->_id}">
-                        <img title="{'BACKUPS_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/backup.png" />
+                        <img alt="{'BACKUPS_'|onapp_string}" title="{'BACKUPS_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/backup.png" />
                     </a>
                 </td>        
             </tr>      
