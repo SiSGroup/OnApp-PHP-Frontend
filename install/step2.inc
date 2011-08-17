@@ -2,7 +2,7 @@
 
 <?php if ($result) { ?>
         <div align="center" class="table">
-            Congratulation! Configurations have been saved. Installation proccess was finished successfully.<br />
+            Congratulation! Configurations have been saved. Installation proccess finished successfully.<br />
             <p class="red">Delete or rename install/ directory and follow the link</p><br />
             <a href="<?php echo $base;?>">Login</a>
        </div>

@@ -52,64 +52,67 @@ $passed = 0;
         $version_compare_txt = !version_compare( PHP_VERSION, '5.0.0', '<' )
             ? $passed_txt
             : '<span class="red">You have to upgrade you php version to 5+ </span>';
-              $passed++;
         
         $mod_rewrite_txt = in_array('mod_rewrite', apache_get_modules())
             ? $passed_txt
             : '<span class="red">You have to enable mod_rewrite on your server </span>';
-              $passed++;
 
         $mod_php_txt = in_array('mod_php5', apache_get_modules())
             ? $passed_txt
             : '<span class="red">You have to enable mod_php5 on your server </span>';
-              $passed++;
 
         $curl_txt = extension_loaded('curl')
             ? $passed_txt
             : '<span class="red">You have to install and enable Curl extension on your server </span>';
-              $passed++;
 
         $mcrypt_txt = extension_loaded('mcrypt')
             ? $passed_txt
             : '<span class="red">You have to install and enable Mcrypt extension on your server </span>';
-              $passed++;
 
         $config_file_txt = is__writable('..' . ONAPP_DS . 'config.ini')
             ? $passed_txt
             : '<span class="red">You must set permissions for the config.ini file so it can be written to (chmod 777) </span>';
-              $passed++;
 
         $logs_dir_txt = is__writable('..' . ONAPP_DS . 'logs' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the logs/ directory so it can be written to (chmod 777) </span>';
-              $passed++;
 
         $templates_dir_txt = is__writable('..' . ONAPP_DS . 'templates_c' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the templates_c/ directory so it can be written to (chmod 777) </span>';
-            $passed++;
 
         $cache_dir_txt = is__writable('..' . ONAPP_DS . 'cache' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the cache/ directory so it can be written to (chmod 777) </span>';
-            $passed++;
 
         $htaccess_fite_txt = file_exists('..' . ONAPP_DS . '.htaccess')
             ? $passed_txt
             : '<span class="red">You must miss the .htaccess file somewhere :) </span>';
-            $passed++;
 
-        if ( $passed == 10 ) {
-            $disabled = '';
-            $not_passed_txt = '';
-        }
-        else {
-            $disabled = 'disabled';
-            $not_passed_txt = '<p class="red"> Some of your system parameters doesn\'t meet the requirements you need to fix them in order to continue </p>';
-        }
-        $disabled = ( $passed == 10 )
-            ? ''
-            : 'disabled';
+        $passes = array (
+            $htaccess_fite_txt,
+            $cache_dir_txt,
+            $templates_dir_txt,
+            $logs_dir_txt,
+            $config_file_txt,
+            $mcrypt_txt,
+            $curl_txt,
+            $mod_php_txt,
+            $mod_rewrite_txt,
+            $version_compare_txt
+        );
+
+        $not_passed = count ( array_unique ( $passes ) ); echo $not_passed;
+
+         
+        $not_passed_txt = ( $not_passed > 1 ) 
+            ? '<p class="red"> Some of your system parameters doesn\'t meet the requirements you need to fix them in order to continue </p>'
+            : '';
+        $disabled = ( $not_passed > 1 )
+            ? 'disabled'
+            : '';
+        
+        
 
         require_once 'step1.inc';
     }

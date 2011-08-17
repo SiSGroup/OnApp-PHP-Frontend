@@ -102,7 +102,7 @@
                 .htaccess file
             </td>
             <td>
-                <?php $htaccess_fite_txt; ?>
+                <?php echo $htaccess_fite_txt; ?>
             </td>
         </tr>
         <tr>
