@@ -1,7 +1,7 @@
 <?php
 
 define( 'ONAPP_DS', DIRECTORY_SEPARATOR );
-define( 'ONAPP_PATH', dirname( __FILE__ ) ); 
+define( 'ONAPP_PATH', dirname( __FILE__ ) );
 
 require_once ONAPP_PATH . ONAPP_DS . 'install.php';
 require_once ONAPP_PATH . ONAPP_DS . 'wrapper' . ONAPP_DS . 'OnAppInit.php';

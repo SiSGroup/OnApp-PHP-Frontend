@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Installation check, and check on removal of the install directory.
  */ 
