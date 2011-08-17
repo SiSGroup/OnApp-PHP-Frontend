@@ -1,5 +1,6 @@
 {include file="default/views/header.tpl"}
-        
+
+{if $files_list != NULL}
    <table class="table_my" cellpadding="0" cellspacing="0" border="0">
         <tr>
             <th>{'ERROR_IDENTIFIER'|onapp_string}</th>
@@ -25,8 +26,13 @@
     
    {/foreach}
     </table>
+{else}
+    <p class="not_found">No errors found</p>
+{/if}
 
-    
-{include file="default/views/pagination.tpl"}
+{if $pages_quantity > 1}
+    {include file="default/views/pagination.tpl"}
+{/if}
+
 {include file="default/views/navigation.tpl"}
 {include file="default/views/footer.tpl"}
