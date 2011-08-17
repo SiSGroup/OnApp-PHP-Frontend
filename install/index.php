@@ -101,7 +101,7 @@ $passed = 0;
 
         if ( $passed == 10 ) {
             $disabled = '';
-            $not_passed_text = '';
+            $not_passed_txt = '';
         }
         else {
             $disabled = 'disabled';
@@ -120,9 +120,9 @@ $passed = 0;
                     ? 'https://'
                     : 'http://'
             ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']
-        );
+        ); 
 
-        $base = str_replace('/install', '', $base);
+        $base = preg_replace('/\/install\/|index.php/', '', $base);
 
         $settings = array(
             'base_url' => $base,

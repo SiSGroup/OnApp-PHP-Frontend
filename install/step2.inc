@@ -8,7 +8,7 @@
        </div>
 <?php } else { ?>
     Config file isn't writable
-<? } ?>
+<?php } ?>
     
 </body>
 </html>
