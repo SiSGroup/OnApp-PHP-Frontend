@@ -30,6 +30,7 @@ $passed = 0;
    * @return boolean true|false
    */
    function write_config($config_array, $path){
+       $content = '';
        foreach ( $config_array as $key=>$value )
          $content .= "$key=$value"."\n";
 
@@ -71,7 +72,7 @@ $passed = 0;
 </head>
 <body>
     <?php
-    if ($_POST['step'] == 1 || !$_POST['step']) {
+    if ( ! isset( $_POST['step'] ) ) {
 
         echo '<table align="center" cellpadding="0" cellspacing="0" border="0">
             <tr>
@@ -325,9 +326,6 @@ $passed = 0;
           }
     }
     ?>
-
-
-
 
 </body>
 </html>
