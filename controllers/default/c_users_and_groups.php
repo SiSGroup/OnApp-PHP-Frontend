@@ -425,6 +425,7 @@ class Users_and_Groups extends Controller {
         onapp_debug('user_id => ' . $user_id);
 
         $params = array(
+            'user_obj'=> $this->load( 'User', array( $id ) ),
             'id' => $id,
             'payment_obj' => $this->load('Payment', array($id, $user_id)),
             'user_id' => $user_id,
@@ -628,7 +629,6 @@ class Users_and_Groups extends Controller {
         }                                                                                   
 
         $params = array(
-            'currency' => $billin_plan_obj->_currency_code,
             'billing_plan_obj' => $billing_plan_obj,
             'vm_labels' => $vm_labels,
             'user_obj' => $user_obj,
