@@ -24,7 +24,7 @@ class Controller {
     * @param string class name
     * @return mixed standard objects array
     */
-   protected function getList( $class_name, $params, $debug = false ) {
+   protected function getList( $class_name, $params = NULL, $debug = false ) {
         $onapp = $this->get_factory();
 
         $obj = $onapp->factory( $class_name, ONAPP_WRAPPER_LOG_REPORT_ENABLE );
@@ -47,7 +47,7 @@ class Controller {
     * @param integer object id
     * @return mixed standard object
     */
-   protected function load( $class_name, $params, $debug = false ) { 
+   protected function load( $class_name, $params = NULL, $debug = false ) {
        $onapp = $this->get_factory();
 
        $obj = $onapp->factory( $class_name, ONAPP_WRAPPER_LOG_REPORT_ENABLE );

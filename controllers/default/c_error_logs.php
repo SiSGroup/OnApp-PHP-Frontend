@@ -48,11 +48,11 @@ class Error_Logs {
             }
         }                   
 
-        arsort($files_list);             
+        arsort($files_list); 
 
         $items_per_page = 15;
 
-        $pages_quantity = (integer) ( count($files_list) / $items_per_page );
+        $pages_quantity = ceil( count($files_list) / $items_per_page ); 
 
         $j = 0;
         $i = 1;

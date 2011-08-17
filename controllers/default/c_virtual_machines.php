@@ -222,7 +222,7 @@ class Virtual_Machines extends Controller {
         $params = array(
             'user_id' => $user_id,
             'hypervisor_id' => $hypervisor_id,
-            'vm_backups' => $vm_backups,
+           //'vm_backups' => $vm_backups,
             'virtual_machines' => $virtual_machines,
             'hypervisor_label' => $hypervisor_label,
             'title' => onapp_string('VIRTUAL_MACHINES'),
