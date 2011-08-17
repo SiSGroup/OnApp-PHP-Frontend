@@ -279,7 +279,7 @@ $passed = 0;
                 'https://' : 'http://' )
                 . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
            
-          $base = substr( $base, 0, -18 );
+          $base = str_replace('/install', '', $base );
       
           $settings = array(
             'base_url'  => $base,
