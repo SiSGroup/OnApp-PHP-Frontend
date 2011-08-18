@@ -35,10 +35,7 @@
                     </select>
                 </dd>
             </dl>
-           <!-- <dl>
-                <dt><label for="amount">{'LOCALE_'|onapp_string}</label></dt>
-                <dd><input id="amount" type="text" name="locale[_amount]" value="{$payment_obj->_amount}" /></dd>
-            </dl>   -->
+           
          </div>
 
 <h1>{'LOGIN_PASSWORD'|onapp_string}</h1>

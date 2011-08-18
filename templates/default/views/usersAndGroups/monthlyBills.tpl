@@ -28,7 +28,7 @@
     <table style="border-bottom:none" class="form-table" width="50%" cellpadding="0" cellspacing="0" >
         <tr>
             <td class="label">{'TOTAL_AMOUNT'|onapp_string}</td>
-            <td>{round( $total_amount, 2 )|onapp_format_money}</td>
+            <td>{round( $total_amount, 2 )|onapp_format_money} {$billing_plan_obj->_currency_code}</td>
         </tr>
     </table>
  

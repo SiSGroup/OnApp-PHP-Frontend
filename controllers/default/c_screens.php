@@ -69,6 +69,7 @@ class Screens
             $this->show_template_view($error);
         } else {
             $screen = $_SCREEN_IDS[$screen_id];
+            trigger_error ( onapp_string( $error ) );
             $this->show_template_info($error, $screen);
         }
     }

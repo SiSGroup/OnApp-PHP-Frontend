@@ -28,10 +28,8 @@ class Controller {
         $onapp = $this->get_factory();
 
         $obj = $onapp->factory( $class_name, ONAPP_WRAPPER_LOG_REPORT_ENABLE );
-
-        $params_count = count( $params );
         
-        switch ( $params_count ) {
+        switch ( count( $params ) ) {
             case 1:
                 $_obj = $obj->getList ( $params[0] );
                 break;
@@ -63,10 +61,8 @@ class Controller {
        $onapp = $this->get_factory();
 
        $obj = $onapp->factory( $class_name, ONAPP_WRAPPER_LOG_REPORT_ENABLE );
-
-       $params_count = count( $params );
-
-       switch ( $params_count ) {
+       
+       switch ( count( $params ) ) {
             case 1:
                 $_obj = $obj->load ( $params[0] );
                 break;

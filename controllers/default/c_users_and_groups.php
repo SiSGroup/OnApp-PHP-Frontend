@@ -108,7 +108,7 @@ class Users_and_Groups extends Controller {
     private function show_template_view( $error = NULL ) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
-        onapp_debug('error => ' . $error);
+        onapp_debug( 'error => ' . print_r( $error, true ) );
 
         $onapp = $this->get_factory();
          
@@ -144,7 +144,7 @@ class Users_and_Groups extends Controller {
     private function show_template_details($id, $error = NULL) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
-        onapp_debug('error => ' . $error);
+        onapp_debug('error => ' .  print_r( $error, true)  );
 
         onapp_permission(array('users', 'users.read.own', 'users.read'));
 
@@ -183,7 +183,7 @@ class Users_and_Groups extends Controller {
     private function show_template_payments($id, $error = NULL) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
-        onapp_debug('error => ' . $error, 'id  =>' . $id);
+        onapp_debug('error => ' . print_r( $error, true) . 'id  =>' . $id);
 
         onapp_permission(array('payments', 'payments.read.own', 'payments.read'));
 
@@ -210,7 +210,7 @@ class Users_and_Groups extends Controller {
     private function show_template_roles( $error = NULL ) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
-        onapp_debug('error => ' . $error, 'id  =>' . $id);
+        onapp_debug('error => ' . print_r( $error, true ) );
 
         onapp_permission(array('roles', 'roles.read.own', 'roles.read'));
 
@@ -388,6 +388,7 @@ class Users_and_Groups extends Controller {
 
         $monthly_bills_obj = $this->getList( 'User_MonthlyBill', array( $id ) );
 
+        $total_amount = 0;
         foreach ($monthly_bills_obj as $bill) {
             $total_amount += $bill->_cost;
         }                                                   
@@ -650,7 +651,7 @@ class Users_and_Groups extends Controller {
     private function show_template_white_list($id, $error = NULL) {
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
-        onapp_debug('error => ' . $error, 'id  =>' . $id);
+        onapp_debug('error => ' . print_r( $error, true) . ', id  =>' . $id);
 
         onapp_permission(array('user_white_lists', 'user_white_lists.read.own', 'user_white_lists.read'));
 
@@ -695,8 +696,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'PAYMENT_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $user_id);
         }
-        else
+        else {
+            trigger_error ( print_r( $payment_obj->error, true ) );
             $this->show_template_payments($payment->error);
+        }
     }
 
     /**
@@ -725,8 +728,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'ROLE_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
         }
-        else
+        else {
+            trigger_error ( print_r( $role->error, true ) );
             $this->show_template_roles( $role->error );
+        }
     }
 
     /**
@@ -755,8 +760,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'GROUP_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
         }
-        else
+        else {
+            trigger_error ( print_r( $group->error, true ) );
             $this->show_template_groups($group->error);
+        }
     }
 
     /**
@@ -785,8 +792,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'USER_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view');
         }
-        else
+        else {
+            trigger_error ( print_r( $user->error, true ) );
             $this->show_template_view($user->error);
+        }
     }
 
     /**
@@ -815,8 +824,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'USER_STATUS_CHANGED_TO_SUSPENDED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view');
         }
-        else
+        else {
+            trigger_error ( print_r( $user->error, true ) );
             $this->show_template_view($user->error);
+        }
     }
 
     /**
@@ -845,8 +856,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'USER_ACTIVATION_SUCCESSFULL';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view');
         }
-        else
+        else {
+            trigger_error ( print_r( $user->error, true ) );
             $this->show_template_view($user->error);
+        }
     }
 
     /**
@@ -883,8 +896,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $id);
             }
-            else
+            else {
+                trigger_error ( print_r( $payment_obj->error, true ) );
                 $this->show_template_payments($id, $payment_obj->error);
+            }
         }
     }
 
@@ -927,8 +942,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'ROLE_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
             }
-            else
+            else {
+                trigger_error ( print_r( $role_obj->error, true ) );
                 $this->show_template_roles( $role_obj->error);
+            }
         }
     }
 
@@ -968,8 +985,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
             }
-            else
+            else {
+                trigger_error ( print_r( $group_obj->error, true ) );
                 $this->show_template_groups( $group_obj->error );
+            }
         }
     }
 
@@ -1007,8 +1026,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_CREATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $id);
             }
-            else
+            else {
+                trigger_error ( print_r( $white_list_obj->error, true ) );
                 $this->show_template_payments($id, $white_list_obj->error);
+            }
         }
     }
 
@@ -1042,8 +1063,10 @@ class Users_and_Groups extends Controller {
             $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_DELETED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $user_id);
         }
-        else
+        else {
+            trigger_error ( print_r( $white_list->error, true ) );
             $this->show_template_payments($white_list->error);
+        }
     }
 
     /**
@@ -1082,8 +1105,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_UPDATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $user_id);
             }
-            else
+            else {
+                trigger_error ( print_r( $white_list_obj->error, true ) );
                 $this->show_template_payments($user_id, $white_list_obj->error);
+            }
         }
     }
 
@@ -1116,7 +1141,7 @@ class Users_and_Groups extends Controller {
             }                                                                         
 
             $user['_role_ids'] = array_values($user['_role_ids']);
-            //print_r($user); die();
+            
             $user_obj = $onapp->factory('User', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             foreach ($user as $key => $value)
                 $user_obj->$key = $value;
@@ -1129,8 +1154,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'USER_PROFILE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $id);
             }
-            else
+            else {
+                trigger_error ( print_r( $user_obj->error, true ) );
                 $this->show_template_details($id, $user_obj->error);
+            }
         }
     }
 
@@ -1174,8 +1201,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'USER_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $user_obj->_id);
             }
-            else
+            else {
+                trigger_error ( print_r( $user_obj->error, true ) );
                 $this->show_template_view($user_obj->error);
+            }
         }
     }
 
@@ -1215,8 +1244,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $user_id);
             }
-            else
+            else {
+                trigger_error ( print_r( $payment_obj->error, true ) );
                 $this->show_template_payments($user_id, $payment_obj->error);
+            }
         }
     }
     
@@ -1263,8 +1294,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'ROLE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
             }
-            else
+            else {
+                trigger_error ( print_r( $role_obj->error, true ) );
                 $this->show_template_roles( $role_obj->error);
+            }
         }
     }
 
@@ -1307,8 +1340,10 @@ class Users_and_Groups extends Controller {
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
             }
-            else
+            else {
+                trigger_error ( print_r( $group_obj->error, true ) );
                 $this->show_template_groups( $group_obj->error );
+            }
         }
     }
 

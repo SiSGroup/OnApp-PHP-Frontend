@@ -144,8 +144,10 @@ class Base_Settings
 
         if ( ! isset($error) )
             $this->show_template_view( 'CONFIGURATIONS_HAVE_BEEN_UPDATED' );
-        else
+        else {
+            trigger_error ( onapp_string($error ) );
             $this->show_template_edit( $error );
+        }
     }
 
     /**

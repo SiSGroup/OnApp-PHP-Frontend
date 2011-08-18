@@ -48,31 +48,41 @@ class Error_Logs {
             }
         }                   
 
-        arsort( $files_list );
+        if ( isset ( $files_list ) && count( $files_list ) > 1 )
+            arsort( $files_list );
 
         $items_per_page = 15;
 
         $j = 0;
         $i = 1;
-        foreach ($files_list as $key => $value) {
-            $files_list_array[$i][$key] = $value;
-            $j++;
-            if ($j > $items_per_page) {
-                $j = 0;
-                $i++;
+
+        if ( isset( $files_list ) && is_array( $files_list) ) {
+            foreach ($files_list as $key => $value) {
+                $files_list_array[$i][$key] = $value;
+                $j++;
+                if ($j > $items_per_page) {
+                    $j = 0;
+                    $i++;
+                }
             }
-        } 
+            $pages_quantity = count( $files_list_array );
+            $files_list = $files_list_array[$page];
+        }
+        else {
+            $pages_quantity = NULL;
+            $files_list = NULL;
+        }
         
         $params = array(
             'alias' => 'error_logs',
             'page' => $page,
-            'pages_quantity' => count( $files_list_array ),
-            'files_list' => $files_list_array[$page],
+            'pages_quantity' => $pages_quantity,
+            'files_list' => $files_list,
             'title' => onapp_string('ERROR_LOGS'),
             'info_title' => onapp_string('ERROR_LOGS'),
             'info_body' => onapp_string('ERROR_LOGS_INFO'),
         );
-        onapp_show_template('errorLogs_view', $params);
+        onapp_show_template('errorLogs_view', $params );
     }
 
     /**
