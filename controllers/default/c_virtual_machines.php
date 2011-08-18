@@ -305,12 +305,12 @@ class Virtual_Machines extends Controller {
 
         onapp_debug('id => ' . $id);
 
-        $onapp = $this->get_factory();
+        $onapp = $this -> get_factory();
 
         onapp_permission(array('virtual_machines', 'virtual_machines.power', 'virtual_machines.power.own'));
 
         $cpuusage = $onapp->factory('VirtualMachine_CpuUsage', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-        $cpuusage->_virtual_machine_id = $id;
+        $cpuusage->_virtual_machine_id = $id; // print('<pre>');print_r($cpuusage); die();
         $list = $cpuusage->getList();
 
         $xaxis = '';
@@ -411,18 +411,20 @@ class Virtual_Machines extends Controller {
 
         onapp_permission(array('firewall_rules.read.own', 'firewall_rules.read', 'firewall_rules'));
 
-        $firewall_obj = $this->getList('VirtualMachine_FirewallRule', array($id));
+        $firewall_obj = $this->getList('VirtualMachine_FirewallRule', array( $id ));
 
         $network_interface_obj = $this->getList('VirtualMachine_NetworkInterface', array($id));
 
         foreach ($network_interface_obj as $network_interface)
             $network_interface_object[$network_interface->_id] = $network_interface;
 
-        foreach ($firewall_obj as $firewall)
-            $firewall_by_network[$firewall->_network_interface_id][] = $firewall;
-
-        if (is_null($firewall_obj->_id) && !is_array($firewall_obj))
-            $firewall_obj = NULL;
+        if ( ! is_null( $firewall_obj )) {
+            foreach ($firewall_obj as $firewall)
+                $firewall_by_network[$firewall->_network_interface_id][] = $firewall;
+        }
+        else 
+            $firewall_by_network = NULL;
+        
 
         $params = array(
             'firewall_by_network' => $firewall_by_network,
@@ -550,11 +552,12 @@ class Virtual_Machines extends Controller {
         $backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
 
         foreach ($disk_obj as $disk) {
-            $backup_obj = $backup->diskBackups($disk->_id);
-            if (!is_null($backup_obj->_id) || is_array($backup_obj))
+            $backup_obj = $backup->diskBackups( $disk->_id );
+            
+            if ( ! is_null($backup_obj) )
                 $backup_object[$disk->_id] = count($backup_obj);
             else
-                $backup_object[$disk->_id] = 0;
+               $backup_object[$disk->_id] = 0;
         }
 
         $params = array(
@@ -851,10 +854,14 @@ class Virtual_Machines extends Controller {
 
         foreach ($network_obj_array as $interface_id => $network) {
             $ip_addresses_object = $ip_addresses->getList($network->_id);
-            foreach ($ip_addresses_object as $object) {
-                if ($object->_free == 1)
-                    $ip_addresses_array[$network_interface_object[$interface_id]->_id][$object->_id] = $object->_address . '/' . $object->_netmask . '/' . $object->_gateway;
+
+            if ( ! is_null( $ip_addresses_object) ) {
+                foreach ($ip_addresses_object as $object) {
+                    if ($object->_free == 1)
+                        $ip_addresses_array[$network_interface_object[$interface_id]->_id][$object->_id] = $object->_address . '/' . $object->_netmask . '/' . $object->_gateway;
+                }
             }
+            
         }
 
         $params = array(
@@ -893,8 +900,12 @@ class Virtual_Machines extends Controller {
 
         $network_interface_obj = $this->getList('VirtualMachine_NetworkInterface', array($id));
 
-        foreach ($network_interface_obj as $network_interface)
-            $network_interface_array[$network_interface->_network_join_id] = $network_interface;
+        if ( ! is_null( $network_interface_obj ) ) {
+            foreach ($network_interface_obj as $network_interface)
+                $network_interface_array[$network_interface->_network_join_id] = $network_interface;
+        }
+        else
+            $network_interface_array = NULL;
 
         $hypervisor_network_join_obj = $this->getList('Hypervisor_NetworkJoin', array($vm_obj->_hypervisor_id));
 
@@ -1580,6 +1591,7 @@ class Virtual_Machines extends Controller {
 
             $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
             $vm->editAdminNote($id, $note);
+            onapp_debug( 'vm => ' . print_r( $vm, true ) );
 
             if (is_null($vm->error)) {
                 $_SESSION['message'] = 'RESOURCES_UPDATED_SUCCESSFULLY';
@@ -1617,7 +1629,7 @@ class Virtual_Machines extends Controller {
             foreach ($disk as $key => $value)
                 $disk_obj->$key = $value;
 
-            $disk_obj->save();
+            $disk_obj->save();   
 
             if (is_null($disk_obj->error)) {
                 $_SESSION['message'] = 'DISK_RESIZE_HAS_BEEN_REQUESTED';
@@ -1802,7 +1814,7 @@ class Virtual_Machines extends Controller {
 
         $firewall_obj->updateDefaults($id, $firewall);
 
-        if (is_null($firewall->error)) {
+        if (is_null($firewall_obj->error)) {
             $_SESSION['message'] = 'DEFAULT_RULES_HAVE_BEEN_UPDATED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $id);
         }

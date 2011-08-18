@@ -20,8 +20,6 @@ function is__writable($path) {
     return true;
 }
 
-$passed = 0;
-
   /**
    * Writes log settings changes to onapp frontend configuration file
    *
@@ -102,8 +100,7 @@ $passed = 0;
             $version_compare_txt
         );
 
-        $not_passed = count ( array_unique ( $passes ) ); echo $not_passed;
-
+        $not_passed = count ( array_unique ( $passes ) ); 
          
         $not_passed_txt = ( $not_passed > 1 ) 
             ? '<p class="red"> Some of your system parameters doesn\'t meet the requirements you need to fix them in order to continue </p>'
@@ -112,8 +109,6 @@ $passed = 0;
             ? 'disabled'
             : '';
         
-        
-
         require_once 'step1.inc';
     }
     elseif ( $_POST['step'] == 2 ) {
@@ -131,7 +126,7 @@ $passed = 0;
             'base_url' => $base,
             'hostname' => '',
             'default_alias' => 'profile',
-            'secret_key' => 'ChZyhSmndC6Qd5VD',
+            'secret_key' => uniqid(mt_rand()),
             'session_lifetime' => 3600,
             'default_language' => 'English',
             'template' => 'default',

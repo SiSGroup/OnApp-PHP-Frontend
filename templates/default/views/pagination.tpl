@@ -22,8 +22,8 @@
         {/if}
 
         {if $cpage>1}
-            <a href="{$_ALIASES["$alias"]}?page=1">{'FIRST_'|onapp_string}</a>
-            <a href="{$_ALIASES["$alias"]}?page={$cpage-1}">{'PREVIOUS_'|onapp_string}</a>
+            <a href="{$_ALIASES[$alias]}?page=1">{'FIRST_'|onapp_string}</a>
+            <a href="{$_ALIASES[$alias]}?page={$cpage-1}">{'PREVIOUS_'|onapp_string}</a>
         {/if}
 
         {if $stpage>1}
@@ -36,7 +36,7 @@
             {if $i==$cpage}
                <em>{$i}</em>
             {else}
-                <a href='{$_ALIASES["$alias"]}?page={$i}'>{$i}</a>
+                <a href='{$_ALIASES[$alias]}?page={$i}'>{$i}</a>
             {/if}
             {$i=$i+1}
         {/while}
@@ -46,7 +46,7 @@
         {/if}
 
         {if $cpage<$pagescount}
-            <a href="{$_ALIASES["$alias"]}?page={$cpage+1}">{'NEXT_'|onapp_string}</a>
-            <a href="{$_ALIASES["$alias"]}?page={$pagescount}">{'LAST_'|onapp_string}</a>
+            <a href="{$_ALIASES[$alias]}?page={$cpage+1}">{'NEXT_'|onapp_string}</a>
+            <a href="{$_ALIASES[$alias]}?page={$pagescount}">{'LAST_'|onapp_string}</a>
         {/if}
     </div>

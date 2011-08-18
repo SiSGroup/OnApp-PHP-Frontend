@@ -32,7 +32,7 @@
                    {foreach from=$user->_roles item=roles}
                       ( as {$roles->_label} )&nbsp;
                    {/foreach}
-                   <br /> {if $user_group_labels[$user->_id] == true}
+                   <br /> {if isset($user_group_labels[$user->_id])}
                               {$user_group_labels[$user->_id]}
                           {else}
                               {'UNDEFINED_'|onapp_string}

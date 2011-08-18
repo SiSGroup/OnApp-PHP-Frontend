@@ -424,7 +424,7 @@ $_LANG['VM_DETAILS'] = 'VM Details';
 $_LANG['ADD_NEW_FIREWALL_RULE'] = 'Add New Firewall Rule';
 $_LANG['FRONTEND_LOGS'] = 'Frontend Logs';
 $_LANG['ERROR_LOGS'] = 'Error Logs';
-$_LANG['ERROR_LOGS_INFO'] = 'Click on the error log identifier to see it\'s details';
+$_LANG['ERROR_LOGS_INFO'] = 'Click on the error log identifier to see the error information. Or click on the right link to see complete debug log information';
 $_LANG['ERROR_IDENTIFIER'] = 'Error Identirier';
 $_LANG['ERROR_LOGS_DETAILS'] = 'Error Log Details';
 $_LANG['ERROR_LOGS_DETAILS_INFO'] = '';
@@ -565,8 +565,8 @@ $_LANG['USER_GROUPS_INFO'] =
     the list of users';
 $_LANG['GROUP_'] = 'Group';
 $_LANG['ADD_NEW_GROUP'] = 'Add New Group';
-$_LANG['DESTROY_GROUP'] = 'Edit Group';
-$_LANG['EDIT_GROUP'] = 'Destroy Group';
+$_LANG['DESTROY_GROUP'] = 'Destroy Group';
+$_LANG['EDIT_GROUP'] = 'Edit Group';
 $_LANG['GROUP_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Group has been deleted successfully';
 $_LANG['ADD_A_NEW_USER_GROUP'] = 'Add a New User Group';
 $_LANG['ADD_A_NEW_USER_GROUP_INFO'] = 'Add a New User Group';
@@ -595,3 +595,4 @@ $_LANG['CREATE_NEW_ROLE_INFO'] =
     permissions you would like this role to have, and click the Save button';
 $_LANG['ROLE_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Role has been created successfully';
 $_LANG['HELLO_THERE'] = 'Hello There';
+$_LANG['COMPLETE_DEBUG_INFO'] = 'Complete debug info';

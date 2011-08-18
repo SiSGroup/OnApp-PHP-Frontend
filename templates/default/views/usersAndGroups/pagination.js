@@ -68,7 +68,7 @@ function paginate ( page ) {
         endpage = pagescount
     }
 
-    prenavigation = ( cpage > 1 ) ? '<a style="cursor:pointer" onclick = "paginate( 1 )">First</a><a style="cursor:pointer" onclick = "paginate( cpage-1 )">Previous</a>' : ''
+    prenavigation = ( cpage > 1 ) ? '<a style="cursor:pointer" onclick = "paginate( 1 )"z>First</a><a style="cursor:pointer" onclick = "paginate( cpage-1 )">Previous</a>' : ''
 
     dots = ( stpage > 1 ) ? '...' : ''
 

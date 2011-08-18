@@ -29,7 +29,19 @@ class Controller {
 
         $obj = $onapp->factory( $class_name, ONAPP_WRAPPER_LOG_REPORT_ENABLE );
 
-        $_obj = $obj->getList( $params[0], $params[1] );
+        $params_count = count( $params );
+        
+        switch ( $params_count ) {
+            case 1:
+                $_obj = $obj->getList ( $params[0] );
+                break;
+            case 2:
+                $_obj = $obj->getList ( $params[0], $params[1] );
+                break;
+            default:
+                $_obj = $obj->getList ();
+                break;
+        }
 
        if ( $debug ) {
           // print('<pre>'); print_r( $obj );
@@ -51,8 +63,23 @@ class Controller {
        $onapp = $this->get_factory();
 
        $obj = $onapp->factory( $class_name, ONAPP_WRAPPER_LOG_REPORT_ENABLE );
-       
-       $_obj = $obj->load( $params[0], $params[1], $params[2] );
+
+       $params_count = count( $params );
+
+       switch ( $params_count ) {
+            case 1:
+                $_obj = $obj->load ( $params[0] );
+                break;
+            case 2:
+                $_obj = $obj->load ( $params[0], $params[1] );
+                break;
+            case 3:
+                $_obj = $obj->load ( $params[0], $params[1], $params[2] );
+                break;
+            default:
+                $_obj = $obj->load ();
+                break;
+        }
 
        if ( $debug ) {
            //print('<pre>'); print_r( $obj );

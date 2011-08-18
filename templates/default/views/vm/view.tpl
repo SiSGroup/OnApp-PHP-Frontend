@@ -28,7 +28,7 @@
                 <td><a href="{$_ALIASES["virtual_machines"]}?action=details&amp;id={$v->_id}">{substr($v->_label, 0, 10)}...</a></td>
 
                 <td>
-                    {if $v->_ip_addresses[0] != null}
+                    {if isset( $v->_ip_addresses[0] )}
                     {foreach from=$v->_ip_addresses key=k item=val}
                         {$val->_address} <br />
                     {/foreach}

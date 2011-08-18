@@ -35,7 +35,7 @@
         </dl>
         
         <dl style="clear:both;">
-            <dt class="label">{'SESSION_LIFETIME'|onapp_string} (seconds)</dt>
+            <dt class="label">{'SESSION_LIFETIME'|onapp_string}<br /> (seconds)</dt>
             
             <dd>
                 <input type="text" name="settings[session_lifetime]" value="{$smarty.const.ONAPP_SESSION_LIFETIME}" />

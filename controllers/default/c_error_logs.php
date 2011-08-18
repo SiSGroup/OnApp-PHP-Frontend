@@ -48,11 +48,9 @@ class Error_Logs {
             }
         }                   
 
-        arsort($files_list); 
+        arsort( $files_list );
 
         $items_per_page = 15;
-
-        $pages_quantity = ceil( count($files_list) / $items_per_page ); 
 
         $j = 0;
         $i = 1;
@@ -63,11 +61,12 @@ class Error_Logs {
                 $j = 0;
                 $i++;
             }
-        }
+        } 
         
         $params = array(
+            'alias' => 'error_logs',
             'page' => $page,
-            'pages_quantity' => $pages_quantity,
+            'pages_quantity' => count( $files_list_array ),
             'files_list' => $files_list_array[$page],
             'title' => onapp_string('ERROR_LOGS'),
             'info_title' => onapp_string('ERROR_LOGS'),

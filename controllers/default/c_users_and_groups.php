@@ -325,7 +325,6 @@ class Users_and_Groups extends Controller {
                                                                                        
         $params = array(
            'group_users_quantity' => $group_users_quantity,
-           'group_users' => $group_users,
            'user_groups_obj' => $user_group_obj,
            'title' => onapp_string('USER_GROUPS'),
            'info_title' => onapp_string('USER_GROUPS'),

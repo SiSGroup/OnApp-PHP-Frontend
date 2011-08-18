@@ -57,7 +57,7 @@
         <tr>
             <td class="label">IP Addresses: </td>
             <td>
-                 {if $vm_obj->_ip_addresses[0] != null}
+                 {if isset( $vm_obj->_ip_addresses[0] )}
                      {foreach from=$vm_obj->_ip_addresses key=k item=v}
                      {$vm_obj->_ip_addresses[$k]->_address}
                      {/foreach}

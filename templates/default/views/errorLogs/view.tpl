@@ -6,6 +6,7 @@
             <th>{'ERROR_IDENTIFIER'|onapp_string}</th>
             <th>{'DATE_'|onapp_string}</th>
             <th>{'SIZE_'|onapp_string}</th>
+            <th></th>
         </tr>
 
     {foreach from=$files_list key=file_id item=value}
@@ -20,6 +21,11 @@
             </td>
             <td>
                 {$value.size} bytes
+            </td>
+            <td>
+                <a href="{$_ALIASES["debug_logs"]}?action=details&amp;id={$file_id}">
+                    {'COMPLETE_DEBUG_INFO'|onapp_string}
+                </a>
             </td>
         </tr>
     
