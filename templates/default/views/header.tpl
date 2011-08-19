@@ -23,7 +23,7 @@
     <div id="content">
 
     {if isset($error)}
-        <div id="onapp_error">
+        <div id="onapp_error"> <b>{'ERROR_LOG_ID'|onapp_string} {$smarty.session.log_id}</b><br />
             {if ! is_array($error)}
                 {$error}
             {else}

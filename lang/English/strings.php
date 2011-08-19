@@ -596,3 +596,4 @@ $_LANG['CREATE_NEW_ROLE_INFO'] =
 $_LANG['ROLE_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Role has been created successfully';
 $_LANG['HELLO_THERE'] = 'Hello There';
 $_LANG['COMPLETE_DEBUG_INFO'] = 'Complete debug info';
+$_LANG['ERROR_LOG_ID'] = 'Error log id : ';
