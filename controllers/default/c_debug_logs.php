@@ -71,6 +71,7 @@ class Debug_Logs
 
         if( ! $contents ){
             $error = 'SESSION_IDENTIFIER_NOT_FOUND_IN_LOG_FILE';
+            trigger_error( onapp_string($error ) );
             $this->show_template_view($error);
         }
         else{

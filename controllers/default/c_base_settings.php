@@ -76,7 +76,6 @@ class Base_Settings
     private function show_template_edit( $error = NULL )
     {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
-        
         $params = array(
             'title'               => onapp_string( $this->config['title'] ),
             'log_levels_frontend' => onapp_get_frontend_errors(),
@@ -132,11 +131,11 @@ class Base_Settings
 
                 $updated = $this->write_config($result, ONAPP_PATH.ONAPP_DS.'config.ini');
 
-                if (! is_null($updated) )
+                if ( ! is_null($updated) )
                     $error = $updated;
             }
 
-            if( ! $error )
+            if( ! isset( $error ) )
                 onapp_debug('Update Success');
         } else {
             $error = 'CONFIG_FILE_DOES_NOT_EXISTS';
@@ -173,6 +172,7 @@ class Base_Settings
        onapp_debug(__CLASS__.' :: '.__FUNCTION__);
        onapp_debug('params : $config_array => '. print_r($config_array, true). '$path => '.$path );
 
+       $content = '';
        foreach ( $config_array as $key=>$value )
          $content .= "$key=$value"."\n";
 
@@ -185,6 +185,7 @@ class Base_Settings
        else
            fclose($handle);
 
-       return $error;
+       if ( isset( $error ) )
+           return $error;
     }
 }

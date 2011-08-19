@@ -60,17 +60,14 @@ class Screens
 
         $screen_id   = onapp_get_arg('screen_id');
 
-        onapp_debug('$alias => '. $screen);
-
         if( ! in_array($screen_id, $_ALIASES) || ! is_numeric($screen_id))
         {
             $error = 'THERE_IS_NO_SUCH_SCREEN';
-            onapp_notice('Screen '.$screen_id.' not found');
-            $this->show_template_view($error);
+            trigger_error( onapp_string($error ) );
+            $this->show_template_view( $error );
         } else {
             $screen = $_SCREEN_IDS[$screen_id];
-            trigger_error ( onapp_string( $error ) );
-            $this->show_template_info($error, $screen);
+            $this->show_template_info( NULL, $screen );
         }
     }
 

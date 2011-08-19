@@ -46,7 +46,7 @@
             <dt class="label">{'DEFAULT_LANGUAGE'|onapp_string}</dt>
             <dd>
                  <select name="settings[default_language]">
-                    {html_options values=$language_list output=$language_list selected=$language_list[$smarty.const.ONAPP_DEFAULT_LANGUAGE]}
+                    {html_options values=$language_list output=$language_list selected=$smarty.const.ONAPP_DEFAULT_LANGUAGE}
                 </select>
             </dd>
         </dl>
@@ -55,7 +55,7 @@
             <dt class="label">{'TEMPLATE_'|onapp_string}</dt>
             <dd>
                  <select name="settings[template]">
-                    {html_options values=$templates_list output=$templates_list selected=$templates_list[$smarty.const.ONAPP_TEMPLATE]}
+                    {html_options values=$templates_list output=$templates_list selected=$smarty.const.ONAPP_TEMPLATE}
                 </select>
             </dd>
         </dl>
@@ -64,7 +64,7 @@
             <dt class="label">{'CONTROLLERS_'|onapp_string}</dt>
             <dd>
                  <select name="settings[controllers]">
-                    {html_options values=$controllers_list output=$controllers_list selected=$controllers_list[$smarty.const.ONAPP_CONTROLLERS]}
+                    {html_options values=$controllers_list output=$controllers_list selected=$smarty.const.ONAPP_CONTROLLERS}
                 </select>
             </dd>
         </dl>
