@@ -197,20 +197,20 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
         foreach($SimpleXMLElement->screen[ $id -1 ]->attributes() as $k=>$v)
             $_SCREEN_IDS["$current_id"][$k] = (String)$v;
 
-        if(isset($_SCREEN_IDS["$current_id"]['title'])){
-
-            // TODO move on onapp_show_template function
-            $file_path = 'controllers'. ONAPP_DS .  ONAPP_CONTROLLERS . ONAPP_DS . 'c_'.strtolower($_SCREEN_IDS["$current_id"]['class']).'.php';
-            if( file_exists( $file_path ) )
-            {   
-                require_once $file_path;
-                $_SCREEN_IDS["$current_id"]['show'] = call_user_func( array( $_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access'] ) );
-                // $_SCREEN_IDS["$current_id"]['show'] = true;
+        // Menu permission check necessary only when loged in
+        if ( isset( $_SESSION['permissions'] ) ) {
+            if(isset($_SCREEN_IDS["$current_id"]['title'])){
+                $file_path = 'controllers'. ONAPP_DS .  ONAPP_CONTROLLERS . ONAPP_DS . 'c_'.strtolower($_SCREEN_IDS["$current_id"]['class']).'.php';
+                if( file_exists( $file_path ) )
+                {
+                    require_once $file_path;
+                    $_SCREEN_IDS["$current_id"]['show'] = call_user_func( array( $_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access'] ) );
+                }
+                    else
+                        die('File '.$file_path.' doesn\'t exists');
             }
-                else
-                    die('File '.$file_path.' doesn\'t exists');
-
         }
+
         $_ALIASES[$_SCREEN_IDS["$current_id"]["alias"]] = $current_id;
 
         onapp_load_screen_ids($SimpleXMLElement->screen[ $id -1 ], "$current_id");
@@ -309,10 +309,6 @@ function onapp_check_configs() {
 
     onapp_debug('Check configs');
 
-    // Cheching PHP version
-    if (version_compare(PHP_VERSION, '5.0.0', '<'))
-        onapp_die('You need at least PHP 5.0.0, your current version is '. PHP_VERSION) ;
-
     // Checking of necessary configuration options
 // TODO check is ONAPP_SMARTY_COMPILE_DIR and other config options exists
     $config_options = array(
@@ -332,26 +328,6 @@ function onapp_check_configs() {
        if(!function_exists($function_name))
            onapp_die("Function $function_name not found");
 
-    // Checking of necessary PHP extensions
-
-    // Including manuals
-
-    $enabled_extensions = get_loaded_extensions();
-    $require_extensions = array(
-        'mcrypt' => 'mcrypt.php'
-    );
-
-    foreach( $require_extensions as $extension_name => $manual )
-        if( ! in_array($extension_name, $enabled_extensions)) {
-            $file = ONAPP_PATH.ONAPP_DS."manuals/$manual";
-
-            if ( file_exists($file) )
-                include($file);
-            else
-                onapp_die("File $file does'n file");
-
-            exit;
-        }
 }
 
 /**

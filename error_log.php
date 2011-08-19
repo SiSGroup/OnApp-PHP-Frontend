@@ -288,7 +288,7 @@ function onapp_error_reporting($error) {
 
     $error_type = in_array($error['type'], array_keys($error_levels) ) ? $error_levels[$error['type']] : "ERROR ID ".$error['type'];
 
-    if( $error !== NULL ) {
+    if( $error !== NULL && isset( $_SESSION['log_id'] ) ) {
         if ( is_null($error['file']) && is_null($error['line']) )
             $msg = '['.$_SESSION['log_id'] . "] : [$error_type] : " . $error['message'] ;
         else

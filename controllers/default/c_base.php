@@ -51,7 +51,7 @@ class Base {
      */
 	function logout( ) {
 		global $_ALIASES;
-		session_start( );
+		//session_start( );
 		session_regenerate_id( );
 		session_destroy( );
 		unset( $_SESSION );
