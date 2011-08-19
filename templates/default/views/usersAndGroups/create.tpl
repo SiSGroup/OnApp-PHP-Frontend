@@ -33,10 +33,6 @@
                     </select>
                 </dd>
             </dl>
-           <!-- <dl>
-                <dt><label for="amount">{'LOCALE_'|onapp_string}</label></dt>
-                <dd><input id="amount" type="text" name="locale[_amount]" value="{$payment_obj->_amount}" /></dd>
-            </dl>   -->
          </div>
 
 <h1>{'LOGIN_PASSWORD'|onapp_string}</h1>
@@ -97,26 +93,8 @@
             </dl>
         </div>
 
-<!-- TODO 
-<h1>{'AUTO_SUSPENDING'|onapp_string}</h1>
-        <div class="div_page">
-            <dl>
-                <dt><label for="suspend_field">{'SUSPEND_AT'|onapp_string}</label></dt>
-                <dd><input id="login_field" type="text" name="user[_suspend_at]" value="{$user_obj->_suspend_at}" /> YYYY-MM-DD hh:mm:ss (UTC)</dd>
-            </dl>
-            <dl>
-                <dt>
+<!-- TODO autosuspending -->
 
-                </dt>
-                <dd>
-                    <input type="hidden" name="user[_role_ids][]" value="0" />
-                    <input value="{$role->_id}" type="checkbox" name="user[_role_ids][]" {if in_array($role->_id, $user_role_ids)}checked="true"{/if}/>
-                    {$role->_label}
-                </dd>
-            </dl>
-        </div>
--->
-     
         <input type="hidden" name = "action" value="create" />
         <input type="submit" value="{'SAVE_'|onapp_string}" />
     </form>

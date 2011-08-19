@@ -159,7 +159,6 @@ class Users_and_Groups extends Controller {
         //TODO Add resource table Ticket #
 
         $params = array(
-            'user_statistics' => $user_statistics,
             'user_id' => $user_obj->_id,
             'payment_obj' => $this->getList('Payment', array($user_obj->_id)),
             'user_group_obj' => $user_group_obj,
@@ -1028,7 +1027,7 @@ class Users_and_Groups extends Controller {
             }
             else {
                 trigger_error ( print_r( $white_list_obj->error, true ) );
-                $this->show_template_payments($id, $white_list_obj->error);
+                $this->show_template_white_list($id, $white_list_obj->error);
             }
         }
     }
@@ -1171,14 +1170,13 @@ class Users_and_Groups extends Controller {
         global $_ALIASES;
         
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
-        onapp_debug('id => ' . $id);
 
         onapp_permission(array('users.create', 'users'));
 
         $user = onapp_get_arg('user');
 
         if (is_null($user)) {
-            $this->show_template_create($id);
+            $this->show_template_create( );
         } else {
             $onapp = $this->get_factory();
                                                                                              
