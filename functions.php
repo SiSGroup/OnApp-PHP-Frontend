@@ -373,7 +373,7 @@ function onapp_is_auth() {
         && isset($_SESSION["password"])
         && isset($_SESSION["host"])
         && isset($_SESSION["id"]);
-
+    
     onapp_debug("onapp_is_auth: return => '$is_auth'");
 
     return $is_auth;

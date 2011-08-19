@@ -25,7 +25,7 @@ class Base {
 			if( ! is_null( $onapp->getAPIVersion( ) ) ) {
 				$this->_start_session( );
 				$this->_load_profile( $onapp );
-				if( isset( $_SESSION[ 'redirect' ] ) ) {
+				if( isset( $_SESSION[ 'redirect' ] ) && $_SESSION['redirect'] != ONAPP_BASE_URL . '/' . $_ALIASES ['logout'] ) {
 					$redirect_url = $_SESSION[ 'redirect' ];
 					onapp_redirect( $redirect_url );
 				}

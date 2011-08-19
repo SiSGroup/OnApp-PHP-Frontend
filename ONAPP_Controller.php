@@ -22,6 +22,7 @@ Class ONAPP_Controller
                 ( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ?
                 'https://' : 'http://' )
                 . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            
             onapp_debug("Set redirection url => " . print_r($_SESSION['redirect'] ,true));
             onapp_redirect( ONAPP_BASE_URL.'/'.$_ALIASES['login'] );
         }
@@ -29,7 +30,7 @@ Class ONAPP_Controller
 
     public function access() { }
 
-    public function run() {
+    public function run() { 
         global $_ALIASES, $_SCREEN_IDS;
 
         $route  = onapp_get_arg('route');

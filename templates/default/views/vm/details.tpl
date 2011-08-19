@@ -78,7 +78,7 @@
                 {/if}
             </td>
 
-            <td class="label">Price per hour powered ON/OFF:</td>
+            <td class="label">&nbsp;</td>
             <td></td>
         </tr>
         <tr>

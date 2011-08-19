@@ -10,7 +10,8 @@ require_once ONAPP_PATH . ONAPP_DS . 'error_log.php';
 require_once ONAPP_PATH . ONAPP_DS . 'ONAPP_Controller.php';
 
 onapp_init_config( );
-onapp_startSession( );
+if ( ! onapp_is_auth() )
+    onapp_startSession( );
 onapp_check_configs( );
 onapp_init_log( );
 onapp_init_screen_ids( );
