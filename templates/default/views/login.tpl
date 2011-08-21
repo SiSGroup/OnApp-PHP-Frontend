@@ -27,7 +27,7 @@
             <input type="text" name="login" value=""  /><br />
             {'PASSWORD_'|onapp_string}:<br />
             <input type="password" name="password" value="" /><br />
-            {'HOST_'|onapp_string}: <br />
+            {'ONAPP_HOST'|onapp_string}: <br />
             {if $smarty.const.ONAPP_HOSTNAME != ''}
             <input type="text" name="host" value="{$smarty.const.ONAPP_HOSTNAME}" disabled="true" /><br />
             <input type="hidden" name="host" value="{$smarty.const.ONAPP_HOSTNAME}" />
