@@ -8,7 +8,7 @@ $_LANG['CREATE_VIRTUAL_MACHINE'] = 'Create Virtual Machine';
 $_LANG['CREATE_VIRTUAL_MACHINE_INFO'] = 
     'Complete the form and click the Create Virtual Machine button at the bottom of the screen.
     Please note that swap disk size must be greater than zero.';
-$_LANG['LOGIN_'] = 'Log In';
+$_LANG['LOGIN_'] = 'Login';
 $_LANG['PASSWORD_'] = 'Password';
 $_LANG['HOST_'] = 'Host';
 $_LANG['SELECT_LANG'] = 'Select language';
