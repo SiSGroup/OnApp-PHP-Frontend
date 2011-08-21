@@ -163,8 +163,8 @@ function onapp_load_language($lang = '') {
 
     onapp_debug("Load language: lang => '$lang'");
 
-    if(isset($_SESSION["language"]) && $_SESSION["language"] != '')
-        $language = $_SESSION["language"];
+    if(isset($_SESSION["lang"]) && $_SESSION["lang"] != '')
+        $language = $_SESSION["lang"];
     else
         $language = $lang;
 
