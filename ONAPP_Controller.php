@@ -8,41 +8,51 @@ Class ONAPP_Controller
 
     public function  __construct()
     {
+        onapp_debug(__METHOD__);
         global $_SCREEN_IDS, $_ALIASES;
 
         $route = onapp_get_arg('route');
-
-        onapp_debug("ONAPP_Controller->__construct: route => $route");
-
-        if( onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] == 'login')
+        onapp_debug('route =>' . $route);
+        if( onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] == 'login'){
+            onapp_debug('Redirecting :' . ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS] );
             onapp_redirect( ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS] );
-        
-        elseif ( ! onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] != 'login' ){
+        }
+        elseif ( ! onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] != 'login' ) {
             $_SESSION['redirect'] =
                 ( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ?
                 'https://' : 'http://' )
                 . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-            
-            onapp_debug("Set redirection url => " . print_r($_SESSION['redirect'] ,true));
+
+            onapp_debug('Setting after login redirect url => ' . $_SESSION['redirect']);
+            onapp_debug('Redirecting :' . ONAPP_BASE_URL.'/'.$_ALIASES['login'] );
             onapp_redirect( ONAPP_BASE_URL.'/'.$_ALIASES['login'] );
         }
     }
 
     public function access() { }
 
-    public function run() { 
+    public function run() {
+        onapp_debug(__METHOD__);
+
         global $_ALIASES, $_SCREEN_IDS;
 
         $route  = onapp_get_arg('route');
+
+        onapp_debug( 'route => ' . $route );
 
         if ( array_key_exists($route, $_SCREEN_IDS) ) {
             $method_name = $_SCREEN_IDS[$route]['method'];
             $class_name = $_SCREEN_IDS[$route]['class'];
         }
-        else if(is_null($route))
-            onapp_redirect( $_ALIASES["profile"]);
-        else
+        else if(is_null($route)){
+            onapp_debug('$route is null!, Redirecting :' . ONAPP_BASE_URL.'/'. $_ALIASES[ ONAPP_DEFAULT_ALIAS ]);
+            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES[ ONAPP_DEFAULT_ALIAS ]);
+        }
+        else{
+            onapp_debug('There is no such page, Redirecting ' .ONAPP_BASE_URL.'/errors/error404.php');
             onapp_redirect(ONAPP_BASE_URL.'/errors/error404.php');
+        }
+
 
         $file_path = ONAPP_PATH.ONAPP_DS.'controllers'.ONAPP_DS.ONAPP_CONTROLLERS.ONAPP_DS.strtolower('c_'.$class_name.'').'.php';
 

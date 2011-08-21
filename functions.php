@@ -1,5 +1,6 @@
 <?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
 
+
 /**
  * Gets list of directories in specified directory
  *
@@ -183,6 +184,7 @@ function onapp_load_language($lang = '') {
  *
  */
 function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
+    onapp_debug(__METHOD__);
     global $_SCREEN_IDS, $_ALIASES;
 
     if(is_null($SimpleXMLElement))
@@ -269,12 +271,14 @@ function onapp_cryptData($value, $action) {
  * @return void
  *
  */
-function onapp_redirect($url) {
+function onapp_redirect($url) { 
     onapp_debug("Redirect: url => '$url'");
 
     if (!headers_sent()) {
+        onapp_debug('Redirectiong with header location');
         header('Location: '.$url); exit;
     } else {
+        onapp_debug('Javascript Redirection!');
         echo '<script type="text/javascript">';
         echo 'window.location.href="'.$url.'";';
         echo '</script>';
@@ -282,6 +286,7 @@ function onapp_redirect($url) {
         echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
         echo '</noscript>'; exit;
     }
+    
 }
 
 /*
@@ -341,23 +346,26 @@ function onapp_check_configs() {
  *
  */
 function onapp_startSession($ses = 'MYSES') {
-    $time =  ONAPP_SESSION_LIFETIME;
-    session_set_cookie_params($time);
-    session_name($ses);
-    session_start();
+    onapp_debug(__METHOD__);
+    if ( ! onapp_is_auth() ) {
+        $time =  ONAPP_SESSION_LIFETIME;
+        session_set_cookie_params($time);
+        session_name($ses);
+        session_start();
 
-    onapp_debug('Start SESSION');
+        onapp_debug('Start SESSION');
 
-    // rotates error log files
-    onapp_rotate_error_log();
+        // rotates error log files
+        onapp_rotate_error_log();
 
-    // rotates debug log file
-    onapp_rotate_debug_log();
-    
+        // rotates debug log file
+        onapp_rotate_debug_log();
 
-    // Reset the expiration time upon page load
-    if (isset($_COOKIE[$ses]))
-      setcookie($ses, $_COOKIE[$ses], time() + $time, "/");
+
+        // Reset the expiration time upon page load
+        if (isset($_COOKIE[$ses]))
+          setcookie($ses, $_COOKIE[$ses], time() + $time, "/");
+    }
 }
 
 /**
