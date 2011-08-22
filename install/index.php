@@ -47,9 +47,9 @@ function is__writable($path) {
     if ( ! isset( $_POST['step'] ) ) {
         $passed_txt = '<span class="yes">.......Passed</span>';
 
-        $version_compare_txt = !version_compare( PHP_VERSION, '5.0.0', '<' )
+        $version_compare_txt = !version_compare( PHP_VERSION, '5.2.0', '<' )
             ? $passed_txt
-            : '<span class="red">You have to upgrade you php version to 5+ </span>';
+            : '<span class="red">You have to upgrade you php version to at least 5.2.0+ </span>';
         
         $mod_rewrite_txt = in_array('mod_rewrite', apache_get_modules())
             ? $passed_txt

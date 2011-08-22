@@ -1,0 +1,15 @@
+Oops! You virtual host must be set incorrectly, .htaccess file won't work in this directory!<br />
+
+You must change <b>'AllowOverride None'</b> to <b>'AllowOverride All'</b> in you server config file!
+<br />
+
+<pre>
+DocumentRoot /var/www /:yourhost
+        <Directory /var/www/:yourhost>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride <b style="color:red">All</b>
+                Order allow,deny
+                allow from all
+        </Directory>
+</pre>
+ 
