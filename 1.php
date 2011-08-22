@@ -7,7 +7,7 @@
 
 </head>
 <body>
-Oops! You virtual host must be set incorrectly, .htaccess file won't work in this directory!<br />
+This page reminds you to set correctly you virtual host in order your .htaccess file work in this directory!<br />
 
 You must change <b>'AllowOverride None'</b> to <b>'AllowOverride All'</b> in you server config file!
 <br />
@@ -32,6 +32,6 @@ DocumentRoot /var/www /:yourhost
 
 $base = preg_replace('/1|index.php/', '', $base);?>
 
-<b>Don't forget to restart your server</b> and follow the link  <a href="<?php echo $base ?>" >Link</a>
+<b>If everything good restart your server, delete or rename "1.php" file</b> and follow the link  <a href="<?php echo $base ?>" >Link</a>
 </body>
 </html>
