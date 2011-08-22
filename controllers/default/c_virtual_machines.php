@@ -577,6 +577,7 @@ class Virtual_Machines extends Controller {
     /**
      * Shows virtual machine ip addresses list
      *
+     * TODO doesn't work in XML ( Different structure of VirtualMachine_IpAddressJoin response! ) ticket #118
      * @param integer virtual machine id
      * @return void
      */
@@ -590,10 +591,10 @@ class Virtual_Machines extends Controller {
         $vm_obj = $this->load('VirtualMachine', array($id));
 
         foreach ($this->getList('VirtualMachine_NetworkInterface', array($id)) as $network_interface)
-            $network_interface_array[$network_interface->_id] = $network_interface;
+            $network_interface_array[$network_interface->_id] = $network_interface;                      
 
         foreach ($this->getList('Network') as $network)
-            $network_array[$network->_id] = $network;
+            $network_array[$network->_id] = $network;                                        
 
         $params = array(
             'virtual_machine_id' => $id,
