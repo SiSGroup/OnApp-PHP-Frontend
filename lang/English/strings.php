@@ -598,3 +598,4 @@ $_LANG['HELLO_THERE'] = 'Hello There';
 $_LANG['COMPLETE_DEBUG_INFO'] = 'Complete debug info';
 $_LANG['ERROR_LOG_ID'] = 'Error log id : ';
 $_LANG['ONAPP_HOST'] = 'OnApp Host';
+$_LANG['JAVASCRIPT_IS_DISABLED_IN_YOUR_BROWSER'] = 'Javascript is disabled in your browser';

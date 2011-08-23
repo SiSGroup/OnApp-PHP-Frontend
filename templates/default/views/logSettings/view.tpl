@@ -1,12 +1,12 @@
 {include file="default/views/header.tpl"}
 {if isset($error)}
-    <div id="onapp_error">
+    <div class="onapp_error">
             {$error|onapp_string}
     </div>
 {/if}
 
 {if isset($message)}
-    <div id="onapp_msg">
+    <div class="onapp_msg">
             {$message|onapp_string}
     </div>
 {/if}

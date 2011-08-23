@@ -116,7 +116,7 @@ div#content
     height:auto; 
 }
 
-#login_error, #onapp_error, #onapp_msg
+#login_error, .onapp_error, .onapp_msg
 {
     border-bottom: 3px solid #F5B0B3;
     display:block;
@@ -124,13 +124,13 @@ div#content
     padding:10px 10px;
 }
 
-#onapp_error, #onapp_msg
+.onapp_error, .onapp_msg
 {   
     float:right;
     width: 705px;
 }
 
-#onapp_msg
+.onapp_msg
 {    
     background:#E6EFC2;
     border-bottom: 3px solid #B6CC6E;

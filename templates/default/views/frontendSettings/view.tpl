@@ -1,13 +1,13 @@
 {include file="default/views/header.tpl"}
 
 {if isset($smarty.session.error)}
-    <div id="onapp_error">
+    <div class="onapp_error">
             {$smarty.session.error|onapp_string}
     </div>
 {/if}
 
 {if isset($smarty.session.message)}
-    <div id="onapp_msg">
+    <div class="onapp_msg">
             {$smarty.session.message|onapp_string}
     </div>
 {/if}

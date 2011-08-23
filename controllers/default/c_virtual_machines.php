@@ -866,6 +866,7 @@ class Virtual_Machines extends Controller {
         }
 
         $params = array(
+            'ip_addresses_array' => $ip_addresses_array,
             'ip_addresses' => json_encode($ip_addresses_array),
             'network_interface_obj' => $network_interface_obj,
             'id' => $id,
@@ -2355,7 +2356,7 @@ class Virtual_Machines extends Controller {
 
         if (!$ip_address) {
             $this->show_template_ip_address_join_new($id);
-        } else {
+        } else {        
             $onapp = $this->get_factory();
 
             $ip_address_obj = $onapp->factory('VirtualMachine_IpAddress', ONAPP_WRAPPER_LOG_REPORT_ENABLE);

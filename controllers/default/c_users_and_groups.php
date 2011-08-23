@@ -265,6 +265,7 @@ class Users_and_Groups extends Controller {
         $items_per_page = 15;
 
         $params = array(
+            'permission_obj' => $this->getList( 'Role_Permission' ),
             'checked_role_ids_js' => json_encode( array() ),
             'items_per_page' => $items_per_page,
             'pages_quantity' => round( count( $permission_obj ) / $items_per_page ) ,
@@ -463,10 +464,12 @@ class Users_and_Groups extends Controller {
         $items_per_page = 15;
 
         $params = array(
+            'permission_obj' => $this->getList( 'Role_Permission' ),
             'items_per_page' => $items_per_page,
             'pages_quantity' => round( count( $permission_obj ) / $items_per_page ) ,
             'permission_array' => json_encode( $permission_array ),
             'role_obj' => $role_obj,
+            'checked_role_ids'   => $checked_role_ids,
             'checked_role_ids_js' => json_encode( $checked_role_ids ),
             'id' => $id,
             'title' => onapp_string('EDIT_ROLE'),

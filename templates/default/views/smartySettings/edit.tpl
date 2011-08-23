@@ -27,7 +27,7 @@
         </dl>
 
         <dl style="clear:both;">
-            <dt class="label">{'CACHING_LIFETIME'|onapp_string} (seconds)</dt>
+            <dt class="label">{'CACHING_LIFETIME'|onapp_string}<br /> (seconds)</dt>
             
             <dd>
                 <input type="text" name="settings[smarty_caching_lifetime]" value="{$smarty.const.ONAPP_SMARTY_CACHING_LIFETIME}" />
