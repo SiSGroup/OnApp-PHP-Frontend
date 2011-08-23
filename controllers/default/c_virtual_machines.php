@@ -2435,7 +2435,7 @@ class Virtual_Machines extends Controller {
         $console_obj = $console->load($id);
         onapp_debug('console_obj => ' . print_r($console_obj, true));
 
-        $url = ONAPP_HOSTNAME . ONAPP_DS . 'console_remote' . ONAPP_DS . $console->_obj->_remote_key;
+        $url = $_SESSION['host'] . ONAPP_DS . 'console_remote' . ONAPP_DS . $console->_obj->_remote_key;
 
         if (is_null($console->error)) {
             onapp_redirect($url);
