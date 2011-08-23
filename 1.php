@@ -28,15 +28,15 @@
 You must change <b>'AllowOverride None'</b> to <b>'AllowOverride All'</b> in you server config file!
 <br />
 
- <pre>
+<?php echo '<pre>
 DocumentRoot /var/www /:yourhost
-    <?php   echo htmlentities( '<Directory /var/www/:yourhost>
+        &lt;Directory /var/www/:yourhost&gt;
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride <b style="color:red">All</b>
                 Order allow,deny
                 allow from all
-        </Directory>' ); ?>
-</pre>
+        &lt;/Directory&gt;
+</pre>'; ?>
 
 <?php $base = (
             ( isset($_SERVER['HTTPS'])
