@@ -258,7 +258,7 @@ class Virtual_Machines extends Controller {
             'backups_quantity' => $size_and_quantity['quantity'],
             'backups_total_size' => $size_and_quantity['size'],
             'profile_obj' => $_SESSION['profile_obj'],
-            'hypervisor_obj' => $this->load('Hypervisor', array($vm_obj->_hypervisor_id)),
+            'hypervisor_obj' => $this->load('Hypervisor', array($vm_obj->_hypervisor_id) ),
             'vm_obj' => $vm_obj,
             'title' => onapp_string('VIRTUAL_MACHINE_DETAILS'),
             'info_title' => onapp_string('VIRTUAL_MACHINE_DETAILS'),
@@ -280,10 +280,17 @@ class Virtual_Machines extends Controller {
 
         onapp_debug('error => ' . $error);
 
+        $onapp = $this -> get_factory();
+
+        onapp_permission(array('virtual_machines', 'virtual_machines.create'));
+
+        $template = $onapp->factory('Template', ONAPP_WRAPPER_LOG_REPORT_ENABLE);               
+                                              
         $params = array(
             'network_zone_obj' => $this->getList('NetworkZone'),
             'data_store_zone_obj' => $this->getList('DataStoreZone'),
             'hypervisor_zones_obj' => $this->getList('HypervisorZone'),
+            'user_templates_obj' => $template->getUserTemplates(),
             'templates_obj' => $this->getList('Template'),
             'hypervisor_obj' => $this->getList('Hypervisor'),
             'title' => onapp_string('CREATE_VIRTUAL_MACHINE'),
@@ -892,11 +899,11 @@ class Virtual_Machines extends Controller {
 
         $onapp = $this->get_factory();
 
-        $vm_obj = $this->load('VirtualMachine', array($id));
+        $vm_obj = $this->load('VirtualMachine', array($id) );
 
-        $hypervisor_obj = $this->load('Hypervisor', array($vm_obj->_hypervisor_id));
+        $hypervisor_obj = $this->load('Hypervisor', array($vm_obj->_hypervisor_id) );
 
-        $hypervisor_zone_obj = $this->load('HypervisorZone', array($hypervisor_obj->_hypervisor_group_id));
+        $hypervisor_zone_obj = $this->load('HypervisorZone', array($hypervisor_obj->_hypervisor_group_id) );
 
         $ip_address_obj = $this->getList('VirtualMachine_IpAddressJoin', array($id));
 
@@ -904,10 +911,10 @@ class Virtual_Machines extends Controller {
 
         if ( ! is_null( $network_interface_obj ) ) {
             foreach ($network_interface_obj as $network_interface)
-                $network_interface_array[$network_interface->_network_join_id] = $network_interface;
+                $network_interface_array[$network_interface->_network_join_id] = $network_interface;        
         }
         else
-            $network_interface_array = NULL;
+            $network_interface_array = NULL;              
 
         $hypervisor_network_join_obj = $this->getList('Hypervisor_NetworkJoin', array($vm_obj->_hypervisor_id));
 
@@ -917,12 +924,14 @@ class Virtual_Machines extends Controller {
 
         if (is_array($hypervisor_network_join_obj)) {
             foreach ($hypervisor_network_join_obj as $network_join) {
-                $network_obj = $network->load($network_join->_network_id);
+                if ( $network_join->_networ_id ) {
+                    $network_obj = $network->load( $network_join->_network_id );
+                }
                 $hypervisor_network_interfaces[$network_join->_id] = $network_obj;
                 $network_labels[$network_join->_id] = $network_obj;
                 $target_labels[$network_join->_id] = $hypervisor_obj->_label;
             }
-        }
+        }                                                                                         
 
         if (is_array($hypervisor_zone_network_join_obj)) {
             foreach ($hypervisor_zone_network_join_obj as $network_join) {
@@ -1445,7 +1454,7 @@ class Virtual_Machines extends Controller {
 
         onapp_debug('id => ' . $id);
 
-        onapp_permission(array('backups.delete', 'backups'));
+        onapp_permission(array('backups.delete', 'backups', 'backups.delete.own'));
 
         $onapp = $this->get_factory();
 
@@ -1478,7 +1487,7 @@ class Virtual_Machines extends Controller {
 
         onapp_debug('id => ' . $id);
 
-        onapp_permission(array('backups.create', 'backups'));
+        onapp_permission(array('backups.create', 'backups', 'backups.create.own'));
 
         $onapp = $this->get_factory();
 
@@ -2052,7 +2061,7 @@ class Virtual_Machines extends Controller {
 
         if (is_null($virtual_machine))
             $this->show_template_edit($id);
-        else {
+        else {             
             $onapp = $this->get_factory();
 
             $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
@@ -2060,7 +2069,7 @@ class Virtual_Machines extends Controller {
             foreach ($virtual_machine as $key => $value)
                 $vm->$key = $value;
 
-            $vm->save();
+            $vm->save();                                                       
             onapp_debug('vm => ' . print_r($vm, true));
 
             if (is_null($vm->error)) {
@@ -2102,7 +2111,7 @@ class Virtual_Machines extends Controller {
             foreach ($network_interface as $key => $value)
                 $network_interface_obj->$key = $value;
 
-            $network_interface_obj->save();
+            $network_interface_obj->save();                                                              print('<pre>');      print_r($network_interface_obj); die();
             onapp_debug('network_interface_obj => ' . print_r($network_interface_obj, true));
 
             if (is_null($network_interface_obj->error)) {
@@ -2130,7 +2139,7 @@ class Virtual_Machines extends Controller {
 
         onapp_debug('id => ' . $id);
 
-        onapp_permission(array('ip_address_joins.delete', 'ip_address_joins'));
+        onapp_permission(array('ip_address_joins.delete', 'ip_address_joins', 'ip_address_joins.delete.own'));
 
         $onapp = $this->get_factory();
 

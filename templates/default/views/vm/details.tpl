@@ -109,7 +109,9 @@
             <tr>
                 <td  class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=firewall&amp;id={$vm_obj->_id}">Edit Firewall Rules</a></td>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit&amp;id={$vm_obj->_id}">Adjust Resource Allocation</a></td>
+                {if onapp_has_permission( array( 'virtual_machines.change_owner' ) ) == true}
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=change_owner&amp;id={$vm_obj->_id}">Change Owner</a></td>
+                {/if}
             </tr>
             <tr>
                 {if onapp_has_permission( array( 'virtual_machines' ) ) == true}
@@ -137,7 +139,9 @@
             <tr>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=network_interfaces&amp;id={$vm_obj->_id}">Manage Network Interfaces</a></td>
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=edit&amp;id={$vm_obj->_id}">Adjust Resource Allocation</a></td>
+                {if onapp_has_permission( array( 'virtual_machines.change_owner' ) ) == true}
                 <td class="action_edit"><a href="{$_ALIASES["virtual_machines"]}?action=change_owner&amp;id={$vm_obj->_id}">Change Owner</a></td>
+                {/if}
             </tr>
             <tr>
                 {if onapp_has_permission( array( 'virtual_machines', 'virtual_machines.rebuild_network' ) ) == true}

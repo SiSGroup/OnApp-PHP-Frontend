@@ -90,13 +90,13 @@
             <dd>
                 <select name="virtual_machine[_template_id]" >
                     <option></option>
-                    {if is_array($templates_obj)}
                         {foreach from=$templates_obj item=v}
                             <option value="{$v->_id}">{$v->_label}</option>
                         {/foreach}
-                    {else}
-                        <option value="{$templates_obj->_id}">{$templates_obj->_label}</option>
-                    {/if}
+                            
+                        {foreach from=$user_templates_obj item=v}
+                            <option value="{$v->_id}">{$v->_label}</option>
+                        {/foreach}
                  </select>
             </dd>
         </dl>
