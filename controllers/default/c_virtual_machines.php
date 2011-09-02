@@ -241,7 +241,7 @@ class Virtual_Machines extends Controller {
      * @param string other message
      * @return void
      */
-    public function show_template_details($id, $error = NULL) {
+    public function show_template_details($id, $error = NULL) { 
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
 
         onapp_debug('id => ' . $id . ' error => ' . $error);
@@ -1120,10 +1120,11 @@ class Virtual_Machines extends Controller {
             if ($virtual_machine[$key] != '' && !is_null($virtual_machine[$key]))
                 $vm_obj->$key = $value;
 
-        $vm_obj->save();
+        $vm_obj->save();                                                              
 
         if (is_null($vm_obj->error)) {
             $_SESSION['message'] = 'VIRTUAL_MACHINE_HAS_BEEN_CREATED_SUCCESSFULLY';
+            onapp_event_exec( 'vm_create', array( 'vm_obj' => $vm_obj ) );
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $vm_obj->_id);
         }
         else {
@@ -1981,7 +1982,7 @@ class Virtual_Machines extends Controller {
         onapp_permission(array('firewall_rules.update', 'firewall_rules.update.own', 'firewall_rules'));
 
         $onapp = $this->get_factory();
-
+        
         $virtual_machine_id = onapp_get_arg('virtual_machine_id');
         $position = onapp_get_arg('position');
 
@@ -1991,8 +1992,10 @@ class Virtual_Machines extends Controller {
         $firewall->move($position);
         onapp_debug('firewall => ' . print_r($firewall, true));
 
-        if (is_null($firewall->errors))
+        if (is_null($firewall->errors)) {
+            onapp_event_exec( 'vm_create', array( 'firewall' => $firewall ) );
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $virtual_machine_id);
+        }
         else {
             trigger_error ( print_r( $firewall->error, true ) );
             $this->show_template_firewall($virtual_machine_id, $firewall->error);
@@ -2111,7 +2114,7 @@ class Virtual_Machines extends Controller {
             foreach ($network_interface as $key => $value)
                 $network_interface_obj->$key = $value;
 
-            $network_interface_obj->save();                                                              print('<pre>');      print_r($network_interface_obj); die();
+            $network_interface_obj->save();                                                              
             onapp_debug('network_interface_obj => ' . print_r($network_interface_obj, true));
 
             if (is_null($network_interface_obj->error)) {
@@ -2409,7 +2412,7 @@ class Virtual_Machines extends Controller {
             $onapp = $this->get_factory();
 
             $vm = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
-            $vm->migrate($id, $virtual_machine['_destination_id']);
+            $vm->migrate($id, $virtual_machine['_destination_id']);                                     // print('<pre>');print_r($vm);die();
             onapp_debug('vm => ' . print_r($vm, true));
 
             if (is_null($vm->error)) {

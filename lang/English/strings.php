@@ -599,3 +599,39 @@ $_LANG['COMPLETE_DEBUG_INFO'] = 'Complete debug info';
 $_LANG['ERROR_LOG_ID'] = 'Error log id : ';
 $_LANG['ONAPP_HOST'] = 'OnApp Host';
 $_LANG['JAVASCRIPT_IS_DISABLED_IN_YOUR_BROWSER'] = 'Javascript is disabled in your browser';
+$_LANG['EMAIL_TEMPLATES'] = 'Email Templates';
+$_LANG['EMAIL_TEMPLATES_INFO'] = 
+    'The default email templates that come supplied with the system are sent 
+    when certain events occur. You can also create custom templates which you 
+    can assign to some particular event';
+$_LANG['NO_TEMPLATES_FOUND'] = 'No templates found';
+$_LANG['TEMPLATE_NAME'] = 'Template Name';
+$_LANG['EVENT_ASSIGNMENT'] = 'Event Assignment';
+$_LANG['EDIT_TEMPLATE'] = 'Edit template';
+$_LANG['DELETE_TEMPLATE'] = 'Delete template';
+$_LANG['ADD_NEW_EMAIL_TEMPLATE'] = 'Add New Email Template';
+$_LANG['TEMPLATE_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Template has been deleted successfully';
+$_LANG['TEMPLATE_HAS_NOT_BEEN_DELETED_CHECK_EVENTS_FOLDER_PERMISSIONS'] = 
+    'Template has not been deleted check events folder permissions';
+$_LANG['EDIT_EMAIL_TEMPLATE'] = 'Edit Email Template';
+$_LANG['EDIT_EMAIL_TEMPLATE_INFO'] = 'Make necessary changes and press the Save button';
+$_LANG['TEMPLATE_DETAILS'] = 'Template Details';
+$_LANG['FROM_FULL_NAME'] = 'From (Full name)';
+$_LANG['FROM_EMAIL'] = 'From (e-mail)';
+$_LANG['TO_EMAIL'] = 'To (e-mail)';
+$_LANG['COPY_EMAIL'] = 'Copy (e-mail)';
+$_LANG['SUBJECT_'] = 'Subject';
+$_LANG['MESSAGE_'] = 'Message';
+
+$_LANG['TEMPLATE_HAS_NOT_BEEN_UPDATED_CHECK_EVENTS_FOLDER_PERMISSIONS'] =
+   'Template has no been updated check events folder permissions';
+$_LANG['TEMPLATE_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Template has been updated successfully';
+
+
+$_LANG['CREATE_EMAIL_TEMPLATE'] = 'Create Email Template';
+$_LANG['CREATE_EMAIL_TEMPLATE_INFO'] = 'Fill up the form bellow and click the Save button';
+
+
+
+
+

@@ -21,7 +21,7 @@ define('ONAPP_E_DEBUG', 16);
  * @param string $filename File name
  * @param string $content  Content string
  *
- * @return void
+ * @return bolean true if success
  *
  */
 function onapp_file_write( $content, $type = NULL, $path = NULL ) {
@@ -63,6 +63,10 @@ function onapp_file_write( $content, $type = NULL, $path = NULL ) {
         die("Cannot write to file $filename");
 
     fclose($handle);
+
+    if ( $path ) chmod( $path, 0777 );
+        
+    return true;
 }
 /**
  * Reads file content

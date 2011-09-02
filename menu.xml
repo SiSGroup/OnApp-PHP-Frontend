@@ -25,6 +25,7 @@
         <screen title="LOG_SETTINGS" class="Log_Settings" method="view" alias="log_settings" access="access" />
         <screen title="FRONTEND_SETTINGS" class="Frontend_Settings" method="view" alias="frontend_settings" access="access" />
         <screen title="SMARTY_SETTINGS" class="Smarty_Settings" method="view" alias="smarty_settings" access="access" />
+        <screen title="EMAIL_TEMPLATES" class="Email_Templates" method="view" alias="email_templates" access="access" />
     </screen>
    <!-- <screen title="HELP_" class="Help" method="view" alias="help" access="access" /> -->
     <screen title="LOGOUT_" class="Base" method="logout" alias="logout" access="access" />

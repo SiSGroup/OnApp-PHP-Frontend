@@ -5,7 +5,7 @@
             <dl>
                 <dt><label for="note">{'NOTE_'|onapp_string}</label></dt>
                 <dd>
-                    <textarea name="note" rows="10" colums="50" id="note">{$current_admin_note}</textarea>  
+                    <textarea name="note" rows="10" cols="50" id="note">{$current_admin_note}</textarea>  
                 </dd>
             </dl>
         </div>

@@ -29,7 +29,7 @@
         <dl>
             <dt><label>{'HYPERVISOR_'|onapp_string}</label></dt>
             <dd>
-                <select name="virtual_machine[_hypervisor_id]" />
+                <select name="virtual_machine[_hypervisor_id]" >
                     <option></option>
                     {foreach from=$hypervisor_obj item=v}
                         <option value="{$v->_id}">{$v->_label}</option>

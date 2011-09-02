@@ -208,8 +208,8 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
                     require_once $file_path;
                     $_SCREEN_IDS["$current_id"]['show'] = call_user_func( array( $_SCREEN_IDS["$current_id"]['class'], $_SCREEN_IDS["$current_id"]['access'] ) );
                 }
-                    else
-                        die('File '.$file_path.' doesn\'t exists');
+                else
+                    die('File '.$file_path.' doesn\'t exists');
             }
         }
 
@@ -444,13 +444,13 @@ function onapp_scan_dir( $path ){
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     if ( $handle = opendir( $path ) ) {
         while (false !== ($file = readdir($handle))) {
-            if( ! is_dir($file) ) {
+            if( ! is_dir($file) && $file != 'index.html' ) {
                 $files_list[] = $file;
             }
         }
     }
     else {
-        onapp_die('Directory not found -> '. $path);
+        onapp_die('Unable to scan directory =><br /> '. $path . '<br /> Check permissions');
     }
     closedir($handle);
     return $files_list;
@@ -470,4 +470,125 @@ function onapp_format_money($number, $fractional=false) {
         }
     }
     return $number;
+}
+
+function onapp_load_event_classes () {
+    global $_EVENT_CLASSES;
+
+    $_EVENT_CLASSES = array (
+        'vm_create' => 'Virtual_Machine',
+        'vm_suspend' => 'Virtual_Machine',
+        'vm_delete' => 'Virtual_Machine'
+    );
+}
+
+/**
+ * Event manager function
+ * 
+ * @param string $event_name Event name
+ * @param mixed $objects_array Objects array
+ * @param string $url
+ */
+function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //print('<pre>'); print_r($_SESSION['profile_obj']); die();
+    onapp_debug(__METHOD__);
+
+    if ( $objects_array && count( $objects_array ) == 1 ) $objects_array = array( $objects_array );         //print('<pre>');  print_r($objects_array); die();
+
+    $event_directory = ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS . $event_name . ONAPP_DS;
+
+    if( ! (count( scandir( $event_directory . 'script') ) == 2 ) ) {
+
+    }
+
+    if(  ! (count( scandir( $event_directory . 'exec') ) == 2) )  {
+
+    }
+
+    if( ! (count( scandir( $event_directory . 'mail') ) == 2) ) {
+        $mail_directory = $event_directory . 'mail' . ONAPP_DS;
+
+        $mails = onapp_scan_dir( $mail_directory );                                                 //print('<pre>');print_r($mails); die();
+        $content = '';
+        $mail_count = 1;
+        $mails_array = array();
+
+        foreach ( $mails as $mail ) {
+            $handle = @fopen($mail_directory . $mail, "r");
+
+            if ( $handle ) {
+                $mails_array[$mail_count]['message'] = '';
+                
+                while ( ( $buffer = fgets ( $handle, 4096 ) ) !== false) {
+                   if ( preg_match ( "/^:from:/" ,$buffer ) ) {
+                       $mails_array[$mail_count]['from'] = trim( str_replace( ':from:', '', $buffer ) );
+                   }
+                   elseif ( preg_match ( "/^:from_name:/" ,$buffer ) ) {
+                       $mails_array[$mail_count]['from_name'] = trim( str_replace( ':from_name:', '', $buffer ) );
+                   }
+                   elseif ( preg_match ( "/^:to:/" ,$buffer ) ) {
+                       $mails_array[$mail_count]['to'] = trim( str_replace( ':to:', '', $buffer ) );
+                   }
+                   elseif ( preg_match ( "/^:subject:/" ,$buffer ) ) {
+                       $mails_array[$mail_count]['subject'] = trim( str_replace( ':subject:', '', $buffer ) );
+                   }
+                   elseif ( ! preg_match ('/^:/' , $buffer) ) {
+                       $mails_array[$mail_count]['message'] .= $buffer ;
+                   }
+                   elseif ( preg_match ('/^:copy/' , $buffer) ) {
+                       $mails_array[$mail_count]['copy'] = trim( str_replace( ':copy:', '', $buffer ) ); ;
+                   }
+               }
+            }
+            else {
+                die( 'Unable to open file ' . $mail_directory . $mail );
+            }
+            fclose( $handle );
+            $mail_count++;
+        }                                                                                       // print('<pre>');print_r($mails_array ); die();
+                                                                                                        
+        require_once ONAPP_PATH.ONAPP_DS.'libs'.ONAPP_DS.'smarty'.ONAPP_DS.'Smarty.class.php';
+        $smarty = new Smarty;
+        $profile = $_SESSION['profile_obj'];
+        $smarty->assign( 'client_name', $profile->_first_name . ' ' . $profile->_last_name );
+        $smarty->assign( 'client_email', $profile->_email );
+        
+        foreach ( $mails_array as $email ) {
+            $sent = onapp_send_email (
+                $smarty->fetch('string:'. $email['to']),
+                $smarty->fetch('string:'. $email['from']),
+                $smarty->fetch('string:'. $email['subject']),
+                $smarty->fetch('string:'. $email['message']),
+                $smarty->fetch('string:'. $email['from_name']),
+                $smarty->fetch('string:'. $email['copy'])
+            );
+            if ( ! $sent ) {
+                trigger_error('Failed to send email to'. $email['to']);
+            }
+        }
+    }                                                                                   
+ }
+/**
+ * Sends email
+ *
+ * @param string $to recipients email address ( could be multiple coma separated )
+ * @param string $from sender email
+ * @param string $from_name sender name
+ * @param string $subject mail subject
+ * @param string $message message body
+ * @param string $copy email address to send copy to
+ * @return <type>
+ */
+function onapp_send_email ( $to, $from, $subject, $message, $from_name = NULL, $copy = NULL ) { 
+    $headers =
+        'From: '.$from_name.' <'. $from .'>' . "\r\n" .
+        'To:' . $to  . "\r\n" .
+        'Cc:' . $copy . "\r\n" .
+        'X-Mailer: PHP/' . phpversion() . "\r\n" .
+        "MIME-Version: 1.0\r\n" .
+        "Content-Type: text/html; charset=utf-8\r\n" .
+        "Content-Transfer-Encoding: 8bit\r\n\r\n";
+
+    $sent = mail( $to, $subject, $message, $headers );
+
+    return $sent ? true : false;
 }

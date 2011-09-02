@@ -42,8 +42,8 @@ class Controller {
         }
 
        if ( $debug ) {
-          // print('<pre>'); print_r( $obj );
-           print('<pre>'); print_r( $_obj );
+           print('<pre>'); print_r( $obj );
+          // print('<pre>'); print_r( $_obj );
            die();
        }
 
@@ -78,8 +78,8 @@ class Controller {
         }
 
        if ( $debug ) {
-           //print('<pre>'); print_r( $obj );
-           print('<pre>'); print_r( $_obj );
+           print('<pre>'); print_r( $obj );
+           //print('<pre>'); print_r( $_obj );
            die();
        }
 
