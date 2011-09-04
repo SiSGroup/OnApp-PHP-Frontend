@@ -76,6 +76,28 @@
         <input type="hidden" name="file_name" value="{$file_name}" />
         <input type="hidden" name="action" value="edit" />
     </form>
+<div id="log_details">
+    <h1>{'AVAILABLE_MERGE_FIELDS'|onapp_string}</h1>
+
+    {foreach from=$classes_fields item=class}
+     <br />  <b> {'WITH_THESE_ACTIONS'|onapp_string} </b> <br />
+        {foreach from=$class['events'] item=event}
+            ( {$event} ) &nbsp;
+        {/foreach}
+      <br /><br /> <b> {'YOU_CAN_USE_THE_FOLLOWING_VARIABLES'|onapp_string}</b> <br />
+        {foreach from=$class['fields'] item=field}
+                <br />&#123;&#036;{$field}&#125;<br />
+        {/foreach}<br />
+
+
+    {/foreach}
+
+    <h1>{'CONDITIONAL_DISPLAY'|onapp_string}</h1>
+    {'CONDITIONAL_DISPLAY_INFO'|onapp_string}
+
+    <h1>{'LOOPING_THROW_DATA'|onapp_string}</h1>
+    {'LOOPING_THROW_DATA_INFO'|onapp_string}
+</div>
       
 {include file="default/views/navigation.tpl"}
 {include file="default/views/footer.tpl"}

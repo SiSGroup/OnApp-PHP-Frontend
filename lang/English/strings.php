@@ -622,16 +622,27 @@ $_LANG['TO_EMAIL'] = 'To (e-mail)';
 $_LANG['COPY_EMAIL'] = 'Copy (e-mail)';
 $_LANG['SUBJECT_'] = 'Subject';
 $_LANG['MESSAGE_'] = 'Message';
-
 $_LANG['TEMPLATE_HAS_NOT_BEEN_UPDATED_CHECK_EVENTS_FOLDER_PERMISSIONS'] =
    'Template has no been updated check events folder permissions';
 $_LANG['TEMPLATE_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Template has been updated successfully';
-
-
 $_LANG['CREATE_EMAIL_TEMPLATE'] = 'Create Email Template';
 $_LANG['CREATE_EMAIL_TEMPLATE_INFO'] = 'Fill up the form bellow and click the Save button';
+$_LANG['TEMPLATE_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Template has been created successfully';
 
-
-
-
-
+$_LANG['YOU_CAN_USE_THE_FOLLOWING_VARIABLES'] = 'You can use the following variables';
+$_LANG['WITH_THESE_ACTIONS'] = 'With these actions';
+$_LANG['CONDITIONAL_DISPLAY'] = 'Conditional Display';
+$_LANG['LOOPING_THROW_DATA'] = 'Looping Throw Data';
+$_LANG['CONDITIONAL_DISPLAY_INFO'] =
+    'You can use conditionals to display text based on other values - for example: <br />
+    {if $ticket_department eq "Sales"} <br />
+    Sales only operates Monday-Friday 9am-5pm <br />
+    {else} <br />
+    Your ticket has been received and will be answered shortly <br />
+    {/if}';
+$_LANG['LOOPING_THROW_DATA_INFO'] =
+    'A foreach loop can be used to cycle through values like invoice items:<br />
+    {foreach from=$array_data item=data}<br />
+    {$data.option}: {$data.value}<br />
+    {/foreach}';
+$_LANG['AVAILABLE_MERGE_FIELDS'] = 'Available Merge Fields';

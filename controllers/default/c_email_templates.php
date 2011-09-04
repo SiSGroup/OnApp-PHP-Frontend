@@ -2,7 +2,7 @@
 
 if (!defined('ONAPP_PATH')) die('No direct script access allowed');
 
-class Email_Templates {
+class Email_Templates extends Controller {
 
     /**
      * Main controller function
@@ -65,9 +65,6 @@ class Email_Templates {
         $params = array(
             'events' => $events,
             'alias' => 'email_templates',
-            'page' => $page,
-            'pages_quantity' => $pages_quantity,
-            'files_list' => $files_list,
             'title' => onapp_string('EMAIL_TEMPLATES'),
             'info_title' => onapp_string('EMAIL_TEMPLATES'),
             'info_body' => onapp_string('EMAIL_TEMPLATES_INFO'),
@@ -150,6 +147,7 @@ class Email_Templates {
         }                                                                           //print('<pre>'); print_r($template_info); die();
 
         $params = array(
+            'classes_fields' => $this->get_classes_fields(),
             'events_list' => onapp_scan_dir( $events_directory ),
             'event' => $event,
             'file_name' => $file_name,
@@ -171,6 +169,7 @@ class Email_Templates {
         onapp_debug(__METHOD__);
 
         $params = array(
+            'classes_fields' => $this->get_classes_fields(),
             'events_list' => onapp_scan_dir( ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS ),
             'title' => onapp_string('СREATE_EMAIL_TEMPLATE'),
             'info_title' => onapp_string('CREATE_EMAIL_TEMPLATE'),
@@ -280,6 +279,33 @@ class Email_Templates {
                 $this->show_template_view($error);
             }
         }
+    }
+
+    private function get_classes_fields () {
+        global $_EVENT_CLASSES;
+        
+        $classes_fields = array();
+
+        $onapp = $this->get_factory();
+
+        foreach ( $_EVENT_CLASSES as $event => $classes ) {
+            foreach ( $classes as $class ) {
+                if ( ! array_key_exists( $class, $classes_fields ) ) {
+                    $fields_new = NULL;
+                    $object = $onapp->factory($class, ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+                    foreach ( $object->getClassFields() as $field => $value ) {
+                         $fields_new[] = $class . '_' .$field;
+                    }
+
+                    $classes_fields[$class]['fields'] = $fields_new;
+                    $classes_fields[$class]['events'][] = $event;
+                }
+                else {
+                    $classes_fields[$class]['events'][] = $event;
+                }
+            }
+        }
+        return $classes_fields;
     }
 
     /**

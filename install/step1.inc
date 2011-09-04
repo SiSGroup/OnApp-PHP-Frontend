@@ -93,6 +93,14 @@
             </td>
         </tr>
         <tr>
+            <td>
+                Events Directory
+            </td>
+            <td>
+                <?php echo $events_dir_txt; ?>
+            </td>
+        </tr>
+        <tr>
             <th colspan="2">
                 .htaccess file
             </th>

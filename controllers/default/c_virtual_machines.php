@@ -1124,10 +1124,11 @@ class Virtual_Machines extends Controller {
 
         if (is_null($vm_obj->error)) {
             $_SESSION['message'] = 'VIRTUAL_MACHINE_HAS_BEEN_CREATED_SUCCESSFULLY';
-            onapp_event_exec( 'vm_create', array( 'vm_obj' => $vm_obj ) );
+            onapp_event_exec( 'vm_create', array( $vm_obj, $this->load( 'User', array($vm_obj->_user_id ) ) ) );
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $vm_obj->_id);
         }
         else {
+            onapp_event_exec( 'vm_create_failed', array( $vm_obj, $this->load( 'User', array($vm_obj->_user_id ) ) ) );
             trigger_error ( print_r( $vm_obj->error, true ) );
             $this->show_template_view($vm_obj->error);
         }
@@ -1167,10 +1168,12 @@ class Virtual_Machines extends Controller {
         }
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'vm_startup', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_STARTUP_HAS_BEEN_QUEUED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'vm_startup_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1203,10 +1206,12 @@ class Virtual_Machines extends Controller {
         $virtual_machine->reset_password();
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'vm_reset_password', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_PASSWORD_WIL_BE_CHANGED_SHORTLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'vm_reset_password_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1246,10 +1251,12 @@ class Virtual_Machines extends Controller {
         }
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'vm_reboot', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_WILL_BE_REBOOTED_SHORTLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'vm_reboot_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1278,10 +1285,12 @@ class Virtual_Machines extends Controller {
         $virtual_machine->delete();
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'vm_delete', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_HAVE_BEEN_SQUEDULED_FOR_DESTRUCTION';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'vm_delete_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1309,10 +1318,12 @@ class Virtual_Machines extends Controller {
         $disk->disableAutobackup($id);
 
         if (is_null($disk->error)) {
+            onapp_event_exec( 'disk_autobackup_disable', array( $disk  ) );
             $_SESSION['message'] = 'AUTOBACKUP_HAS_BEEN_DISABLED_FOR_THIS_DISK';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disks&id=' . onapp_get_arg('virtual_machine_id'));
         }
         else {
+            onapp_event_exec( 'disk_autobackup_disable_failed', array( $disk  ) );
             trigger_error ( print_r( $disk->error, true ) );
             $this->show_template_disks(onapp_get_arg('virtual_machine_id'), $disk->error);
         }
@@ -1340,10 +1351,12 @@ class Virtual_Machines extends Controller {
         $disk->enableAutobackup($id);
 
         if (is_null($disk->error)) {
+            onapp_event_exec( 'disk_autobackup_enable', array( $disk  ) );
             $_SESSION['message'] = 'AUTOBACKUP_HAS_BEEN_ENABLED_FOR_THIS_DISK';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disks&id=' . onapp_get_arg('virtual_machine_id'));
         }
         else {
+            onapp_event_exec( 'disk_autobackup_enable_failed', array( $disk  ) );
             trigger_error ( print_r( $disk->error, true ) );
             $this->show_template_disks(onapp_get_arg('virtual_machine_id'), $disk->error);
         }
@@ -1373,10 +1386,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('virtual_machine => ' . print_r($virtual_machine, true));
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'vm_shutdown', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_WILL_BE_STOPED_SHORTLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'vm_shutdown_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1402,10 +1417,19 @@ class Virtual_Machines extends Controller {
 
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $virtual_machine->_id = $id;
+        $event = ( $virtual_machine->_suspended ) ? 'vm_unsuspend' : 'vm_suspend' ;
         $virtual_machine->suspend();
-        onapp_debug('virtual_machine => ' . print_r($virtual_machine, true));
 
-        onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
+        if (is_null($virtual_machine->error)) {
+            onapp_event_exec( $event, array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
+            $_SESSION['message'] = 'VIRTUAL_MACHINE_WILL_BE_STOPED_SHORTLY';
+            onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
+        }
+        else {
+            onapp_event_exec( $event.'_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
+            trigger_error ( print_r( $virtual_machine->error, true ) );
+            $this->show_template_view($virtual_machine->error);
+        }
     }
 
     /**
@@ -1432,10 +1456,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('virtual_machine => ' . print_r($virtual_machine, true));
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'vm_build', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_BUILD_HAS_BEEN_QUEUED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'vm_build_failed', array( $virtual_machine, $this->load( 'User', array( $virtual_machine_id->_user_id ) ) ) );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1465,10 +1491,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('backup_obj => ' . print_r($backup_obj, true));
 
         if (is_null($backup->error)) {
+            onapp_event_exec( 'backup_delete', array( $backup ) );
             $_SESSION['message'] = 'BACKUP_HAS_BEEN_SQUEDULED_FOR_REMOVAL';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']);
         }
         else {
+            onapp_event_exec( 'backup_delete_failed', array( $backup  ) );
             trigger_error ( print_r( $backup->error, true ) );
             $this->show_template_view($backup->error);
         }
@@ -1497,10 +1525,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('disk => ' . print_r($disk, true));
 
         if (is_null($disk->error)) {
+            onapp_event_exec( 'backup_take_failed', array( $disk  ) );
             $_SESSION['message'] = 'BACKUP_HAS_BEEN_CREATED_AND_WILL_BE_TAKEN_SHORTLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disk_backups&id=' . $id . '&virtual_machine_id=' . onapp_get_arg('virtual_machine_id'));
         }
         else {
+            onapp_event_exec( 'backup_take_failed', array( $disk  ) );
             trigger_error ( print_r( $disk->error, true ) );
             $this->show_template_disk_backup(onapp_get_arg('virtual_machine_id'), $disk->error);
         }
@@ -1533,10 +1563,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('firewall_obj => ' . print_r($firewall_obj, true));
 
         if (is_null($firewall->error)) {
+            onapp_event_exec( 'firewall_rule_delete', array( $firewall  ) );
             $_SESSION['message'] = 'RULE_HAS_BEEN_DESTROYED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $virtual_machine_id);
         }
         else {
+            onapp_event_exec( 'firewall_rule_delete_failed', array( $firewall  ) );
             trigger_error ( print_r( $firewall->error, true ) );
             $this->show_template_firewall($virtual_machine_id, $firewall->error);
         }
@@ -1566,10 +1598,12 @@ class Virtual_Machines extends Controller {
         onapp_debug( '$backup_obj => ' . print_r( $backup_obj, true) );
 
         if (is_null($backup->error)) {
+            onapp_event_exec( 'backup_restore', array( $backup  ) );
             $_SESSION['message'] = 'BACKUP_HAS_BEEN_SQUEDULED_FOR_RESTORE';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']);
         }
         else {
+            onapp_event_exec( 'backup_restore_failed', array( $backup  ) );
             trigger_error ( print_r( $backup->error, true ) );
             $this->show_template_view($backup->error);
         }
@@ -1582,7 +1616,7 @@ class Virtual_Machines extends Controller {
      * @param integer backup id
      * @return void
      */
-    private function backup_convert($id) {
+    private function backup_convert( $id ) {
         global $_ALIASES;
 
         onapp_debug(__CLASS__ . ' :: ' . __FUNCTION__);
@@ -1604,10 +1638,12 @@ class Virtual_Machines extends Controller {
             onapp_debug( '$backup_obj => ' . print_r( $backup_obj, true) );
 
             if (is_null($backup->error)) {
+                onapp_event_exec( 'backup_convert', array( $backup  ) );
                 $_SESSION['message'] = 'BACKUP_HAS_BEEN_SQUEDULED_FOR_CONVERTION';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']);
             }
             else {
+                onapp_event_exec( 'backup_convert_failed', array( $backup  ) );
                 trigger_error ( print_r( $backup->error, true ) );
                 $this->show_template_view($backup->error);
             }
@@ -1642,10 +1678,12 @@ class Virtual_Machines extends Controller {
             onapp_debug( 'vm => ' . print_r( $vm, true ) );
 
             if (is_null($vm->error)) {
+                onapp_event_exec( 'admin_note_edit', array( $vm  ) );
                 $_SESSION['message'] = 'RESOURCES_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
             }
             else {
+                onapp_event_exec( 'admin_note_edit_failed', array( $vm  ) );
                 trigger_error ( print_r( $vm->error, true ) );
                 $this->show_template_view($id, $vm->error);
             }
@@ -1682,10 +1720,12 @@ class Virtual_Machines extends Controller {
             $disk_obj->save();   
 
             if (is_null($disk_obj->error)) {
+                onapp_event_exec( 'disk_edit', array( $disk_obj  ) );
                 $_SESSION['message'] = 'DISK_RESIZE_HAS_BEEN_REQUESTED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disks&id=' . onapp_get_arg('virtual_machine_id'));
             }
             else {
+                onapp_event_exec( 'disk_edit_failed', array( $disk_obj  ) );
                 trigger_error ( print_r( $disk_obj->error, true ) );
                 $this->show_template_view($disk_obj->error);
             }
@@ -1722,10 +1762,12 @@ class Virtual_Machines extends Controller {
             $schedule_obj->save();
 
             if (is_null($schedule_obj->error)) {
+                onapp_event_exec( 'schedule_edit', array( $schedule_obj  ) );
                 $_SESSION['message'] = 'SCHEDULE_WAS_SUCCESSFULLY_UPDATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disk_backups_schedule&id=' . $id);
             }
             else {
+                onapp_event_exec( 'schedule_edit_failed', array( $schedule_obj  ) );
                 trigger_error ( print_r( $schedule_obj->error, true ) );
                 $this->show_template_disk_backups_schedule($id, $schedule_obj->error);
             }
@@ -1764,10 +1806,12 @@ class Virtual_Machines extends Controller {
             $firewall_obj->save();
 
             if (is_null($firewall->error)) {
+                onapp_event_exec( 'firewall_rule_edit', array( $firewall_obj ) );
                 $_SESSION['message'] = 'RULE_HAS_BEEN_UPDATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $virtual_machine_id);
             }
             else {
+                onapp_event_exec( 'firewall_rule_edit_failed', array( $firewall_obj ) );
                 trigger_error ( print_r( $firewall->error, true ) );
                 $this->show_template_disk_backups_schedule($virtual_machine_id, $firewall->error);
             }
@@ -1993,7 +2037,7 @@ class Virtual_Machines extends Controller {
         onapp_debug('firewall => ' . print_r($firewall, true));
 
         if (is_null($firewall->errors)) {
-            onapp_event_exec( 'vm_create', array( 'firewall' => $firewall ) );
+            onapp_event_exec( 'vm_create', array( $firewall ) );
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $virtual_machine_id);
         }
         else {

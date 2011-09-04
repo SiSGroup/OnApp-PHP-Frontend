@@ -457,6 +457,13 @@ function onapp_scan_dir( $path ){
 
 }
 
+/**
+ * Formats money amounts to usuall view
+ *
+ * @param mixed $number money amount
+ * @param boolean $fractional if fractional
+ * @return mixed money amount in usuall format
+ */
 function onapp_format_money($number, $fractional=false) {
     if ($fractional) {
         $number = sprintf('%.2f', $number);
@@ -472,13 +479,58 @@ function onapp_format_money($number, $fractional=false) {
     return $number;
 }
 
+/**
+ * Loads available events and their class names, to use in event manager and
+ * email templates.
+ *
+ * @global array $_EVENT_CLASSES available events and their class names
+ * @return void 
+ *
+ */
 function onapp_load_event_classes () {
     global $_EVENT_CLASSES;
 
     $_EVENT_CLASSES = array (
-        'vm_create' => 'Virtual_Machine',
-        'vm_suspend' => 'Virtual_Machine',
-        'vm_delete' => 'Virtual_Machine'
+        'vm_create'                          => array('VirtualMachine', 'User'),
+        'vm_create_failed'                   => array('VirtualMachine', 'User'),
+        'vm_startup'                         => array('VirtualMachine', 'User'),
+        'vm_startup_faild'                   => array('VirtualMachine', 'User' ),
+        'vm_reset_password'                  => array('VirtualMachine', 'User'),
+        'vm_reset_password_failed'           => array('VirtualMachine', 'User'),
+        'vm_reboot'                          => array('VirtualMachine', 'User' ),
+        'vm_reboot_failed'                   => array('VirtualMachine', 'User'),
+        'vm_delete'                          => array('VirtualMachine', 'User'),
+        'vm_delete_failed '                  => array('VirtualMachine', 'User' ),
+        'disk_autobackup_disable'            => array('Disk'),
+        'disk_autobackup_disable_failed'     => array('Disk'),
+        'disk_autobackup_enable'             => array('Disk' ),
+        'disk_autobackup_enable_failed'      => array('Disk'),
+        'vm_shutdown'                        => array('VirtualMachine', 'User'),
+        'vm_shutdown_failed'                 => array('VirtualMachine', 'User' ),
+        'vm_suspend'                         => array('VirtualMachine', 'User'),
+        'vm_suspend_failed'                  => array('VirtualMachine', 'User'),
+        'vm_unsuspend'                       => array('VirtualMachine', 'User'),
+        'vm_unsuspend_failed'                => array('VirtualMachine', 'User'),
+        'vm_build'                           => array('VirtualMachine', 'User'),
+        'vm_build_failed'                    => array('VirtualMachine', 'User'),
+        'backup_delete'                      => array( 'VirtualMachine_Backup' ),
+        'backup_delete_failed'               => array('VirtualMachine_Backup'),
+        'backup_take'                        => array('Disk'),
+        'backup_take_failed'                 => array('Disk' ),
+        'firewall_rule_delete'               => array('VirtualMachine_FirewallRule'),
+        'firewall_rule_delete_failed'        => array('VirtualMachine_FirewallRule'),
+        'backup_restore'                     => array('VirtualMachine_Backup'),
+        'backup_restore_failed'              => array('VirtualMachine_Backup'),
+        'backup_convert'                     => array('VirtualMachine_Backup'),
+        'backup_convert_failed'              => array('VirtualMachine_Backup'),
+        'admin_note_edit'                    => array('VirtualMachine'),
+        'admin_note_edit_failed'             => array('VirtualMachine'),
+        'disk_edit'                          => array('Disk'),
+        'disk_edit_failed'                   => array('Disk'),
+        'schedule_edit'                      => array('Disk_Schedule'),
+        'schedule_edit_failed'               => array('Disk_Schedule'),
+        'firewall_rule_edit'                 => array('VirtualMachine_FirewallRule'),
+        'firewall_rule_edit_failed'          => array('VirtualMachine_FirewallRule'),
     );
 }
 
@@ -491,8 +543,6 @@ function onapp_load_event_classes () {
  */
 function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //print('<pre>'); print_r($_SESSION['profile_obj']); die();
     onapp_debug(__METHOD__);
-
-    if ( $objects_array && count( $objects_array ) == 1 ) $objects_array = array( $objects_array );         //print('<pre>');  print_r($objects_array); die();
 
     $event_directory = ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS . $event_name . ONAPP_DS;
 
@@ -548,11 +598,22 @@ function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //
                                                                                                         
         require_once ONAPP_PATH.ONAPP_DS.'libs'.ONAPP_DS.'smarty'.ONAPP_DS.'Smarty.class.php';
         $smarty = new Smarty;
+
+        foreach ( $objects_array as $object ) {                                       // print('<pre>');print_r($object); die();
+            $name = str_replace('OnApp_', '', $object->getClassName());
+           
+            foreach ( $object->getClassFields() as $field => $value ) {
+                $field = '_'.$field;
+                $smarty->assign( $name.$field, $object->$field );                    //$sma[$name][$name . $field] =$object->$field;
+            }
+        }
+                                                                                       // print('<pre>');print_r($sma); die();
         $profile = $_SESSION['profile_obj'];
-        $smarty->assign( 'client_name', $profile->_first_name . ' ' . $profile->_last_name );
-        $smarty->assign( 'client_email', $profile->_email );
-        
+        $smarty->assign( 'responsible_name', $profile->_first_name . ' ' . $profile->_last_name );
+        $smarty->assign( 'responsible_email', $profile->_email );
+
         foreach ( $mails_array as $email ) {
+                                                                                          //echo $smarty->fetch('string:'. $email['message']); die(); //print(***************************
             $sent = onapp_send_email (
                 $smarty->fetch('string:'. $email['to']),
                 $smarty->fetch('string:'. $email['from']),
@@ -576,7 +637,8 @@ function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //
  * @param string $subject mail subject
  * @param string $message message body
  * @param string $copy email address to send copy to
- * @return <type>
+ * @return boolean if sent true|false
+ * @todo fix not to get into spam
  */
 function onapp_send_email ( $to, $from, $subject, $message, $from_name = NULL, $copy = NULL ) { 
     $headers =

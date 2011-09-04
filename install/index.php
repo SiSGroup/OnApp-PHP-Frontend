@@ -1,5 +1,8 @@
 <?php
+define( 'ONAPP_PATH', dirname( dirname(__FILE__) ) );
 define('ONAPP_DS', DIRECTORY_SEPARATOR);
+require_once ONAPP_PATH .  ONAPP_DS . 'functions.php';
+
 
 function is__writable($path) {
 
@@ -67,29 +70,34 @@ function is__writable($path) {
             ? $passed_txt
             : '<span class="red">You have to install and enable Mcrypt extension on your server </span>';
 
-        $config_file_txt = is__writable('..' . ONAPP_DS . 'config.ini')
+        $config_file_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'config.ini')
             ? $passed_txt
             : '<span class="red">You must set permissions for the config.ini file so it can be written to (chmod 777) </span>';
 
-        $logs_dir_txt = is__writable('..' . ONAPP_DS . 'logs' . ONAPP_DS)
+        $logs_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'logs' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the logs/ directory so it can be written to (chmod 777) </span>';
 
-        $templates_dir_txt = is__writable('..' . ONAPP_DS . 'templates_c' . ONAPP_DS)
+        $templates_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'templates_c' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the templates_c/ directory so it can be written to (chmod 777) </span>';
 
-        $cache_dir_txt = is__writable('..' . ONAPP_DS . 'cache' . ONAPP_DS)
+        $cache_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'cache' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the cache/ directory so it can be written to (chmod 777) </span>';
 
-        $htaccess_fite_txt = file_exists('..' . ONAPP_DS . '.htaccess')
+        $events_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS)
+            ? $passed_txt
+            : '<span class="red">You must set permissions for the events/ directory so it can be written to (chmod 777) </span>';
+
+        $htaccess_fite_txt = file_exists(ONAPP_PATH . ONAPP_DS . '.htaccess')
             ? $passed_txt
             : '<span class="red">You must miss the .htaccess file somewhere :) </span>';
 
         $passes = array (
             $htaccess_fite_txt,
             $cache_dir_txt,
+            $events_dir_txt,
             $templates_dir_txt,
             $logs_dir_txt,
             $config_file_txt,
@@ -149,7 +157,22 @@ function is__writable($path) {
             'smarty_compile_check' => 1,
         );
         
-        $result = write_config($settings, '..' . ONAPP_DS . 'config.ini');
+        $result = write_config($settings, ONAPP_PATH . ONAPP_DS . 'config.ini');
+
+        onapp_load_event_classes();
+        global $_EVENT_CLASSES;
+
+        $events_dir = ONAPP_PATH. ONAPP_DS . 'events' . ONAPP_DS ;
+
+        foreach ( $_EVENT_CLASSES as $event => $classes_array ) {
+            $event_dir = $events_dir . $event . ONAPP_DS;
+           if ( ! file_exists ($event_dir) ) {
+                mkdir($event_dir , 0777, true );
+                mkdir($event_dir . 'script', 0777, true );
+                mkdir($event_dir. 'mail', 0777, true );
+                mkdir($event_dir . 'exec', 0777, true );
+           }
+        }
 
         require_once 'step2.inc';
     }
