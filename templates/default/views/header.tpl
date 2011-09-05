@@ -11,7 +11,7 @@
 <body>
 
 <div id="header">
-    <img src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/OnApp.png" />
+    <img alt="LOGO" title="Version {$smarty.const.ONAPP_FRONTEND_VERSION}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/OnApp.png" />
     <a href="{$_ALIASES.logout}">{'LOGOUT_'|onapp_string}</a> 
 </div>
 

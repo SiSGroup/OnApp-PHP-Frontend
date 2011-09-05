@@ -1,5 +1,5 @@
 <?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
-
+define('ONAPP_FRONTEND_VERSION', '0.3.0 beta');
 
 /**
  * Gets list of directories in specified directory
@@ -513,16 +513,16 @@ function onapp_load_event_classes () {
         'vm_unsuspend_failed'                => array('VirtualMachine', 'User'),
         'vm_build'                           => array('VirtualMachine', 'User'),
         'vm_build_failed'                    => array('VirtualMachine', 'User'),
-        'backup_delete'                      => array( 'VirtualMachine_Backup' ),
-        'backup_delete_failed'               => array('VirtualMachine_Backup'),
-        'backup_take'                        => array('Disk'),
-        'backup_take_failed'                 => array('Disk' ),
+        'backup_delete'                      => NULL,
+        'backup_delete_failed'               => NULL,
+        'backup_take'                        => array('VirtualMachine_Backup'),
+        'backup_take_failed'                 => array('VirtualMachine_Backup'),
         'firewall_rule_delete'               => array('VirtualMachine_FirewallRule'),
         'firewall_rule_delete_failed'        => array('VirtualMachine_FirewallRule'),
         'backup_restore'                     => array('VirtualMachine_Backup'),
         'backup_restore_failed'              => array('VirtualMachine_Backup'),
-        'backup_convert'                     => array('VirtualMachine_Backup'),
-        'backup_convert_failed'              => array('VirtualMachine_Backup'),
+        'backup_convert'                     => array('Template'),
+        'backup_convert_failed'              => array('Template'),
         'admin_note_edit'                    => array('VirtualMachine'),
         'admin_note_edit_failed'             => array('VirtualMachine'),
         'disk_edit'                          => array('Disk'),
@@ -599,12 +599,16 @@ function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //
         require_once ONAPP_PATH.ONAPP_DS.'libs'.ONAPP_DS.'smarty'.ONAPP_DS.'Smarty.class.php';
         $smarty = new Smarty;
 
-        foreach ( $objects_array as $object ) {                                       // print('<pre>');print_r($object); die();
-            $name = str_replace('OnApp_', '', $object->getClassName());
-           
-            foreach ( $object->getClassFields() as $field => $value ) {
-                $field = '_'.$field;
-                $smarty->assign( $name.$field, $object->$field );                    //$sma[$name][$name . $field] =$object->$field;
+        if ( $objects_array ) {
+            foreach ( $objects_array as $object ) {                                       // print('<pre>');print_r($object); die();
+                if ( $object ) {                                                          // print('<pre>');print_r($object); die();
+                    $name = str_replace('OnApp_', '', $object->getClassName());           // echo $name; die();
+
+                    foreach ( $object->getClassFields() as $field => $value ) {
+                        $field = '_'.$field;
+                        $smarty->assign( $name.$field, $object->$field );                  //  $sma[$name][$name . $field] =$object->$field;
+                    }
+                }
             }
         }
                                                                                        // print('<pre>');print_r($sma); die();

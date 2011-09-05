@@ -146,9 +146,12 @@ class Email_Templates extends Controller {
             onapp_die('Unable to open file ' . $path );
         }                                                                           //print('<pre>'); print_r($template_info); die();
 
+        $events_list = onapp_scan_dir( $events_directory );
+        sort( $events_list, SORT_STRING );
+
         $params = array(
             'classes_fields' => $this->get_classes_fields(),
-            'events_list' => onapp_scan_dir( $events_directory ),
+            'events_list' => $events_list,
             'event' => $event,
             'file_name' => $file_name,
             'template_info' => $template_info,
@@ -167,10 +170,13 @@ class Email_Templates extends Controller {
      */
     public function show_template_create ( ) {
         onapp_debug(__METHOD__);
+        $events_list = onapp_scan_dir( ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS );
+
+        sort( $events_list, SORT_STRING );
 
         $params = array(
             'classes_fields' => $this->get_classes_fields(),
-            'events_list' => onapp_scan_dir( ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS ),
+            'events_list' => $events_list,
             'title' => onapp_string('СREATE_EMAIL_TEMPLATE'),
             'info_title' => onapp_string('CREATE_EMAIL_TEMPLATE'),
             'info_body' => onapp_string('CREATE_EMAIL_TEMPLATE_INFO'),
@@ -304,8 +310,8 @@ class Email_Templates extends Controller {
                     $classes_fields[$class]['events'][] = $event;
                 }
             }
-        }
-        return $classes_fields;
+        }                                          
+        return $classes_fields;         
     }
 
     /**
