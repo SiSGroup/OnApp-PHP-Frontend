@@ -78,7 +78,9 @@
     </form>
 <div id="log_details">
     <h1>{'AVAILABLE_MERGE_FIELDS'|onapp_string}</h1>
-
+    <b> {'YOU_CAN_USE_THESE_VARIABLES_WITH_ALL_ACTIONS'|onapp_string}</b>
+    <br />&#123;&#036;responsible_name&#125;<br />
+    <br />&#123;&#036;responsible_email&#125;<br />
     {foreach from=$classes_fields item=class}
      <br />  <b> {'WITH_THESE_ACTIONS'|onapp_string} </b> <br />
         {foreach from=$class['events'] item=event}

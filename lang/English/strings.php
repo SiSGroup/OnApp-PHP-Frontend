@@ -646,3 +646,4 @@ $_LANG['LOOPING_THROW_DATA_INFO'] =
     {$data.option}: {$data.value}<br />
     {/foreach}';
 $_LANG['AVAILABLE_MERGE_FIELDS'] = 'Available Merge Fields';
+$_LANG['YOU_CAN_USE_THESE_VARIABLES_WITH_ALL_ACTIONS'] = 'You can use these variables with all actions';

@@ -695,10 +695,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'payment =>' . print_r( $payment, true ) );
 
         if (is_null($payment->error)) {
+            onapp_event_exec( 'payment_delete', array( $payment->_obj ) );
             $_SESSION['message'] = 'PAYMENT_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $user_id);
         }
         else {
+            onapp_event_exec( 'payment_delete_failed', array( $payment->_obj ) );
             trigger_error ( print_r( $payment_obj->error, true ) );
             $this->show_template_payments($payment->error);
         }
@@ -727,10 +729,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'role =>' . print_r( $role, true ) );
 
         if ( is_null( $role->error ) ) {
+            onapp_event_exec( 'role_delete', array( $payment->_obj ) );
             $_SESSION['message'] = 'ROLE_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
         }
         else {
+            onapp_event_exec( 'role_delete_failed', array( $payment->_obj ) );
             trigger_error ( print_r( $role->error, true ) );
             $this->show_template_roles( $role->error );
         }
@@ -759,10 +763,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'group =>' . print_r( $group, true ) );
 
         if (is_null($group->error)) {
+            onapp_event_exec( 'group_delete', array( $group->_obj ) );
             $_SESSION['message'] = 'GROUP_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
         }
         else {
+            onapp_event_exec( 'group_delete_failed', array( $group->_obj ) );
             trigger_error ( print_r( $group->error, true ) );
             $this->show_template_groups($group->error);
         }
@@ -791,10 +797,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'user =>' . print_r( $user, true ) );
 
         if (is_null($user->error)) {
+            onapp_event_exec( 'user_delete' );
             $_SESSION['message'] = 'USER_HAS_BEEN_DELETED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view');
         }
         else {
+            onapp_event_exec( 'user_delete_failed' );
             trigger_error ( print_r( $user->error, true ) );
             $this->show_template_view($user->error);
         }
@@ -823,10 +831,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'suspend =>' . print_r( $suspend, true ) );
 
         if (is_null($user->error)) {
+            onapp_event_exec( 'user_suspend', array( $user->_obj ) );
             $_SESSION['message'] = 'USER_STATUS_CHANGED_TO_SUSPENDED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view');
         }
         else {
+            onapp_event_exec( 'user_suspend_failed', array( $user->_obj ) );
             trigger_error ( print_r( $user->error, true ) );
             $this->show_template_view($user->error);
         }
@@ -855,10 +865,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'user =>' . print_r( $user, true ) );
 
         if (is_null($user->error)) {
+            onapp_event_exec( 'user_activate', array( $user->_obj ) );
             $_SESSION['message'] = 'USER_ACTIVATION_SUCCESSFULL';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=view');
         }
         else {
+            onapp_event_exec( 'user_activate_failed', array( $user->_obj ) );
             trigger_error ( print_r( $user->error, true ) );
             $this->show_template_view($user->error);
         }
@@ -895,10 +907,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'payment_obj =>' . print_r( $payment_obj, true ) );
 
             if (is_null($payment_obj->error)) {
+                onapp_event_exec( 'payment_create', array( $payment_obj->_obj ) );
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $id);
             }
             else {
+                onapp_event_exec( 'payment_create_failed', array( $payment_obj->_obj ) );
                 trigger_error ( print_r( $payment_obj->error, true ) );
                 $this->show_template_payments($id, $payment_obj->error);
             }
@@ -941,10 +955,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'role_obj =>' . print_r( $role_obj, true ) );
                                                                                               
             if ( is_null($role_obj->error) ) {
+                onapp_event_exec( 'role_create', array( $role_obj->_obj ) );
                 $_SESSION['message'] = 'ROLE_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
             }
             else {
+                onapp_event_exec( 'role_create_failed', array( $role_obj->_obj ) );
                 trigger_error ( print_r( $role_obj->error, true ) );
                 $this->show_template_roles( $role_obj->error);
             }
@@ -984,10 +1000,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'group_obj =>' . print_r( $group_obj, true ) );
 
             if (is_null($group_obj->error)) {
+                onapp_event_exec( 'group_create', array( $group_obj->_obj ) );
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
             }
             else {
+                onapp_event_exec( 'group_create_failed', array( $group_obj->_obj ) );
                 trigger_error ( print_r( $group_obj->error, true ) );
                 $this->show_template_groups( $group_obj->error );
             }
@@ -1025,10 +1043,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'white_list_obj =>' . print_r( $white_list_obj, true ) );
                                                                                                              
             if (is_null($white_list_obj->error)) {
+                onapp_event_exec( 'white_list_create', array( $white_list_obj->_obj ) );
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_CREATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $id);
             }
             else {
+                onapp_event_exec( 'white_list_create_failed', array( $white_list_obj->_obj ) );
                 trigger_error ( print_r( $white_list_obj->error, true ) );
                 $this->show_template_white_list($id, $white_list_obj->error);
             }
@@ -1062,10 +1082,12 @@ class Users_and_Groups extends Controller {
         onapp_debug( 'white_list =>' . print_r( $white_list, true ) );
 
         if (is_null($white_list->error)) {
+            onapp_event_exec( 'white_list_delete', array( $white_list->_obj ) );
             $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_DELETED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $user_id);
         }
         else {
+            onapp_event_exec( 'white_list_delete_failed', array( $white_list->_obj ) );
             trigger_error ( print_r( $white_list->error, true ) );
             $this->show_template_payments($white_list->error);
         }
@@ -1104,10 +1126,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'white_list_obj =>' . print_r( $white_list_obj, true ) );
                                                                                                
             if (is_null($white_list_obj->error)) {
+                onapp_event_exec( 'white_list_edit', array( $white_list_obj->_obj ) );
                 $_SESSION['message'] = 'USER_WHITE_IP_WAS_SUCCESSFULLY_UPDATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=white_list&id=' . $user_id);
             }
             else {
+                onapp_event_exec( 'white_list_edit_failed', array( $white_list_obj->_obj ) );
                 trigger_error ( print_r( $white_list_obj->error, true ) );
                 $this->show_template_payments($user_id, $white_list_obj->error);
             }
@@ -1153,10 +1177,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'user_obj =>' . print_r( $user_obj, true ) );
                                                                                                 
             if (is_null($user_obj->error)) {
+                onapp_event_exec( 'user_edit', array( $user_obj->_obj ) );
                 $_SESSION['message'] = 'USER_PROFILE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $id);
             }
             else {
+                onapp_event_exec( 'user_edit_failed', array( $user_obj->_obj ) );
                 trigger_error ( print_r( $user_obj->error, true ) );
                 $this->show_template_details($id, $user_obj->error);
             }
@@ -1199,10 +1225,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'user_obj =>' . print_r( $user_obj, true ) );
 
             if (is_null($user_obj->error)) {
+                onapp_event_exec( 'user_create', array( $user_obj->_obj ) );
                 $_SESSION['message'] = 'USER_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=details&id=' . $user_obj->_id);
             }
             else {
+                onapp_event_exec( 'user_create_failed', array( $user_obj->_obj ) );
                 trigger_error ( print_r( $user_obj->error, true ) );
                 $this->show_template_view($user_obj->error);
             }
@@ -1242,10 +1270,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'payment_obj =>' . print_r( $payment_obj, true ) );
                                                                                                  
             if (is_null($payment_obj->error)) {
+                onapp_event_exec( 'payment_edit', array( $payment_obj->_obj ) );
                 $_SESSION['message'] = 'PAYMENT_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=payments&id=' . $user_id);
             }
             else {
+                onapp_event_exec( 'payment_edit_failed', array( $payment_obj->_obj ) );
                 trigger_error ( print_r( $payment_obj->error, true ) );
                 $this->show_template_payments($user_id, $payment_obj->error);
             }
@@ -1292,10 +1322,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'role_obj =>' . print_r( $role_obj, true ) );
                                                                                              
             if ( is_null($role_obj->error) ) {
+                onapp_event_exec( 'role_edit', array( $role_obj->_obj ) );
                 $_SESSION['message'] = 'ROLE_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=roles' );
             }
             else {
+                onapp_event_exec( 'role_edit_failed', array( $role_obj->_obj ) );
                 trigger_error ( print_r( $role_obj->error, true ) );
                 $this->show_template_roles( $role_obj->error);
             }
@@ -1338,10 +1370,12 @@ class Users_and_Groups extends Controller {
             onapp_debug( 'group_obj =>' . print_r( $group_obj, true ) );
             
             if (is_null($group_obj->error)) {
+                onapp_event_exec( 'group_edit', array( $group_obj->_obj ) );
                 $_SESSION['message'] = 'GROUP_HAS_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['users_and_groups'] . '?action=groups' );
             }
             else {
+                onapp_event_exec( 'group_edit_failed', array( $group_obj->_obj ) );
                 trigger_error ( print_r( $group_obj->error, true ) );
                 $this->show_template_groups( $group_obj->error );
             }

@@ -361,7 +361,6 @@ function onapp_startSession($ses = 'MYSES') {
         // rotates debug log file
         onapp_rotate_debug_log();
 
-
         // Reset the expiration time upon page load
         if (isset($_COOKIE[$ses]))
           setcookie($ses, $_COOKIE[$ses], time() + $time, "/");
@@ -531,6 +530,72 @@ function onapp_load_event_classes () {
         'schedule_edit_failed'               => array('Disk_Schedule'),
         'firewall_rule_edit'                 => array('VirtualMachine_FirewallRule'),
         'firewall_rule_edit_failed'          => array('VirtualMachine_FirewallRule'),
+        'schedule_create'                    => array('Disk_Schedule'),
+        'schedule_create_failed'             => array('Disk_Schedule'),
+        'firewall_rule_create'               => array('VirtualMachine_FirewallRule'),
+        'firewall_rule_create_failed'        => array('VirtualMachine_FirewallRule'),
+        'firewall_rule_update'               => array('VirtualMachine_FirewallRule'),
+        'firewall_rule_update_failed'        => array('VirtualMachine_FirewallRule'),
+        'disk_create'                        => array('Disk'),
+        'disk_create_failed'                 => array('Disk'),
+        'change_owner'                       => array('VirtualMachine'),
+        'change_owner_failed'                => array('VirtualMachine'),
+        'firewall_rule_move'                 => array('VirtualMachine_FirewallRule'),
+        'firewall_rule_move_failed'          => array('VirtualMachine_FirewallRule'),
+        'network_interface_edit'             => array('VirtualMachine_NetworkInterface'),
+        'network_interface_edit_failed'      => array('VirtualMachine_NetworkInterface'),
+        'vm_edit'                            => array('VirtualMachine'),
+        'vm_edit_failed'                     => array('VirtualMachine'),
+        'network_interface_create'           => array('VirtualMachine_NetworkInterface'),
+        'network_interface_create_failed'    => array('VirtualMachine_NetworkInterface'),
+        'ip_address_delete'                  => array('VirtualMachine_IpAddressJoin'),
+        'ip_address_delete_failed'           => array('VirtualMachine_IpAddressJoin'),
+        'network_interface_delete'           => array('VirtualMachine_NetworkInterface'),
+        'network_interface_delete_failed'    => array('VirtualMachine_NetworkInterface'),
+        'disk_delete'                        => array('Disk'),
+        'disk_delete_failed'                 => array('Disk'),
+        'schedule_delete'                    => array('Disk_Schedule'),
+        'schedule_delete_failed'             => array('Disk_Schedule'),
+        'firewall_rules_apply'               => array('Disk_Schedule'),
+        'firewall_rules_apply_failed'        => array('Disk_Schedule'),
+        'ip_address_join'                    => array('VirtualMachine_IpAddressJoin'),
+        'ip_address_join_failed'             => array('VirtualMachine_IpAddressJoin'),
+        'ip_address_join'                    => array('VirtualMachine_IpAddressJoin'),
+        'ip_address_join_failed'             => array('VirtualMachine_IpAddressJoin'),
+        'vm_migrate'                         => array('VirtualMachine'),
+        'vm_migrate_failed'                  => array('VirtualMachine'),
+        'payment_delete'                     => array('Payment'),
+        'payment_delete_failed'              => array('Payment'),
+        'role_delete'                        => array('Role'),
+        'role_delete_failed'                 => array('Role'),
+        'group_delete'                       => array('UserGroup'),
+        'group_delete_failed'                => array('UserGroup'),
+        'user_delete'                        => NULL,
+        'user_delete_failed'                 => NULL,
+        'user_suspend'                       => array('User'),
+        'user_suspend_failed'                => array('User'),
+        'user_activate'                      => array('User'),
+        'user_activate_failed'               => array('User'),
+        'payment_create'                     => array('Payment'),
+        'payment_create_failed'              => array('Payment'),
+        'role_create'                        => array('Role'),
+        'role_create_failed'                 => array('Role'),
+        'group_create'                       => array('UserGroup'),
+        'group_create_failed'                => array('UserGroup'),
+        'white_list_create'                  => array('User_WhiteList'),
+        'white_list_create_failed'           => array('User_WhiteList'),
+        'white_list_delete'                  => array('User_WhiteList'),
+        'white_list_delete_failed'           => array('User_WhiteList'),
+        'user_edit'                          => array('User'),
+        'user_edit_failed'                   => array('User'),
+        'user_create'                        => array('User'),
+        'user_create_failed'                 => array('User'),
+        'payment_edit'                       => array('Payment'),
+        'payment_edit_failed'                => array('Payment'),
+        'role_edit'                          => array('Role'),
+        'role_edit_failed'                   => array('Role'),
+        'group_edit'                         => array('UserGroup'),
+        'group_edit_failed'                  => array('UserGroup'),
     );
 }
 
@@ -606,7 +671,7 @@ function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //
 
                     foreach ( $object->getClassFields() as $field => $value ) {
                         $field = '_'.$field;
-                        $smarty->assign( $name.$field, $object->$field );                  //  $sma[$name][$name . $field] =$object->$field;
+                        $smarty->assign( $name.$field, $object->$field );                   // $sma[$name][$name . $field] =$object->$field;
                     }
                 }
             }
@@ -615,16 +680,27 @@ function onapp_event_exec( $event_name, $objects_array = NULL, $url = NULL) { //
         $profile = $_SESSION['profile_obj'];
         $smarty->assign( 'responsible_name', $profile->_first_name . ' ' . $profile->_last_name );
         $smarty->assign( 'responsible_email', $profile->_email );
-
+                                                                                            //echo $smarty->fetch('string:'. $email['message']); die(); //print(***************************
         foreach ( $mails_array as $email ) {
-                                                                                          //echo $smarty->fetch('string:'. $email['message']); die(); //print(***************************
+            try {
+                $to_f = $smarty->fetch('string:'. $email['to']);
+                $from_f = $smarty->fetch('string:'. $email['from']);
+                $subject_f = $smarty->fetch('string:'. $email['subject']);
+                $message_f = $smarty->fetch('string:'. $email['message']);
+                $from_name_f = $smarty->fetch('string:'. $email['from_name']);
+                $copy_f = $smarty->fetch('string:'. $email['copy']);
+            }
+            catch (Exception $e){
+                trigger_error( 'Smarty Syntax Error  in Email Template <br />' . $e, E_USER_ERROR );
+                break;
+            }
             $sent = onapp_send_email (
-                $smarty->fetch('string:'. $email['to']),
-                $smarty->fetch('string:'. $email['from']),
-                $smarty->fetch('string:'. $email['subject']),
-                $smarty->fetch('string:'. $email['message']),
-                $smarty->fetch('string:'. $email['from_name']),
-                $smarty->fetch('string:'. $email['copy'])
+                $to_f,
+                $from_f,
+                $subject_f,
+                $message_f,
+                $from_name_f,
+                $copy_f
             );
             if ( ! $sent ) {
                 trigger_error('Failed to send email to'. $email['to']);

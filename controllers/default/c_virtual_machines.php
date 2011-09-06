@@ -1285,12 +1285,12 @@ class Virtual_Machines extends Controller {
         $virtual_machine->delete();
 
         if (is_null($virtual_machine->error)) {
-            onapp_event_exec( 'vm_delete', array( $virtual_machine->_obj, $this->load( 'User', array( $id ) ) ) );
+            onapp_event_exec( 'vm_delete' );
             $_SESSION['message'] = 'VIRTUAL_MACHINE_HAVE_BEEN_SQUEDULED_FOR_DESTRUCTION';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
-            onapp_event_exec( 'vm_delete_failed', array( $virtual_machine->_obj, $this->load( 'User', array( $id ) ) ) );
+            onapp_event_exec( 'vm_delete_failed' );
             trigger_error ( print_r( $virtual_machine->error, true ) );
             $this->show_template_view($virtual_machine->error);
         }
@@ -1452,7 +1452,7 @@ class Virtual_Machines extends Controller {
 
         $virtual_machine = $onapp->factory('VirtualMachine', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
         $virtual_machine->_id = $id;
-        $virtual_machine->build();                                                 print('<pre>'); print_r($virtual_machine); die();
+        $virtual_machine->build();                                                                        //print('<pre>'); print_r($virtual_machine); die();
         onapp_debug('virtual_machine => ' . print_r($virtual_machine, true));
 
         if (is_null($virtual_machine->error)) {
@@ -1848,10 +1848,12 @@ class Virtual_Machines extends Controller {
             $schedule_obj->save();
 
             if (is_null($schedule_obj->error)) {
+                onapp_event_exec( 'schedule_create', array( $schedule_obj->_obj ) );
                 $_SESSION['message'] = 'SCHEDULE_HAS_BEEN_CREATED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disk_backups_schedule&id=' . $id);
             }
             else {
+                onapp_event_exec( 'schedule_create_failed', array( $schedule_obj->_obj ) );
                 trigger_error ( print_r( $schedule_obj->error, true ) );
                 $this->show_template_disk_backups_schedule($id, $schedule_obj->error);
             }
@@ -1885,10 +1887,12 @@ class Virtual_Machines extends Controller {
         $firewall_obj->save();
 
         if (is_null($firewall_obj->error)) {
+            onapp_event_exec( 'firewall_rule_create', array( $firewall_obj->_obj ) );
             $_SESSION['message'] = 'RULE_HAS_BEEN_ADDED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $id);
         }
         else {
+            onapp_event_exec( 'firewall_rule_create_failed', array( $firewall_obj->_obj ) );
             trigger_error ( print_r( $firewall_obj->error, true ) );
             $this->show_template_firewall($id, $firewall_obj->error);
         }
@@ -1919,10 +1923,12 @@ class Virtual_Machines extends Controller {
         $firewall_obj->updateDefaults($id, $firewall);
 
         if (is_null($firewall_obj->error)) {
+            onapp_event_exec( 'firewall_rule_update', array( $firewall_obj->_obj ) );
             $_SESSION['message'] = 'DEFAULT_RULES_HAVE_BEEN_UPDATED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $id);
         }
         else {
+            onapp_event_exec( 'firewall_rule_update_failed', array( $firewall_obj->_obj ) );
             trigger_error ( print_r( $firewall->error, true ) );
             $this->show_template_firewall($id, $firewall->error);
         }
@@ -1959,10 +1965,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('disk_obj => ' . print_r($disk_obj, true));
 
             if (is_null($disk_obj->error)) {
+                onapp_event_exec( 'disk_create', array( $disk_obj->_obj ) );
                 $_SESSION['message'] = 'DISK_HAS_BEEN_ADDED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disks&id=' . $id);
             }
             else {
+                onapp_event_exec( 'disk_create_failed', array( $disk_obj->_obj ) );
                 trigger_error ( print_r( $disk_obj->error, true ) );
                 $this->show_template_view($disk_obj->error);
             }
@@ -1999,10 +2007,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('vm => ' . print_r($vm, true));
 
             if (is_null($vm->error)) {
+                onapp_event_exec( 'change_owner', array( $vm->_obj ) );
                 $_SESSION['message'] = 'VIRTUAL_MACHINE_OWNER_HAS_BEEN_CHANGED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
             }
             else {
+                onapp_event_exec( 'change_owner_failed', array( $vm->_obj ) );
                 trigger_error ( print_r( $vm->error, true ) );
                 $this->show_template_details($id, $vm->error);
             }
@@ -2037,10 +2047,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('firewall => ' . print_r($firewall, true));
 
         if (is_null($firewall->errors)) {
+            onapp_event_exec( 'firewall_rule_move', array( $firewall->_obj ) );
             onapp_event_exec( 'vm_create', array( $firewall ) );
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=firewall&id=' . $virtual_machine_id);
         }
         else {
+            onapp_event_exec( 'firewall_rule_move_failed', array( $firewall->_obj ) );
             trigger_error ( print_r( $firewall->error, true ) );
             $this->show_template_firewall($virtual_machine_id, $firewall->error);
         }
@@ -2078,10 +2090,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('network_interface_obj => ' . print_r($network_interface_obj, true));
 
             if (is_null($network_interface_obj->error)) {
+                onapp_event_exec( 'network_interface_edit', array( $network_interface_obj->_obj ) );
                 $_SESSION['message'] = 'NETWORK_INTERFACE_HAVE_BEEN_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=network_interfaces&id=' . $network_interface['_virtual_machine_id']);
             }
             else {
+                onapp_event_exec( 'network_interface_edit_failed', array( $network_interface_obj->_obj ) );
                 trigger_error ( print_r( $network_interface_obj->error, true ) );
                 $this->show_template_network_interface($network_interface['_virtual_machine_id'], $network_interface_obj->error);
             }
@@ -2120,10 +2134,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('vm => ' . print_r($vm, true));
 
             if (is_null($vm->error)) {
+                onapp_event_exec( 'vm_edit', array( $vm->_obj ) );
                 $_SESSION['message'] = 'RESOURCES_UPDATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
             }
             else {
+                onapp_event_exec( 'vm_edit_failed', array( $vm->_obj ) );
                 trigger_error ( print_r( $vm->error, true ) );
                 $this->show_template_details($id, $vm->error);
             }
@@ -2162,10 +2178,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('network_interface_obj => ' . print_r($network_interface_obj, true));
 
             if (is_null($network_interface_obj->error)) {
+                onapp_event_exec( 'network_interface_create', array( $network_interface_obj->_obj ) );
                 $_SESSION['message'] = 'NETWORK_INTERFACE_HAS_BEEN_CREATED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=network_interfaces&id=' . $id);
             }
             else {
+                onapp_event_exec( 'network_interface_create_failed', array( $network_interface_obj->_obj ) );
                 trigger_error ( print_r( $network_interface_obj->error, true ) );
                 $this->show_template_network_interface($id, $network_interface_obj->error);
             }
@@ -2199,10 +2217,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('ip_address_obj => ' . print_r($ip_address_obj, true));
 
         if (is_null($ip_address->error)) {
+            onapp_event_exec( 'ip_address_delete', array( $ip_address_obj->_obj ) );
             $_SESSION['message'] = 'IP_ADDRESS_ASSEGNMENT_HAS_BEEN_REMOVED_SUCCESSFULLY';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=ip_addresses&id=' . $virtual_machine_id);
         }
         else {
+            onapp_event_exec( 'ip_address_delete_failed', array( $ip_address_obj->_obj ) );
             trigger_error ( print_r( $ip_address->error, true ) );
             $this->show_template_ip_addresses($virtual_machine_id, $ip_address->error);
         }
@@ -2236,10 +2256,12 @@ class Virtual_Machines extends Controller {
 
 
         if (is_null($network_interface->error)) {
+            onapp_event_exec( 'network_interface_delete', array( $network_interface->_obj ) );
             $_SESSION['message'] = 'NETWORK_INTERFACE_WILL_BE_REMOVED_IN_A_MOMENT';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=network_interfaces&id=' . $virtual_machine_id);
         }
         else {
+            onapp_event_exec( 'network_interface_delete_failed', array( $network_interface->_obj ) );
             trigger_error ( print_r( $network_interface_obj->error, true ) );
             $this->show_template_network_interface($virtual_machine_id, $network_interface_obj->error);
         }
@@ -2272,10 +2294,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('disk => ' . print_r($disk, true));
 
         if (is_null($disk->error)) {
+            onapp_event_exec( 'disk_delete', array( $disk->_obj ) );
             $_SESSION['message'] = 'DISK_HAS_BEEN_SCHEDULED_FOR_DESTRUCTION';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disks&id=' . $virtual_machine_id);
         }
         else {
+            onapp_event_exec( 'disk_delete_failed', array( $disk->_obj ) );
             trigger_error ( print_r( $network_interface_obj->error, true ) );
             $this->show_template_network_interface($virtual_machine_id, $network_interface_obj->error);
         }
@@ -2307,10 +2331,12 @@ class Virtual_Machines extends Controller {
         onapp_debug('schedule => ' . print_r($schedule, true));
 
         if (is_null($schedule->error)) {
+            onapp_event_exec( 'schedule_delete', array( $schedule->_obj ) );
             $_SESSION['message'] = 'SCHEDULE_HAS_BEEN_DESTRUCTED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=disk_backups_schedule&id=' . $disk_id);
         }
         else {
+            onapp_event_exec( 'schedule_delete_failed', array( $schedule->_obj ) );
             trigger_error ( print_r( $schedule->error, true ) );
             $this->show_template_disk_backups_schedule($disk_id, $schedule->error);
         }
@@ -2340,10 +2366,12 @@ class Virtual_Machines extends Controller {
 
 
         if (is_null($firewall->error)) {
+            onapp_event_exec( 'firewall_rules_apply', array( $firewall->_obj ) );
             $_SESSION['message'] = 'AN_UPDATE_OF_FIREWALL_RULES_HAS_BEEN_QUEUED';
             onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
         }
         else {
+            onapp_event_exec( 'firewall_rules_apply_failed', array( $firewall->_obj ) );
             trigger_error ( print_r( $firewall->error, true ) );
             $this->show_template_details($id, $firewall->error);
         }
@@ -2380,6 +2408,7 @@ class Virtual_Machines extends Controller {
 
 
         if (is_null($virtual_machine->error)) {
+            onapp_event_exec( 'rebuild_netword', array( $virtual_machine->_obj ) );
             $_SESSION['message'] = 'NETWORK_INTERFACE_WILL_BE_REBUILD_FOR_THIS_VIRTUAL_MACHINE';
             onapp_redirect(
                     ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']
@@ -2387,6 +2416,7 @@ class Virtual_Machines extends Controller {
             );
         }
         else {
+            onapp_event_exec( 'rebuild_netword_failed', array( $virtual_machine->_obj ) );
             trigger_error ( print_r( $ip_address->error, true ) );
             $this->show_template_ip_addresses($id, $ip_address->error);
         }
@@ -2423,10 +2453,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('ip_address_obj => ' . print_r($ip_address_obj, true));
 
             if (is_null($ip_address_obj->error)) {
+                onapp_event_exec( 'ip_address_join', array( $ip_address_obj->_obj ) );
                 $_SESSION['message'] = 'IP_ADDRESS_HAS_BEEN_ASSEGNED_SUCCESSFULLY';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=ip_addresses&id=' . $id);
             }
             else {
+                onapp_event_exec( 'ip_address_join_failed', array( $ip_address_obj->_obj ) );
                 trigger_error ( print_r( $ip_address_obj->error, true ) );
                 $this->show_template_ip_addresses($id, $ip_address_obj->error);
             }
@@ -2460,10 +2492,12 @@ class Virtual_Machines extends Controller {
             onapp_debug('vm => ' . print_r($vm, true));
 
             if (is_null($vm->error)) {
+                onapp_event_exec( 'vm_migrate', array( $vm->_obj ) );
                 $_SESSION['message'] = 'VIRTUAL_MACHINE_MIGRATE_HAS_BEEN_QUEUED';
                 onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
             }
             else {
+                onapp_event_exec( 'vm_migrate_failed', array( $vm->_obj ) );
                 trigger_error ( print_r( $vm->error, true ) );
                 $this->show_template_details($id, $vm->error);
             }
