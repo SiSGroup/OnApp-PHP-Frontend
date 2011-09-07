@@ -95,6 +95,7 @@ function onapp_init_log() {
     $_SESSION['log_id'] = substr( md5 ( session_id( ) . date('d-m-Y H-i-s') ), -10 );
 
     onapp_debug('Initialise frontend loger');
+    onapp_debug('Client IpAddress :' . $_SERVER['REMOTE_ADDR']);
     onapp_debug('onapp_init_log: log_id => ' . $_SESSION['log_id']);
 }
 
@@ -110,10 +111,14 @@ function onapp_init_log() {
  */
 function onapp_debug( $message )
 {
+    if ( ! isset( $_SESSION )  || ! isset ( $_SESSION['log_id'] ) ) return;
+   
     if( ONAPP_LOG_LEVEL_FRONTEND < ONAPP_E_DEBUG )
         return;
+    
+    $debug_date =  ( ONAPP_SHOW_DATE_IN_LOGS > 0 ) ? ': ['  . date( 'D M d h:i:s Y') . '] ' : '';
 
-    $msg = '['.$_SESSION['log_id']."] : [DEBUG] $message";
+    $msg = '[' .$_SESSION['log_id']. '] ' .$debug_date. ': [DEBUG]' .$message;
 
     onapp_file_write( $msg, 'frontend' );
 }

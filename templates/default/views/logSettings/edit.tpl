@@ -75,6 +75,19 @@
             </dt>
 
         </dl>
+
+        <dl style="clear:both;">
+            <dt>
+                 <input type="hidden" name="settings[show_date_in_logs]" value="0">
+                <input value="1" name="settings[show_date_in_logs]" type="checkbox"
+                {if $smarty.const.ONAPP_SHOW_DATE_IN_LOGS == 1}
+                    checked
+                {/if}
+                /> &nbsp;&nbsp;&nbsp;{'SHOW_DATE_IN_LOGS'|onapp_string}
+
+            </dt>
+
+        </dl>
  </div>
 
 

@@ -82,6 +82,20 @@
                 </td>
 
             </tr>
+
+            <tr>
+                <td class="label">
+                     {'SHOW_DATE_IN_LOGS'|onapp_string}
+                </td>
+                <td>
+                    {if $config.show_date_in_logs > 0}
+                        {'YES_'|onapp_string}
+                    {else}
+                         {'NO_'|onapp_string}
+                    {/if}
+                </td>
+
+            </tr>
             <tr>
                 <td>
                     <form action="{$config.base_url}/{$_ALIASES['log_settings']}" method="post">

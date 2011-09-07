@@ -155,6 +155,11 @@ function is__writable($path) {
             'smarty_caching_lifetime' => 3600,
             'smarty_force_compile' => 2,
             'smarty_compile_check' => 1,
+            'show_date_in_logs'  => 1,
+            'whmcs_api_file_url' => '',
+            'whmcs_client_area_url' => '',
+            'whmcs_login' =>  '',
+            'whmcs_password' => '',
         );
         
         $result = write_config($settings, ONAPP_PATH . ONAPP_DS . 'config.ini');

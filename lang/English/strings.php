@@ -647,3 +647,21 @@ $_LANG['LOOPING_THROW_DATA_INFO'] =
     {/foreach}';
 $_LANG['AVAILABLE_MERGE_FIELDS'] = 'Available Merge Fields';
 $_LANG['YOU_CAN_USE_THESE_VARIABLES_WITH_ALL_ACTIONS'] = 'You can use these variables with all actions';
+$_LANG['WHMCS_SETTINGS'] = 'WHMCS Settings';
+$_LANG['API_FILE_URL'] = 'API File URL';
+$_LANG['CLIENT_AREA_URL'] = 'Client Area URL';
+$_LANG['WHMCS_SETTINGS_INFO'] = 
+    'When creating an admin user for API use, only the API permission is 
+    required
+    to be able to access & use all the API functions.
+    You must also setup the IP(s) you will be connecting from in General 
+    Settings &gt; Security. Failure to do this will result in an "Invalid IP
+    xx.xxx.xxx.xx" response from the API.';
+$_LANG['EDIT_WHMCS_SETTINGS'] = 'Edit Whmcs Settings';
+$_LANG['EDIT_WHMCS_SETTINGS_INFO'] = 'Make necessary changes and press Save button';
+$_LANG['SHOW_DATE_IN_LOGS'] = 'Show Date in Logs';
+
+
+
+
+
