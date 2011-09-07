@@ -188,8 +188,8 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
     global $_SCREEN_IDS, $_ALIASES;
 
     if(is_null($SimpleXMLElement))
-        if(file_exists(ONAPP_PATH.ONAPP_DS.'menu.xml'))
-            $SimpleXMLElement = simplexml_load_file(ONAPP_PATH.ONAPP_DS.'menu.xml');
+        if(file_exists(ONAPP_PATH.ONAPP_DS.'templates'. ONAPP_DS . ONAPP_TEMPLATE . ONAPP_DS . 'menu.xml'))
+            $SimpleXMLElement = simplexml_load_file(ONAPP_PATH.ONAPP_DS.'templates'. ONAPP_DS . ONAPP_TEMPLATE . ONAPP_DS . 'menu.xml');
         else
             onapp_die('Could not find file menu.xml');
 
@@ -440,6 +440,7 @@ function onapp_has_permission( $permissions ) { //print('<pre>'); print_r( $_SES
  * @return array list of file names in this directory
  */
 function onapp_scan_dir( $path ){
+    //trigger_error( __METHOD__ . '  => ' .$path );
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     if ( $handle = opendir( $path ) ) {
         while (false !== ($file = readdir($handle))) {
