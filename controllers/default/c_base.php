@@ -2,7 +2,7 @@
 if( !defined( 'ONAPP_PATH' ) ) { die( 'No direct script access allowed' ); }
 class Base {
     /**
-     * Performs Login action
+     * Performs Login actions
      *
      * @global array $_ALIASES menu page aliases
      * @return void
@@ -12,7 +12,52 @@ class Base {
 		$login = onapp_get_arg( 'login' );
 		$password = onapp_get_arg( 'password' );
 		$host = onapp_get_arg( 'host' );
-		$params = array( );
+        $submit = onapp_get_arg('submit');
+
+        if ( preg_match('/,/', $host) ) {        
+            $host = explode(',', $host  );
+                    
+            foreach ( $host as $hst ) {  
+                $logedin = $this->login_action( $login, $password, trim($hst) );
+                if ( $logedin ) {
+                    $_SESSION['host'] = trim($hst);
+                    $this->after_logedin_action ();
+                    exit;
+                }
+            }
+            
+            onapp_debug('login failed couldn\'t get APIVersion');
+				$params = array(
+					'error_message' => onapp_string( 'ERORR_WRONG_LOGIN_DATA' ),
+				);
+            onapp_show_template( 'login', $params );
+            exit;
+        }
+
+        if( ! is_null( $this->login_action( $login, $password, $host ) ) ) {
+                onapp_debug('Login successfull!');
+				$this->after_logedin_action ();
+			}
+            elseif ( ! is_null( $submit ) ) {
+                onapp_debug('login failed couldn\'t get APIVersion');
+				$params = array(
+					'error_message' => onapp_string( 'ERORR_WRONG_LOGIN_DATA' ),
+				);
+			}
+
+		onapp_show_template( 'login', $params );
+	}
+
+    /**
+     * Trying to get APIversion
+     *
+     * @param string $login login to OnApp
+     * @param string $password password to OnApp
+     * @param string $host hostname
+     * @return boolean true if succeed
+     */
+    private function login_action ( $login, $password, $host ) {        
+        $params = array( );
 		if( !is_null( $login ) &&
 			!is_null( $password ) &&
 			!is_null( $host )
@@ -23,15 +68,27 @@ class Base {
 				$login,
 				$password
 			);
-            
-            onapp_debug( 'VersioinApi => ' . $onapp->getAPIVersion( ));
-            
-			if( ! is_null( $onapp->getAPIVersion( ) ) ) {
-                onapp_debug('Login successfull!');
-				$this->_start_session( );
-				$this->_load_profile( $onapp );
 
-				if( 
+            onapp_debug( 'VersioinApi => ' . $onapp->getAPIVersion( ));
+            if ( ! is_null( $onapp->getAPIVersion( ) ) ) {
+                $this->_start_session( );
+                $this->_load_profile( $onapp );
+                return true;
+            }
+
+            return false;
+		}
+    }
+
+    /**
+     * Performs the actions after successful getting of APIversion
+     *
+     * @return void
+     */
+    private function after_logedin_action () {
+        onapp_debug('Login successfull!');
+
+				if(
                     isset( $_SESSION[ 'redirect' ] )
                     && $_SESSION['redirect'] != ONAPP_BASE_URL . '/' . $_ALIASES ['logout']
                     && $_SESSION['redirect'] != ONAPP_BASE_URL. '/'
@@ -43,16 +100,9 @@ class Base {
 				else {
 					onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES[ ONAPP_DEFAULT_ALIAS ] );
 				}
-			}
-			else{
-                onapp_debug('login failed couldn\'t get APIVersion');
-				$params = array(
-					'error_message' => onapp_string( 'ERORR_WRONG_LOGIN_DATA' ),
-				);
-			}
-		}
+			
 		onapp_show_template( 'login', $params );
-	}
+    }
 
     /**
      * Performs Logout action

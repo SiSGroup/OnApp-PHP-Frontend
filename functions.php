@@ -440,7 +440,6 @@ function onapp_has_permission( $permissions ) { //print('<pre>'); print_r( $_SES
  * @return array list of file names in this directory
  */
 function onapp_scan_dir( $path ){
-    //trigger_error( __METHOD__ . '  => ' .$path );
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     if ( $handle = opendir( $path ) ) {
         while (false !== ($file = readdir($handle))) {

@@ -11,13 +11,13 @@ Class ONAPP_Controller
         onapp_debug(__METHOD__);
         global $_SCREEN_IDS, $_ALIASES;
 
-        $route = onapp_get_arg('route');
+        $route = onapp_get_arg('route');                                            
         onapp_debug('route =>' . $route);
-        if( onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] == 'login'){
+        if( onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] == 'login'){           
             onapp_debug('Redirecting :' . ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS] );
             onapp_redirect( ONAPP_BASE_URL.'/'.$_ALIASES[ONAPP_DEFAULT_ALIAS] );
         }
-        elseif ( ! onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] != 'login' ) {
+        elseif ( ! onapp_is_auth() && $_SCREEN_IDS[$route]['alias'] != 'login' ) {  
             $_SESSION['redirect'] =
                 ( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ?
                 'https://' : 'http://' )
@@ -52,7 +52,6 @@ Class ONAPP_Controller
             onapp_debug('There is no such page, Redirecting ' .ONAPP_BASE_URL.'/errors/error404.php');
             onapp_redirect(ONAPP_BASE_URL.'/errors/error404.php');
         }
-
 
         $file_path = ONAPP_PATH.ONAPP_DS.'controllers'.ONAPP_DS.ONAPP_CONTROLLERS.ONAPP_DS.strtolower('c_'.$class_name.'').'.php';
 
