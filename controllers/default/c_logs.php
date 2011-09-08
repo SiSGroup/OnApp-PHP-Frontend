@@ -102,7 +102,7 @@ class Logs
      * TODO create a ticket if there is no such page it should return empty false result not the last page !
      */
     public function get_pages_quantity($logs)
-    {
+    { return 100;                                               // Todo after OnApp do normal pagination
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
         $max_number = 1024;
         $result = $max_number;
