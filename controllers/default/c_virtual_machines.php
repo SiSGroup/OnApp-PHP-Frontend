@@ -2408,7 +2408,7 @@ class Virtual_Machines extends Controller {
 
 
         if (is_null($virtual_machine->error)) {
-            onapp_event_exec( 'rebuild_netword', array( $virtual_machine->_obj ) );
+            onapp_event_exec( 'rebuild_network', array( $virtual_machine->_obj ) );
             $_SESSION['message'] = 'NETWORK_INTERFACE_WILL_BE_REBUILD_FOR_THIS_VIRTUAL_MACHINE';
             onapp_redirect(
                     ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines']
@@ -2416,7 +2416,7 @@ class Virtual_Machines extends Controller {
             );
         }
         else {
-            onapp_event_exec( 'rebuild_netword_failed', array( $virtual_machine->_obj ) );
+            onapp_event_exec( 'rebuild_network_failed', array( $virtual_machine->_obj ) );
             trigger_error ( print_r( $ip_address->error, true ) );
             $this->show_template_ip_addresses($id, $ip_address->error);
         }
