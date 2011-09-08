@@ -596,6 +596,8 @@ function onapp_load_event_classes () {
         'role_edit_failed'                   => array('Role'),
         'group_edit'                         => array('UserGroup'),
         'group_edit_failed'                  => array('UserGroup'),
+        'rebuild_network'                    => array('VirtualMachine'),
+        'rebuild_network_failed'             => array('VirtualMachine'),
     );
 }
 
