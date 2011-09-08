@@ -1961,7 +1961,7 @@ class Virtual_Machines extends Controller {
             foreach ($disk as $key => $value)
                 $disk_obj->$key = $value;
 
-            $disk_obj->save();
+            $disk_obj->save();                                                   print('<pre>'); print_r($disk_obj); die(); 
             onapp_debug('disk_obj => ' . print_r($disk_obj, true));
 
             if (is_null($disk_obj->error)) {

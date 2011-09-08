@@ -1,0 +1,50 @@
+
+******************* I N T R O D U T I O N ***************************************************************************************************************************************************
+OnApp PHP Frontend is a web application that enables you to customize and extend OnApp Cloud functionality. The application is written in PHP, and connects to OnApp Cloud via the OnApp API.
+OnApp PHP Frontend operates in much the same way as OnApp Cloud’s Control Panel (“OnApp CP”), but has some additional useful features, such as:
+The ability to customize the interface with your own smarty templates
+Open code, making it possible to add/customize new controllers
+Multi-language support
+Detailed error and debug logs
+Mail templates
+… and much more in future versions of the software. Upcoming releases will include Event Manager.
+********************************************************************************************************************************************************************************************
+
+***************** S O F T W A R E  R E Q U I R E M E N T S *********************************************************************************************************************************
+The software requirements are as follows:
+
+1.PHP version 5.2.0+
+2.PHP modules:
+mod_rewrite
+mod_php5
+3.PHP extensions:
+cURL
+MCrypt
+4.Make sure the following directories and files are writable by the web server:
+[root]/templates_c
+[root]/logs
+[root]/cache
+[root]/events
+[root]/config.ini
+Where [root] stands for the root address of your installation.
+
+*********************************************************************************************************************************************************************************************
+
+***************** I N S T A L L A T I O N ***************************************************************************************************************************************************
+1.Download the latest software version from the OnApp website: www.onapp.com/support/downloads
+
+2.Extract the files using a .tar extraction program into a separate empty virtual host directory.
+
+3.In your browser enter the URL address of your virtual host to see the installation manager page. It will help you to configure your server before the installation.
+
+Installation manager will check all the requirements. If all requirements are met, the Install button at the bottom of the screen will become active.
+4.Click the install button to begin. On successful installation, you will receive a notification:
+
+5.Make sure you made the final changes before logging in:
+Delete or rename the install/ directory in your root path.
+Change AllowOverride None to AllowOverride All, as is shown on the screenshot.
+Restart your server and delete 1.php file.
+Then, follow the login link.
+
+6.On success, you will be directed to a Login screen, where you need to enter the host of your OnApp CP installation and log in (use the same login and password as for your OnApp CP).
+**********************************************************************************************************************************************************************************************
