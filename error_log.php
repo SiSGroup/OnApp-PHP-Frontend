@@ -3,8 +3,8 @@
 error_reporting( E_ALL );
 ini_set( 'display_errors', 0 );
 
-//register_shutdown_function( 'onapp_shutdown_function' );
-//set_error_handler( 'onapp_error_handler' );
+register_shutdown_function( 'onapp_shutdown_function' );
+set_error_handler( 'onapp_error_handler' );
 
 /**#@+
  * ERROR constants
