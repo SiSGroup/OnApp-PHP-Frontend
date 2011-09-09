@@ -151,7 +151,7 @@ function is__writable($path) {
             'smarty_template_dir' => 'templates',
             'smarty_compile_dir' => 'templates_c',
             'smarty_cache_dir' => 'cache',
-            'smarty_caching_enable' => 1,
+            'smarty_caching_enable' => 0,
             'smarty_caching_lifetime' => 3600,
             'smarty_force_compile' => 0,
             'smarty_compile_check' => 0,
