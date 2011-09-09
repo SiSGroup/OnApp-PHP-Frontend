@@ -736,3 +736,32 @@ function onapp_send_email ( $to, $from, $subject, $message, $from_name = NULL, $
 
     return $sent ? true : false;
 }
+
+function onapp_send_whmcs_api_request( $username, $password, $url, $action, $postfields = array() ) {
+    
+    $postfields["username"] = $username;
+    $postfields["password"] = md5($password);
+    $postfields["action"] = $action;
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+    $data = curl_exec($ch);
+    curl_close($ch);
+
+    $data = explode(";",$data);
+    foreach ($data AS $temp) {
+      $temp = explode("=",$temp);
+      $results[$temp[0]] = $temp[1];
+    }
+
+    if ($results["result"]=="success") {
+      return $results;
+    } else {
+      return $results["message"];
+    }
+}
+
