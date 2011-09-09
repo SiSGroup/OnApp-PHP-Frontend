@@ -660,6 +660,9 @@ $_LANG['WHMCS_SETTINGS_INFO'] =
 $_LANG['EDIT_WHMCS_SETTINGS'] = 'Edit Whmcs Settings';
 $_LANG['EDIT_WHMCS_SETTINGS_INFO'] = 'Make necessary changes and press Save button';
 $_LANG['SHOW_DATE_IN_LOGS'] = 'Show Date in Logs';
+$_LANG['ONAPP_NAVIGATION'] = 'OnApp Navigation';
+
+
 
 
 
