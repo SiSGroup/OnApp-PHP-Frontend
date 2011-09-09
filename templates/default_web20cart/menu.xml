@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<menu>
+    <screen class="Base" method="login" alias="login" access="access"/>
+    <screen title="PROFILE_" class="Profile" method="view" alias="profile" access="access" />
+   <!-- <screen title="HYPERVISORS_" class="Hypervisors" method="view" alias="hypervisors" access="access" />-->
+    <screen title="VIRTUAL_MACHINES" class="Virtual_Machines" method="view" alias="virtual_machines" access="access" />
+   <!--  <screen title="TEMPLATES_" class="Templates" method="view" alias="templates" access="access" >
+        <screen title="TEMPLATE_LIST" class="Template_List" method="view" alias="template_list" access="access" />
+        <screen title="SOFTWARE_LICENSES" class="Software_Licenses" method="view" alias="software_licenses" access="access" />
+        <screen title="TEMPLATE_STORE" class="Template_Store" method="view" alias="template_store" access="access" />
+    </screen> -->
+    <screen title="LOGS_" class="Logs" method="view" alias="logs" access="access">
+        <screen title="ERROR_LOGS" method="view" class="Error_Logs" alias="error_logs" access="access" />
+        <screen title="DEBUG_LOGS" method="view" class="Debug_Logs" alias="debug_logs" access="access" />
+    </screen>
+  <!--  <screen title="SETTINGS_" class="Settings" method="view" alias="settings" access="access" /> -->
+    <screen title="USERS_AND_GROUPS" class="Users_And_Groups" method="view" alias="users_and_groups" access="access" />
+  <!--  <screen title="TOOLS_" class="Tools" method="view" alias="tools" access="access" >
+        <screen title="ALERTS_" class="Alerts" method="view" alias="alerts" access="access" />
+        <screen title="USAGE_STATISTICS" class="Usage_Statistics" method="view" alias="usage_statistics" access="access" />
+        <screen title="SYSADMIN_TOOLS" class="Sysadmin_Tools" method="view" alias="sysadmin_tools" access="access" />
+    </screen>  -->
+    <screen title="CONFIGURATION_" class="Configuration" method="view" alias="configuration" access="access" >
+        <screen title="SCREENS_" class="Screens" method="view" alias="screens" access="access"/>
+        <screen title="LOG_SETTINGS" class="Log_Settings" method="view" alias="log_settings" access="access" />
+        <screen title="FRONTEND_SETTINGS" class="Frontend_Settings" method="view" alias="frontend_settings" access="access" />
+        <screen title="SMARTY_SETTINGS" class="Smarty_Settings" method="view" alias="smarty_settings" access="access" />
+        <screen title="EMAIL_TEMPLATES" class="Email_Templates" method="view" alias="email_templates" access="access" />
+        <screen title="WHMCS_SETTINGS" class="Whmcs_Settings" method="view" alias="whmcs_settings" access="access" />
+    </screen>
+   <!-- <screen title="HELP_" class="Help" method="view" alias="help" access="access" /> -->
+    <screen title="LOGOUT_" class="Base" method="logout" alias="logout" access="access" />
+</menu>
