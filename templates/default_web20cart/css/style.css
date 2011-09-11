@@ -523,3 +523,9 @@ padding: 0;
 div#side_menu ul li.li_1 {padding-left: 10px;}
 div#side_menu ul li.li_2 {padding-left: 20px;}
 div#side_menu ul li.li_3 {padding-left: 30px;}
+
+div#login{
+    color:#ffffff;
+    width:500px;
+    margin:200px auto;
+}
