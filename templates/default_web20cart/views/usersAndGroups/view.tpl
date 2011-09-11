@@ -18,15 +18,18 @@
            <tr>
                <td>
                    <a href="{$_ALIASES["users_and_groups"]}?action=details&amp;id={$user->_id}">
-                       {$user->_first_name} {$user->_last_name} 
+                       <span title="{$user->_first_name} {$user->_last_name}">
+                           {$user->_first_name|onapp_table_display}
+                           {$user->_last_name|onapp_table_display}
+                       </span>
                    </a>
                    <br /> {$user->_status}
                </td>
                <td>
-                   {$user->_login}
+                   <span title="{$user->_login}">{$user->_login|onapp_table_display}</span>
                </td>
                <td>
-                   {$user->_email}
+                   <span title="{$user->_email}">{$user->_email|onapp_table_display}</span>
                </td>
                <td>
                    {foreach from=$user->_roles item=roles}

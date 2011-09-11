@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{$smarty.const.ONAPP_SMARTY_TEMPLATE_DIR}/{$smarty.const.ONAPP_TEMPLATE}/css/style.css" type="text/css" />
 <link rel="stylesheet" href="{$smarty.const.ONAPP_SMARTY_TEMPLATE_DIR}/{$smarty.const.ONAPP_TEMPLATE}/css/uniform.css" type="text/css" />
 <title>{$title}</title>
-<link rel="icon" type="image/ico" href="{$smarty.const.ONAPP_BASE_URL}/{$smarty.const.ONAPP_SMARTY_TEMPLATE_DIR}/{$smarty.const.ONAPP_TEMPLATE}/images/favicon.ico" />
+<link rel="icon" type="image/ico" href="{$smarty.const.ONAPP_SMARTY_TEMPLATE_DIR}/{$smarty.const.ONAPP_TEMPLATE}/images/favicon.ico" />
 </head>
 <body>
 
@@ -16,8 +16,6 @@
 </div>
 
 <div id="container">
-
-    
 
     <div style="height:44px;" id="header2">
         <div id="header2_left"></div >

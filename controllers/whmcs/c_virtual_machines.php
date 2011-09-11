@@ -2574,4 +2574,3 @@ class Virtual_Machines extends Controller {
     }
 
 }
-

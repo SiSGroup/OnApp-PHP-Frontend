@@ -1,5 +1,9 @@
-/*CSS document*/
 html,body,*{margin:0;padding:0; }
+#content_wrapper {
+   background: url(../images/container_background.png);
+   width:950px;
+
+}
 
 /*****************************************************************************/
 .div_page
@@ -37,8 +41,6 @@ white-space: nowrap;
 }
 /******************************************************************************/
 
-
-
 p {
 margin: 0;
 padding: 3px 0 8px;
@@ -58,11 +60,6 @@ body {
     background-repeat: repeat-x;
     margin: 0;
     padding: 0;
-}
-
-body {
-    display: block;
-    margin: 8px;
 }
 
 a, a:visited {
@@ -88,8 +85,6 @@ padding:3px;
 
 }
 
-
-
 table.table_my th {
 background-color: #1A4D80;
 font-weight: bold;
@@ -100,9 +95,6 @@ table.table_my th, table.table_my th a, table.table_my th a:visited {
 color: white;
 text-decoration: none;
 }
-
-
-
 
 .table_my tr td.dark_td, .table_my tr td.tree_icon_td, .table_my tr td.five_icon_td, .table_my tr td.one_icon_td
 {
@@ -138,10 +130,6 @@ table.table_my td.blue a:link , .table_my td.blue a:visited{
     font-weight:normal;
 }
 
-
-
-
-
 /* From OnApp*****************************************************************/
 
 
@@ -175,10 +163,6 @@ font-weight: normal;
 line-height: 16px;
 }
 #pagination a{font-weight:normal; font-size:10px;}
-
-
-
-
 
 
 #login_error, .onapp_error, .onapp_msg
@@ -238,8 +222,6 @@ border-right: 2px solid #ffffff;
 width: 80px;
 color: #555;
 }
-
-
 
 .info_body
 {
@@ -350,16 +332,6 @@ color: #909090 !important;
 
 /***************************************************************************************/
 
-
-
-
-
-
-
-
-
-
-
 .action_edit a, .action_reboot a, .action_off a, .action_rebuild a,
 .action_on a, .action_delete a, .action_build a
 {
@@ -426,11 +398,6 @@ color: #909090 !important;
     background:url(../images/label_icons.png) 0 -90px no-repeat;
 }
 
-
-
-
-/*******************************************************************************/
-
 body, td, th {
     color: #666;
     font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
@@ -485,7 +452,7 @@ strong, b {
 }
 
 #content_container {
-    background: white url(images/content_container_bg.gif) repeat-y;
+    
     border: 5px solid #258;
     color: #666;
     margin: 20px auto 0;
@@ -495,7 +462,6 @@ strong, b {
 }
 
 #content_left {
-    background-color: white;
     float: left;
     margin: 0;
     padding: 15px;
@@ -504,8 +470,6 @@ strong, b {
 }
 
 #side_menu {
-    background-color: #EFF5FF;
-    border-left: 1px solid #CFE2FF;
     float: right;
     margin: 0;
     padding: 15px;
@@ -526,8 +490,6 @@ margin: 10px  0 12px;
 padding: 0 0 3px;
 }
 
-
-
 input, select, textarea {
 color: #666;
 font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
@@ -538,17 +500,6 @@ padding: 2px;
 input[type="button"], input[type="submit"] {
     margin: 10px 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 img {
 width: 16px;
@@ -569,3 +520,6 @@ line-height: 25px;
 margin: 0;
 padding: 0;
 }
+div#side_menu ul li.li_1 {padding-left: 10px;}
+div#side_menu ul li.li_2 {padding-left: 20px;}
+div#side_menu ul li.li_3 {padding-left: 30px;}

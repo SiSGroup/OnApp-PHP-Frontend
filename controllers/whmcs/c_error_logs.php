@@ -39,38 +39,48 @@ class Error_Logs {
         if (!$page)
             $page = 1;
 
-        $list = onapp_scan_dir(ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY);
 
-        foreach ($list as $file) {
-            if ( ! preg_match( "/^". ONAPP_DEBUG_FILE_NAME ."|^index/", $file ) ) {
-                $files_list[substr($file, 6, -4)]['date'] = date('Y-m-d H:i:s', filemtime(ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY . ONAPP_DS . $file));
-                $files_list[substr($file, 6, -4)]['size'] = filesize( ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY . ONAPP_DS . $file );
-            }
-        }                   
+        if ( (count( scandir (ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY) ) ) < 4 ) {
+            $files_list = NULL;
+            $pages_quantity = NULL;
+        }
 
-        if ( isset ( $files_list ) && count( $files_list ) > 1 )
-            arsort( $files_list );
+        else {
+            $list = onapp_scan_dir(ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY);
 
-        $items_per_page = 15;
 
-        $j = 0;
-        $i = 1;
-
-        if ( isset( $files_list ) && is_array( $files_list) ) {
-            foreach ($files_list as $key => $value) {
-                $files_list_array[$i][$key] = $value;
-                $j++;
-                if ($j > $items_per_page) {
-                    $j = 0;
-                    $i++;
+            foreach ($list as $file) {
+                if ( ! preg_match( "/^". ONAPP_DEBUG_FILE_NAME ."|^index/", $file ) ) {
+                    $files_list[substr($file, 6, -4)]['date'] = date('Y-m-d H:i:s', filemtime(ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY . ONAPP_DS . $file));
+                    $files_list[substr($file, 6, -4)]['size'] = filesize( ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY . ONAPP_DS . $file );
                 }
             }
-            $pages_quantity = count( $files_list_array );
-            $files_list = $files_list_array[$page];
-        }
-        else {
-            $pages_quantity = NULL;
-            $files_list = NULL;
+
+            if ( isset ( $files_list ) && count( $files_list ) > 1 )
+                arsort( $files_list );
+
+            $items_per_page = 15;
+
+            $j = 0;
+            $i = 1;
+
+            if ( isset( $files_list ) && is_array( $files_list) ) {
+                foreach ($files_list as $key => $value) {
+                    $files_list_array[$i][$key] = $value;
+                    $j++;
+                    if ($j > $items_per_page) {
+                        $j = 0;
+                        $i++;
+                    }
+                }
+                $pages_quantity = count( $files_list_array );
+                $files_list = $files_list_array[$page];
+            }
+            else {
+                $pages_quantity = NULL;
+                $files_list = NULL;
+            }
+        
         }
         
         $params = array(

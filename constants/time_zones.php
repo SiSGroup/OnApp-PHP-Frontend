@@ -150,5 +150,3 @@ $time_zones = array(
     "Wellington" => "(GMT+12:00) Wellington",
     "Nuku'alofa" => "(GMT+13:00) Nuku\'alofa",
     );
-
-?>

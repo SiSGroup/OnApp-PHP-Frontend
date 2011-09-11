@@ -290,7 +290,7 @@ function onapp_redirect($url) {
 }
 
 /*
- * TODO add description
+ * TODO add description, do customization for timezone
  */
 
 function onapp_init_config() {
@@ -301,6 +301,8 @@ function onapp_init_config() {
 
     foreach( $config as $key => $value)
         define('ONAPP_'.strtoupper($key), $value);
+    
+    date_default_timezone_set('Europe/Kiev');
 }
 
 /**
@@ -381,7 +383,7 @@ function onapp_is_auth() {
         && isset($_SESSION["host"])
         && isset($_SESSION["id"]);
     
-    onapp_debug("onapp_is_auth: return => '$is_auth'");
+    onapp_debug('onapp_is_auth: return => ' . $is_auth);
 
     return $is_auth;
 }
@@ -440,6 +442,8 @@ function onapp_has_permission( $permissions ) { //print('<pre>'); print_r( $_SES
  * @return array list of file names in this directory
  */
 function onapp_scan_dir( $path ){
+
+    if ( count( scandir( $path ) ) == 2 ) return;
     onapp_debug(__CLASS__.' :: '.__FUNCTION__);
     if ( $handle = opendir( $path ) ) {
         while (false !== ($file = readdir($handle))) {
@@ -765,3 +769,12 @@ function onapp_send_whmcs_api_request( $username, $password, $url, $action, $pos
     }
 }
 
+/**
+ * Formats string if it longer then 15
+ *
+ * @param string $string string to format
+ * @return formated string
+ */
+function onapp_table_display ( $string ) {
+    return ( strlen($string) > 15 ) ? substr( $string, 0, 15) . '...' : $string;
+}

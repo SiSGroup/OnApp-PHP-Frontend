@@ -13,7 +13,7 @@
            {foreach from=$mails key=file_name item=template_name}
               <tr>
                 <td>
-                    {$template_name}
+                    <span title="{$template_name}">{$template_name|onapp_table_display}</span>
                 </td>
                 <td>
                     {$event}

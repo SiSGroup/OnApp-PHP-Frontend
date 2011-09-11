@@ -49,5 +49,3 @@ class Test
         return true;
     }
 }
-
-?>

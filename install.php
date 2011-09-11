@@ -13,5 +13,3 @@ elseif (  filesize ( ONAPP_PATH . ONAPP_DS . 'config.ini' ) > 10 && file_exists(
     echo 'You need to delete or rename install directory!';
     exit;
 }
-
-?> 

@@ -28,7 +28,7 @@
 
 
 <div id="content_container">
-
+    <div id="content_wrapper">
     
 
    <!-- <div style="height:44px;" id="header2">

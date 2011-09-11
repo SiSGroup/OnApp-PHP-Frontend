@@ -316,12 +316,19 @@ function onapp_error_reporting($error) {
  * @return void
  */
 function onapp_rotate_error_log(){
-    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+    onapp_debug(__METHOD__);
 
-    $list = onapp_scan_dir( ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY );
+    $log_directory = ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY;
+    
+    if ( count( scandir ($log_directory) ) < 4 ) {
+        onapp_debug('Nothing to rotate');
+        return;
+    }
+
+    $list = onapp_scan_dir( $log_directory );
 
     foreach( $list as $file ){
-        $file_path = ONAPP_PATH.ONAPP_DS. ONAPP_LOG_DIRECTORY . ONAPP_DS . $file;
+        $file_path = $log_directory . ONAPP_DS . $file;
 
         if ( filemtime( $file_path ) < ( time() - ( 24 * 60 * 60 * ONAPP_LOG_ROTATION_DAYS ) ) ) {
             chmod($file_path, 0666);
@@ -335,24 +342,29 @@ function onapp_rotate_error_log(){
  *
  * @return void
  */
-function onapp_rotate_debug_log(){ 
-    onapp_debug(__CLASS__.' :: '.__FUNCTION__);
+function onapp_rotate_debug_log(){
+    onapp_debug(__METHOD__);
 
     $file = ONAPP_PATH . ONAPP_DS . ONAPP_LOG_DIRECTORY . ONAPP_DS . ONAPP_DEBUG_FILE_NAME;
-    
+
+    if ( ! file_exists ($file) ) {
+        onapp_debug('Debug file doesn\'t exists');
+        return;
+    }
+
     $size = ( filesize($file) / 1024 ) / 1024;
 
     if($size >= ONAPP_LOG_ROTATION_SIZE){
-        
+
         for( $i = 6; $i > 0; $i-- ){
             $old_name = $file . '.' . $i;
             $new_name = $file. '.' . ($i+1);
-            
+
             if( file_exists($old_name) && $i != 6  ){
                 rename($old_name, $new_name);
             }
         }
-        
+
         $renamed = rename( $file, $file. '.1' );
     }
 }

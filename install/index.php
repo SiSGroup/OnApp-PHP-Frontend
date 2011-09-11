@@ -4,25 +4,6 @@ define('ONAPP_DS', DIRECTORY_SEPARATOR);
 require_once ONAPP_PATH .  ONAPP_DS . 'functions.php';
 
 
-function is__writable($path) {
-
-    if ($path{strlen($path) - 1} == '/')
-        return is__writable($path . uniqid(mt_rand()) . '.tmp');
-
-    if (file_exists($path)) {
-        if (!($f = @fopen($path, 'r+')))
-            return false;
-        fclose($f);
-        return true;
-    }
-
-    if (!($f = @fopen($path, 'w')))
-        return false;
-    fclose($f);
-    unlink($path);
-    return true;
-}
-
   /**
    * Writes log settings changes to onapp frontend configuration file
    *
@@ -70,23 +51,23 @@ function is__writable($path) {
             ? $passed_txt
             : '<span class="red">You have to install and enable Mcrypt extension on your server </span>';
 
-        $config_file_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'config.ini')
+        $config_file_txt = is_writable(ONAPP_PATH . ONAPP_DS . 'config.ini')
             ? $passed_txt
             : '<span class="red">You must set permissions for the config.ini file so it can be written to (chmod 777) </span>';
 
-        $logs_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'logs' . ONAPP_DS)
+        $logs_dir_txt = is_writable(ONAPP_PATH . ONAPP_DS . 'logs' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the logs/ directory so it can be written to (chmod 777) </span>';
 
-        $templates_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'templates_c' . ONAPP_DS)
+        $templates_dir_txt = is_writable(ONAPP_PATH . ONAPP_DS . 'templates_c' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the templates_c/ directory so it can be written to (chmod 777) </span>';
 
-        $cache_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'cache' . ONAPP_DS)
+        $cache_dir_txt = is_writable(ONAPP_PATH . ONAPP_DS . 'cache' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the cache/ directory so it can be written to (chmod 777) </span>';
 
-        $events_dir_txt = is__writable(ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS)
+        $events_dir_txt = is_writable(ONAPP_PATH . ONAPP_DS . 'events' . ONAPP_DS)
             ? $passed_txt
             : '<span class="red">You must set permissions for the events/ directory so it can be written to (chmod 777) </span>';
 
@@ -181,5 +162,3 @@ function is__writable($path) {
 
         require_once 'step2.inc';
     }
-
-    ?>

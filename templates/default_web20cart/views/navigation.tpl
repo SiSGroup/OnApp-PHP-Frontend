@@ -1,14 +1,6 @@
     </div>    
 
     <div id="side_menu">
-
-
-
-
-
-
-
-
     <p class="header">Quick Navigation</p>
     <ul>
       <li>
@@ -77,17 +69,7 @@
 </form>
  <br /><br />
 
-
-
-
-
-
-
-
-
 <p class="header">{'ONAPP_NAVIGATION'|onapp_string}</p>
-
-
 
         <ul>
             {foreach from=$navigation key=k item=v}
@@ -102,7 +84,6 @@
                 {/if}
             {/foreach}
         </ul>
-        
     </div>
-
-
+    <div style="clear:both"></div>
+    </div>

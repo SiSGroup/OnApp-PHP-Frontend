@@ -661,10 +661,4 @@ $_LANG['EDIT_WHMCS_SETTINGS'] = 'Edit Whmcs Settings';
 $_LANG['EDIT_WHMCS_SETTINGS_INFO'] = 'Make necessary changes and press Save button';
 $_LANG['SHOW_DATE_IN_LOGS'] = 'Show Date in Logs';
 $_LANG['ONAPP_NAVIGATION'] = 'OnApp Navigation';
-
-
-
-
-
-
-
+$_LANG['THERE_IS_NO_SUCH_PAGE'] = 'There is no such page';

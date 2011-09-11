@@ -60,7 +60,7 @@ class Email_Templates extends Controller {
             }
         }                                                                                   // print('<pre>');print_r($events); die();
 
-        if ( ! $not_null ) $events = NULL;
+        if ( ! isset( $not_null ) || ! $not_null ) $events = NULL;
             
         $params = array(
             'events' => $events,

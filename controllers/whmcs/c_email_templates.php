@@ -60,7 +60,7 @@ class Email_Templates extends Controller {
             }
         }                                                                                   // print('<pre>');print_r($events); die();
 
-        if ( ! $not_null ) $events = NULL;
+        if ( ! isset( $not_null ) || ! $not_null ) $events = NULL;
             
         $params = array(
             'events' => $events,
@@ -293,8 +293,9 @@ class Email_Templates extends Controller {
         $classes_fields = array();
 
         $onapp = $this->get_factory();
-
-        foreach ( $_EVENT_CLASSES as $event => $classes ) {
+//print('<pre>');print_r($_EVENT_CLASSES); die();
+        foreach ( $_EVENT_CLASSES as $event => $classes ) {// print('<pre>');print_r($classes);
+            if ( is_null ($classes ) ) break;
             foreach ( $classes as $class ) {
                 if ( ! array_key_exists( $class, $classes_fields ) ) {
                     $fields_new = NULL;

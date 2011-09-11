@@ -25,7 +25,7 @@
                         <img alt="{'OFF_'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/off.png" />
                     {/if}
                 </td>
-                <td><a href="{$_ALIASES["virtual_machines"]}?action=details&amp;id={$v->_id}">{substr($v->_label, 0, 10)}...</a></td>
+                <td><a title="{$v->_label}" href="{$_ALIASES["virtual_machines"]}?action=details&amp;id={$v->_id}">{$v->_label|onapp_table_display}</a></td>
 
                 <td>
                     {if isset( $v->_ip_addresses[0] )}
