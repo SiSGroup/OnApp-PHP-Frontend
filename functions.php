@@ -219,6 +219,8 @@ function onapp_load_screen_ids($SimpleXMLElement = null, $parrent_id = '') {
     }
 }
 
+
+
 /**
  *
  */
@@ -741,12 +743,101 @@ function onapp_send_email ( $to, $from, $subject, $message, $from_name = NULL, $
     return $sent ? true : false;
 }
 
-function onapp_send_whmcs_api_request( $username, $password, $url, $action, $postfields = array() ) {
+/**
+ * Converts a simpleXML element into an array. Preserves attributes.<br/>
+ * You can choose to get your elements either flattened, or stored in a custom
+ * index that you define.
+ *
+ * @param simpleXMLElement    $xml            the XML to convert
+ * @param boolean|string    $attributesKey    if you pass TRUE, all values will be
+ *                                            stored under an '@attributes' index.
+ *                                            Note that you can also pass a string
+ *                                            to change the default index.<br/>
+ *                                            defaults to null.
+ * @param boolean|string    $childrenKey    if you pass TRUE, all values will be
+ *                                            stored under an '@children' index.
+ *                                            Note that you can also pass a string
+ *                                            to change the default index.<br/>
+ *                                            defaults to null.
+ * @param boolean|string    $valueKey        if you pass TRUE, all values will be
+ *                                            stored under an '@values' index. Note
+ *                                            that you can also pass a string to
+ *                                            change the default index.<br/>
+ *                                            defaults to null.
+ * @return array the resulting array.
+ */
+function onapp_simpleXMLToArray(SimpleXMLElement $xml,$attributesKey=null,$childrenKey=null,$valueKey=null){
+
+    if($childrenKey && !is_string($childrenKey)){$childrenKey = '@children';}
+    if($attributesKey && !is_string($attributesKey)){$attributesKey = '@attributes';}
+    if($valueKey && !is_string($valueKey)){$valueKey = '@values';}
+
+    $return = array();
+    $name = $xml->getName();
+    $_value = trim((string)$xml);
+    if(!strlen($_value)){$_value = null;};
+
+    if($_value!==null){
+        if($valueKey){$return[$valueKey] = $_value;}
+        else{$return = $_value;}
+    }
+
+    $children = array();
+    $first = true;
+    foreach($xml->children() as $elementName => $child){
+        $value = onapp_simpleXMLToArray($child,$attributesKey, $childrenKey,$valueKey);
+        if(isset($children[$elementName])){
+            if(is_array($children[$elementName])){
+                if($first){
+                    $temp = $children[$elementName];
+                    unset($children[$elementName]);
+                    $children[$elementName][] = $temp;
+                    $first=false;
+                }
+                $children[$elementName][] = $value;
+            }else{
+                $children[$elementName] = array($children[$elementName],$value);
+            }
+        }
+        else{
+            $children[$elementName] = $value;
+        }
+    }
+    if($children){
+        if($childrenKey){$return[$childrenKey] = $children;}
+        else{$return = array_merge($return,$children);}
+    }
+
+    $attributes = array();
+    foreach($xml->attributes() as $name=>$value){
+        $attributes[$name] = trim($value);
+    }
+    if($attributes){
+        if($attributesKey){$return[$attributesKey] = $attributes;}
+        else{$return = array_merge($return, $attributes);}
+    }
+
+    return $return;
+}
+
+/**
+ * Sends API request to whmcs server
+ *
+ * @param string $username whmcs username (admin username)
+ * @param string $password whmcs admin password
+ * @param string $url whmcs api file url
+ * @param string $action whmcs API functioin name
+ * @param array $postfields whmcs additional strings
+ * @return mixed response array when cusseed and error message string when failed.
+ */
+function onapp_send_whmcs_api_request( $username, $password, $url, $action, $postfields = array() ) { 
     
     $postfields["username"] = $username;
     $postfields["password"] = md5($password);
     $postfields["action"] = $action;
-    
+
+    //print_r($postfields); die();
+   
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, 1);
@@ -755,18 +846,28 @@ function onapp_send_whmcs_api_request( $username, $password, $url, $action, $pos
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
     $data = curl_exec($ch);
     curl_close($ch);
+                                                                         
+    $xml = simplexml_load_string($data);
 
-    $data = explode(";",$data);
-    foreach ($data AS $temp) {
-      $temp = explode("=",$temp);
-      $results[$temp[0]] = $temp[1];
+    if ($xml === false) { 
+        $data = explode(";",$data);
+        
+        foreach ($data AS $temp) {
+            $temp = explode("=",$temp);
+            $results[$temp[0]] = $temp[1];
+        }
+        
+        if ($results['result'] == 'success') {
+            return $results;
+        }
+
+        return $results['message'];
     }
 
-    if ($results["result"]=="success") {
-      return $results;
-    } else {
-      return $results["message"];
-    }
+    $results = array();
+    $results = onapp_simpleXMLToArray($xml);
+                                                                                             
+    return $results;
 }
 
 /**

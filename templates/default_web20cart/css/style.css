@@ -89,7 +89,7 @@ table.table_my th {
 background-color: #1A4D80;
 font-weight: bold;
 text-align: left;
-border-right:2px solid #ffffff;
+border-right:1px solid #ffffff;
 }
 table.table_my th, table.table_my th a, table.table_my th a:visited {
 color: white;
@@ -200,7 +200,7 @@ line-height: 16px;
 background: #CCEBD2 url(../images/status.png) no-repeat scroll right -235px;
 border-bottom: 1px solid #B0CEB6;
 border-left: 1px solid #C0DEC6;
-border-right: 2px solid #ffffff;
+border-right: 1px solid #ffffff;
 width: 80px;
 color: #475349;
 }
@@ -209,7 +209,7 @@ color: #475349;
 background: #E6DED2 url(../images/status.png) no-repeat scroll right -393px;
 border-bottom: 1px solid #D7BBAE;
 border-left: 1px solid #E7CBBE;
-border-right: 2px solid #ffffff;
+border-right: 1px solid #ffffff;
 width: 80px;
 color: #A22F21;
 }
@@ -218,7 +218,7 @@ color: #A22F21;
 background: #E1E1E1 url(../images/status.png) no-repeat scroll right -78px;
 border-bottom: 1px solid silver;
 border-left: 1px solid #D0D0D0;
-border-right: 2px solid #ffffff;
+border-right: 1px solid #ffffff;
 width: 80px;
 color: #555;
 }

@@ -26,8 +26,13 @@ class Test
     public function show_template_view($error = NULL)
     {
 
+        $postfields = array(
+            'clientid' => 1,
+        );
 
-        onapp_send_whmcs_api_request( ONAPP_WHMCS_LOGIN, ONAPP_WHMCS_PASSWORD, ONAPP_API_FILE_URL, 'getclients', NULL );
+        $response = onapp_send_whmcs_api_request( ONAPP_WHMCS_LOGIN, ONAPP_WHMCS_PASSWORD, ONAPP_WHMCS_API_FILE_URL, 'getclientsdetails', $postfields );
+
+        print('<pre>'); print_r($response); die();
 
         onapp_show_template(
             'test_view',
