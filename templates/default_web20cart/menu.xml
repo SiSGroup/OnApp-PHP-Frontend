@@ -27,6 +27,7 @@
         <screen title="SMARTY_SETTINGS" class="Smarty_Settings" method="view" alias="smarty_settings" access="access" />
         <screen title="EMAIL_TEMPLATES" class="Email_Templates" method="view" alias="email_templates" access="access" />
         <screen title="WHMCS_SETTINGS" class="Whmcs_Settings" method="view" alias="whmcs_settings" access="access" />
+        <screen title="TEST_" class="Test" method="view" alias="test" access="access" />
     </screen>
    <!-- <screen title="HELP_" class="Help" method="view" alias="help" access="access" /> -->
     <screen title="LOGOUT_" class="Base" method="logout" alias="logout" access="access" />

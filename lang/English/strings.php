@@ -662,3 +662,21 @@ $_LANG['EDIT_WHMCS_SETTINGS_INFO'] = 'Make necessary changes and press Save butt
 $_LANG['SHOW_DATE_IN_LOGS'] = 'Show Date in Logs';
 $_LANG['ONAPP_NAVIGATION'] = 'OnApp Navigation';
 $_LANG['THERE_IS_NO_SUCH_PAGE'] = 'There is no such page';
+$_LANG['ONAPP_FRONTEND'] = 'OnApp Frontend';
+
+
+
+
+$_LANG['PORTAL_HOME'] = 'Portal Home';
+$_LANG['QUICK_NAVIGATION'] = 'Quick Navigation';
+$_LANG['CLIENT_AREA'] = 'Client Area';
+$_LANG['ANNOUNCEMENTS_'] = 'Announcements';
+$_LANG['KNOWLEDGEBASE_'] = 'Knowledgebase';
+$_LANG['SUBMIT_TICKET'] = 'Submit Ticket';
+
+$_LANG['DOWNLOADS_'] = 'Downloads';
+$_LANG['ORDER_'] = 'Order';
+$_LANG['SEARCH_'] = 'Search';
+
+
+

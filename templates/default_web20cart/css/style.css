@@ -524,8 +524,46 @@ div#side_menu ul li.li_1 {padding-left: 10px;}
 div#side_menu ul li.li_2 {padding-left: 20px;}
 div#side_menu ul li.li_3 {padding-left: 30px;}
 
-div#login{
-    color:#ffffff;
-    width:500px;
-    margin:200px auto;
+
+
+table.frame table td.fieldarea {
+background-color: whiteSmoke;
+color: #333;
+text-align: right;
+border-right: 1px solid #EBEBEB;
+padding: 15px;
 }
+table.frame table td {
+background-color: white;
+border-bottom: 1px solid #EBEBEB;
+}
+table.frame {
+
+
+}
+form#frmlogin table.frame tbody {
+display: table-row-group;
+vertical-align: middle;
+
+}
+
+table.frame {
+margin: 0;
+padding: 0;
+
+border-bottom: 0;
+
+}
+
+table#whmcs_login {
+   border: 1px solid #EBEBEB;
+   border-bottom:none;
+   width:400px;
+   margin: 0 auto;
+}
+.breadcrumb {
+background-color: whiteSmoke;
+margin: 0 0 10px;
+padding: 10px;
+}
+
