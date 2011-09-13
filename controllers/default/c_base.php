@@ -33,17 +33,19 @@ class Base {
             onapp_show_template( 'login', $params );
             exit;
         }
+        if (  is_null( $submit ) ) {
 
-        if( ! is_null( $this->login_action( $login, $password, $host ) ) ) {
+        }
+        elseif( ! is_null( $submit ) && $this->login_action( $login, $password, $host  ) ) {
                 onapp_debug('Login successfull!');
 				$this->after_logedin_action ();
 		}
-        elseif ( ! is_null( $submit ) ) {
+        else {
             onapp_debug('login failed couldn\'t get APIVersion');
             $params = array(
                 'error_message' => onapp_string( 'ERORR_WRONG_LOGIN_DATA' ),
             );
-		}
+        }
             
         if ( ! isset ($params )) $params = NULL;
 
@@ -77,9 +79,8 @@ class Base {
                 $this->_load_profile( $onapp );
                 return true;
             }
-
-            return false;
 		}
+        return false;
     }
 
     /**
