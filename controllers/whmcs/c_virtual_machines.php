@@ -195,14 +195,55 @@ class Virtual_Machines extends Controller {
         $virtual_machines_array = $virtual_machine->getList();
 
         $virtual_machines = $virtual_machines_array;
+        /*** W H M C S ****/
+        //        $postfields = array(
+//            'pid' => 2,
+//        );
+//        print('<pre>'); print_r($_SESSION['profile_obj']); die();
+        
+//        if () {
+//
+//        }
+//print('<pre>'); print_r($virtual_machines); die();
+        if( ! $client_id = $this->is_whmcs_client( ) ){
+            require_once 'c_profile.php';
+            $profile = new Profile();
+            $profile->show_template_view('NOT_WHMCS_CLIENT_ERROR');
+            exit;
+        }
 
-        $vm_backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        
 
-        /* foreach ($virtual_machines as $virtual_machine) {
-          $vm_backup_obj = $vm_backup->getList($virtual_machine->_id);
-          $size_and_quantity = $this->calculateBackups($vm_backup_obj);
-          $vm_backups [] = $size_and_quantity;
-          } */
+        if ( ! is_null ( $virtual_machines ) ) {
+            foreach ( $virtual_machines as $virtual_machine ) {
+                if ( $product = $this->is_whmcs_maped( $virtual_machine, $client_id ) ) {
+                    $virtual_machine->_whmcs_maped = $product['id'];
+                    $virtual_machine->_whmcs_status = $product['status'];
+                }
+            }
+        }
+        
+        //print('<pre>'); print_r($virtual_machines); die();
+
+        
+        //$this->is_whmcs_maped
+
+        
+
+
+        
+
+//        print('<pre>'); print_r($response); die();
+
+        /*** W H M C S ****/
+
+//        $vm_backup = $onapp->factory('VirtualMachine_Backup', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+//
+//         foreach ($virtual_machines as $virtual_machine) {
+//             $vm_backup_obj = $vm_backup->getList($virtual_machine->_id);
+//             $size_and_quantity = $this->calculateBackups($vm_backup_obj);
+//             $vm_backups [] = $size_and_quantity;
+//         }
 
         //TODO refactor when bug is fixed Ticket #2508
         if (!is_null($hypervisor_id)) {
@@ -231,6 +272,48 @@ class Virtual_Machines extends Controller {
             'error' => $error,
         );
         onapp_show_template('vm_view', $params);
+    }
+
+    private function is_whmcs_maped( $virtual_machine, $client_id ) {
+       $postfields = array( 'client_id' => $client_id );
+       $response = onapp_send_whmcs_api_request( ONAPP_WHMCS_LOGIN, ONAPP_WHMCS_PASSWORD, ONAPP_WHMCS_API_FILE_URL, 'getclientsproducts', $postfields );
+       $whmcs_products = $response['products']['product'];
+                                                                                                // print('<pre>');print_r($whmcs_products); die();
+
+       foreach ( $whmcs_products as $product ) {
+           
+           if ( $product['domain'] == $virtual_machine->_hostname ) { 
+               onapp_debug( $product['domain'] , ' ==> ', $virtual_machine->_hostname , '<br /><br />' );
+               return array( 'id' => $product['id'], 'status' => $product['status'] );
+           }
+       }
+       //print('<pre>'); print_r($whmcs_products); die();
+       
+       return false;
+    }
+    
+    /**
+     * Checks whether user is whmcs client
+     *
+     * @return integer client_id whether whmcs client and boolean false if not
+     */
+    private function is_whmcs_client( ) {
+        $response = onapp_send_whmcs_api_request( ONAPP_WHMCS_LOGIN, ONAPP_WHMCS_PASSWORD, ONAPP_WHMCS_API_FILE_URL, 'getclients', $postfields );
+        $whmcs_clients = $response['clients']['client'];
+        foreach ( $whmcs_clients as $client ) {
+            onapp_debug( $client['firstname'], ' ==> ', $_SESSION['profile_obj']->_first_name, '<br />' );
+            onapp_debug( $client['lastname'], ' ==> ', $_SESSION['profile_obj']->_last_name, '<br />' );
+            onapp_debug( $client['email'], ' ==> ', $_SESSION['profile_obj']->_email, '<br />', '<br />' );
+
+            if ( $client['firstname'] == $_SESSION['profile_obj']->_first_name
+                && $client['lastname'] == $_SESSION['profile_obj']->_last_name
+                && $client['email'] == $_SESSION['profile_obj']->_email
+            ) {
+               return $client['id'];
+            }
+        }
+
+        return false;
     }
 
     /**

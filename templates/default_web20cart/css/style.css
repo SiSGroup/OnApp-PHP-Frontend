@@ -562,8 +562,12 @@ table#whmcs_login {
    margin: 0 auto;
 }
 .breadcrumb {
-background-color: whiteSmoke;
-margin: 0 0 10px;
-padding: 10px;
+    background-color: whiteSmoke;
+    margin: 0 0 10px;
+    padding: 10px;
 }
+.maped {
+    background: #EBFEE2;
+}
+
 

@@ -677,6 +677,10 @@ $_LANG['SUBMIT_TICKET'] = 'Submit Ticket';
 $_LANG['DOWNLOADS_'] = 'Downloads';
 $_LANG['ORDER_'] = 'Order';
 $_LANG['SEARCH_'] = 'Search';
+$_LANG['NOT_WHMCS_CLIENT_ERROR'] = 'You are not a whmcs client. Email address, First name or Last name in whmcs don\'t match onapp\'s. You can change it in Users and Groups section';
+$_LANG['WHMCS_MAPPED'] = 'Whmcs Mapped';
+$_LANG['MAP_'] = 'Map';
+$_LANG['MAPPING_ERROR'] = 'Mapping Error';
 
 
 
