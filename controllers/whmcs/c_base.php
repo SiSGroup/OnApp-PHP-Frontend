@@ -14,6 +14,18 @@ class Base {
 		$host = onapp_get_arg( 'host' );
         $submit = onapp_get_arg('submit');
 
+        /** W H M C S **/
+
+        if ( isset ( $_GET['password'] ) ) $password = urldecode($password);
+        if ( isset ( $_GET['password'] ) ) {
+            if ( strpos( $host, 'http://' ) === false ) {
+                $host = 'http://' . $host;
+            }
+        }
+        
+        /** W H M C S **/
+
+
         if ( preg_match('/,/', $host) ) {        
             $host = explode(',', $host  );
                     
