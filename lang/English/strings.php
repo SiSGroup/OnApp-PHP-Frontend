@@ -681,6 +681,45 @@ $_LANG['NOT_WHMCS_CLIENT_ERROR'] = 'You are not a whmcs client. Email address, F
 $_LANG['WHMCS_MAPPED'] = 'Whmcs Mapped';
 $_LANG['MAP_'] = 'Map';
 $_LANG['MAPPING_ERROR'] = 'Mapping Error';
+$_LANG['CRON_MANAGER'] = 'Cron Manager';
+$_LANG['CRON_JOBS'] = 'Cron Jobs';
+$_LANG['ADD_NEW_CRON_JOB'] = 'Add New Cron Job';
+$_LANG['MINUTE_'] = 'Minute';
+$_LANG['HOUR_'] = 'Hour';
+$_LANG['DAY_'] = 'Day';
+$_LANG['WEEK_DAY'] = 'Week Day';
+$_LANG['EVERY_MONTH'] = 'Every Month (*)';
+$_LANG['EVERY_MINUTE'] = 'Every Minute (*)';
+$_LANG['EVERY_HOUR'] = 'Every Hour (*)';
+$_LANG['EVERY_DAY'] = 'Every Day (*)';
+$_LANG['EVERY_WEEKDAY'] = 'Every Weekday (*)';
+
+
+$_LANG['MONDAY_'] = 'Monday';
+$_LANG['TUESDAY_'] = 'Tuesday';
+$_LANG['WEDNESDAY_'] = 'Wednesday';
+$_LANG['THURSDAY_'] = 'Thursday';
+$_LANG['FRIDAY_'] = 'Friday';
+$_LANG['SATURDAY_'] = 'Saturday';
+$_LANG['SUNDAY_'] = 'Sunday';
+
+
+$_LANG['EVERY_MINUTE_'] = 'Every Minute (* * * * *)';
+$_LANG['ONCE_A_DAY'] = 'Once a day (0 0 * * *)';
+$_LANG['ONCE_AN_HOUR'] = 'Once an hour (0 * * * *)';
+$_LANG['TWICE_AN_HOUR'] = 'Twice an hour (0.30 * * * *)';
+$_LANG['EVERY_FIVE_MINUTES'] = 'Every Five Minutes (*/5 * * * *)';
+$_LANG['ONCE_A_MONTH'] = 'Once a month (0 0 1 * *)';
+$_LANG['TWICE_A_DAY'] = 'Twice a day (0 0.12 * * *)';
+$_LANG['ONCE_A_YEAR'] = 'Once a year (0 0 1 1 *)';
+$_LANG['COMMON_SETTINGS'] = 'Common Settings';
+
+
+
+
+
+
+
 
 
 
