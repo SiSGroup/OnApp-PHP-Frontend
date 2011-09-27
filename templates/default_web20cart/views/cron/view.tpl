@@ -25,16 +25,12 @@
     
     {/if}
     </table>
-    {if !isset($hypervisor_id)}
         <div>
-            <form action="{$_ALIASES["virtual_machines"]}" method="post">
+            <form action="{$_ALIASES["cron_manager"]}" method="post">
                    <input type="submit" value="{'ADD_NEW_CRON_JOB'|onapp_string}" />
-                   <input type="hidden" name="action" value="create_page" />
+                   <input type="hidden" name="action" value="create" />
             </form>
         </div>
-    {else}
-        {include file="default_web20cart/views/hypervisor/details.tpl"}
-    {/if}
 
 
 {include file="default_web20cart/views/navigation.tpl"}

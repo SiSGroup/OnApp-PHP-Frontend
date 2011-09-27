@@ -19,8 +19,10 @@ Class Cron {
         switch ($action) {
             case 'delete':
                 $this->delete();
+                break;
             case 'create':
                 $this->create();
+                break;
             default:
                 $this->show_template_view( );
                 break;
@@ -28,10 +30,13 @@ Class Cron {
     }
 
     private function delete() {
+        global $_ALIASES;
         $this->ssh_connect ( '192.168.128.106', 22, 'yuriy', '12345678' );
 
-        //print('<pre>'); print_r(urldecode(onapp_get_arg('cron_job') ));
         $this->remove_cronjob( urldecode(onapp_get_arg('cron_job')) );
+
+        $_SESSION['message'] = 'CRON_JOB_HAS_BEEN_DELETED_SUCCESSFULLY';
+        onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['cron_manager'] );
     }
     
 
@@ -51,29 +56,29 @@ Class Cron {
 
     }
 
-    private function create (  ) { 
+    private function show_template_create() {
         $this->ssh_connect ( '192.168.128.106', 22, 'yuriy', '12345678' );
-        
+
         $minute_php = array();
-        $minute_php['every'] = onapp_string('EVERY_MINUTE');
+        $minute_php['*'] = onapp_string('EVERY_MINUTE');
         for ( $i=0; $i<=59; $i++ ) {
             $minute_php[$i] = $i;
         }
 
         $hour_php = array();
-        $hour_php['every'] = onapp_string('EVERY_HOUR');
+        $hour_php['*'] = onapp_string('EVERY_HOUR');
         for ( $i=0; $i<=23; $i++ ) {
             $hour_php[$i] = $i. ':';
         }
 
         $day_php = array();
-        $day_php['every'] = onapp_string('EVERY_DAY');
+        $day_php['*'] = onapp_string('EVERY_DAY');
         for ( $i=1; $i<=31; $i++ ) {
             $day_php[$i] = $i. 'th';
         }
 
         $month_php = array(
-            'every'=>    onapp_string('EVERY_MONTH'),
+            '*'=>    onapp_string('EVERY_MONTH'),
             '1'   =>    onapp_string('JANUARY_'),
             '2'   =>    onapp_string('FABRUARY_'),
             '3'   =>    onapp_string('MARCH_') ,
@@ -89,7 +94,7 @@ Class Cron {
             );
 
         $weekday_php = array(
-            'every' =>   onapp_string('EVERY_WEEKDAY'),
+            '*' =>   onapp_string('EVERY_WEEKDAY'),
             '0'     =>   onapp_string('MONDAY_'),
             '1'     =>   onapp_string('TUESDAY_'),
             '2'     =>   onapp_string('WEDNESDAY_'),
@@ -100,7 +105,7 @@ Class Cron {
         );
 
         //echo $month; echo '<script type="text/javascript">alert(month)</script>';
-        
+
         $params = array(
             'minute_php' => $minute_php,
             'hour_php'   => $hour_php,
@@ -114,7 +119,29 @@ Class Cron {
             'error' => $error,
         );
         onapp_show_template('cron_create', $params);
+    }
 
+    private function create (  ) {
+        global $_ALIASES;
+        
+        $cron = onapp_get_arg('cron');
+        if ( ! $cron ) {
+            $this->show_template_create();
+        }
+        else {
+            $this->ssh_connect ( '192.168.128.106', 22, 'yuriy', '12345678' );
+            $this->append_cronjob(
+                $cron['minute']. ' ' .
+                $cron['hour'] . ' ' .
+                $cron['day'] . ' ' .
+                $cron['month'] . ' ' .
+                $cron['weekday'] . ' ' .
+                $cron['command']
+            );
+            $_SESSION['message'] = 'CRON_JOB_HAS_BEEN_CREATED_SUCCESSFULLY';
+            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['cron_manager'] );
+        }
+        
     }
 
     public function ssh_connect ($host=NULL, $port=NULL, $username=NULL, $password=NULL) { 
@@ -241,20 +268,22 @@ Class Cron {
 			foreach ($cron_jobs as $cron_regex) $cron_array = preg_grep($cron_regex, $cron_array, PREG_GREP_INVERT);
 		}
 		else
-		{ 
+		{    
             foreach ( $cron_array as $key => $cron_job ) {
                 if ( $cron_job == $cron_jobs ) {
                     unset( $cron_array[$key]);
                 }
             }
 		}
-        
+
         $this->remove_file();
         $this->remove_crontab();
-        $this->append_cronjob($cron_array);
+        
+        if ( ! empty( $cron_array ) ) {
+            $this->append_cronjob($cron_array);
+        }
 
         return $this;
-        //return ($original_count === count($cron_array)) ? $this->remove_file() : $this->remove_crontab()->append_cronjob($cron_array);
 	}
 
 	public function remove_crontab()

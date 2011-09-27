@@ -713,6 +713,10 @@ $_LANG['ONCE_A_MONTH'] = 'Once a month (0 0 1 * *)';
 $_LANG['TWICE_A_DAY'] = 'Twice a day (0 0.12 * * *)';
 $_LANG['ONCE_A_YEAR'] = 'Once a year (0 0 1 1 *)';
 $_LANG['COMMON_SETTINGS'] = 'Common Settings';
+$_LANG['CRON_JOB_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Cron job has been deleted successfully';
+$_LANG['CRON_JOB_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Cron job has been created successfully';
+
+
 
 
 

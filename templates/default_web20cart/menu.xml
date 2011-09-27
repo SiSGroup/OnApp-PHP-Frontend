@@ -15,6 +15,7 @@
     </screen>
   <!--  <screen title="SETTINGS_" class="Settings" method="view" alias="settings" access="access" /> -->
     <screen title="USERS_AND_GROUPS" class="Users_And_Groups" method="view" alias="users_and_groups" access="access" />
+    <screen title="CRON_MANAGER" class="Cron" method="view" alias="cron_manager" access="access" />
   <!--  <screen title="TOOLS_" class="Tools" method="view" alias="tools" access="access" >
         <screen title="ALERTS_" class="Alerts" method="view" alias="alerts" access="access" />
         <screen title="USAGE_STATISTICS" class="Usage_Statistics" method="view" alias="usage_statistics" access="access" />
