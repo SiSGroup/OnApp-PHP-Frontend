@@ -349,6 +349,57 @@
 
 {/if}
 
+{if $template == 'sshSettings' || $template == 'configuration'}
+
+<h1>{'SSH_SETTINGS'|onapp_string}</h1>
+
+        <table class="form-table two" width="100%" cellpadding="0" cellspacing="0" >
+
+            <tr>
+                <td class="label">{'SSH_HOST'|onapp_string}</td>
+                <td>
+
+                        {$config.ssh_host}
+
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{'SSH_USER'|onapp_string}</td>
+                <td>
+
+                        {$config.ssh_user}
+
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{'SSH_PORT'|onapp_string}</td>
+                <td>
+
+                        {$config.ssh_port}
+
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{'SSH_PASSWORD'|onapp_string}</td>
+                <td>
+
+                        {$config.ssh_password}
+
+                </td>
+            </tr>
+             <tr>
+                 <td>
+                     <form action="{$config.base_url}/{$_ALIASES['ssh_settings']}" method="post">
+                         <input type="submit" value="{'EDIT_'|onapp_string}" />
+                         <input type="hidden" name="action" value="edit" />
+                     </form>
+                </td>
+            </tr>
+    </table>
+
+
+{/if}
+
 
 
 {include file="default_web20cart/views/navigation.tpl"}

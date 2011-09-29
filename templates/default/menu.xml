@@ -15,6 +15,7 @@
     </screen>
   <!--  <screen title="SETTINGS_" class="Settings" method="view" alias="settings" access="access" /> -->
     <screen title="USERS_AND_GROUPS" class="Users_And_Groups" method="view" alias="users_and_groups" access="access" />
+    <screen title="CRON_MANAGER" class="Cron" method="view" alias="cron_manager" access="access" />
   <!--  <screen title="TOOLS_" class="Tools" method="view" alias="tools" access="access" >
         <screen title="ALERTS_" class="Alerts" method="view" alias="alerts" access="access" />
         <screen title="USAGE_STATISTICS" class="Usage_Statistics" method="view" alias="usage_statistics" access="access" />
@@ -25,6 +26,7 @@
         <screen title="LOG_SETTINGS" class="Log_Settings" method="view" alias="log_settings" access="access" />
         <screen title="FRONTEND_SETTINGS" class="Frontend_Settings" method="view" alias="frontend_settings" access="access" />
         <screen title="SMARTY_SETTINGS" class="Smarty_Settings" method="view" alias="smarty_settings" access="access" />
+        <screen title="SSH_SETTINGS" class="Ssh_Settings" method="view" alias="ssh_settings" access="access" />
         <screen title="EMAIL_TEMPLATES" class="Email_Templates" method="view" alias="email_templates" access="access" />
         <!--<screen title="WHMCS_SETTINGS" class="Whmcs_Settings" method="view" alias="whmcs_settings" access="access" />-->
     </screen>

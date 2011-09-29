@@ -1,4 +1,4 @@
-{include file="default_web20cart/views/header.tpl"}
+{include file="default/views/header.tpl"}
     
     {if $cron_jobs == false}
         <p class="not_found">No cronjobs found<p>
@@ -52,5 +52,5 @@
         </div>
 
 
-{include file="default_web20cart/views/navigation.tpl"}
-{include file="default_web20cart/views/footer.tpl"}
+{include file="default/views/navigation.tpl"}
+{include file="default/views/footer.tpl"}

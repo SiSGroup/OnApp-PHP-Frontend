@@ -1,4 +1,4 @@
-{include file="default_web20cart/views/header.tpl"}
+{include file="default/views/header.tpl"}
 
 <form id="cron_form" action='{$smarty.const.ONAPP_BASE_URL}/{$_ALIASES['cron_manager']}' method="post">
     <div class="div_page">
@@ -99,5 +99,5 @@
     <script type="text/javascript" src="templates/default_web20cart/views/cron/template_filter.js"></script>
 {/literal}
 
-{include file="default_web20cart/views/navigation.tpl"}
-{include file="default_web20cart/views/footer.tpl"}
+{include file="default/views/navigation.tpl"}
+{include file="default/views/footer.tpl"}

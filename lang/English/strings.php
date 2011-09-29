@@ -663,17 +663,12 @@ $_LANG['SHOW_DATE_IN_LOGS'] = 'Show Date in Logs';
 $_LANG['ONAPP_NAVIGATION'] = 'OnApp Navigation';
 $_LANG['THERE_IS_NO_SUCH_PAGE'] = 'There is no such page';
 $_LANG['ONAPP_FRONTEND'] = 'OnApp Frontend';
-
-
-
-
 $_LANG['PORTAL_HOME'] = 'Portal Home';
 $_LANG['QUICK_NAVIGATION'] = 'Quick Navigation';
 $_LANG['CLIENT_AREA'] = 'Client Area';
 $_LANG['ANNOUNCEMENTS_'] = 'Announcements';
 $_LANG['KNOWLEDGEBASE_'] = 'Knowledgebase';
 $_LANG['SUBMIT_TICKET'] = 'Submit Ticket';
-
 $_LANG['DOWNLOADS_'] = 'Downloads';
 $_LANG['ORDER_'] = 'Order';
 $_LANG['SEARCH_'] = 'Search';
@@ -693,8 +688,6 @@ $_LANG['EVERY_MINUTE'] = 'Every Minute (*)';
 $_LANG['EVERY_HOUR'] = 'Every Hour (*)';
 $_LANG['EVERY_DAY'] = 'Every Day (*)';
 $_LANG['EVERY_WEEKDAY'] = 'Every Weekday (*)';
-
-
 $_LANG['MONDAY_'] = 'Monday';
 $_LANG['TUESDAY_'] = 'Tuesday';
 $_LANG['WEDNESDAY_'] = 'Wednesday';
@@ -702,8 +695,6 @@ $_LANG['THURSDAY_'] = 'Thursday';
 $_LANG['FRIDAY_'] = 'Friday';
 $_LANG['SATURDAY_'] = 'Saturday';
 $_LANG['SUNDAY_'] = 'Sunday';
-
-
 $_LANG['EVERY_MINUTE_'] = 'Every Minute (* * * * *)';
 $_LANG['ONCE_A_DAY'] = 'Once a day (0 0 * * *)';
 $_LANG['ONCE_AN_HOUR'] = 'Once an hour (0 * * * *)';
@@ -715,14 +706,24 @@ $_LANG['ONCE_A_YEAR'] = 'Once a year (0 0 1 1 *)';
 $_LANG['COMMON_SETTINGS'] = 'Common Settings';
 $_LANG['CRON_JOB_HAS_BEEN_DELETED_SUCCESSFULLY'] = 'Cron job has been deleted successfully';
 $_LANG['CRON_JOB_HAS_BEEN_CREATED_SUCCESSFULLY'] = 'Cron job has been created successfully';
-
-
-
-
-
-
-
-
+$_LANG['ADD_NEW_CRON_JOB_INFO'] = 
+    'To add a new cron job select minute, hour, day, month, weekday or use one
+    of the common settings. Then put the command to execute in the command input field';
+$_LANG['WEEKDAY_'] = 'Weekday';
+$_LANG['CRON_MANAGER_INFO'] = 'Cron jobs list. Use the icons on the right to manage cron jobs. Push the add button to add a new one';
+$_LANG['SSH_SETTINGS'] = 'Ssh Settings';
+$_LANG['SSH_HOST'] = 'Ssh Host';
+$_LANG['SSH_USER'] = 'Ssh User';
+$_LANG['SSH_PASSWORD'] = 'Ssh Password';
+$_LANG['SSH_PORT'] = 'Ssh Port';
+$_LANG['EDIT_SSH_SETTINGS_INFO'] = 'Make necessary changes and press save button';
+$_LANG['EDIT_SSH_SETTINGS'] = 'Edit Ssh Settings';
+$_LANG['SSH_SETTINGS_INFO'] = 'Press edit button to configure ssh settings';
+$_LANG['CHECK_SSH_SETTINGS'] = 'Check ssh settings';
+$_LANG['THE_SSH2_CONNECTION_COULD_NOT_BE_ESTABLISHED'] = 'The SSH2 connection could not be established';
+$_LANG['COULD_NOT_AUTHENTICATE_USER'] = 'Could not authenticate user';
+$_LANG['THERE_IS_NOTHING_TO_EXECUTE'] = 'There is nothing to exececute, no arguments specified';
+$_LANG['NOTING_TO_APPEND'] = 'Nothing to append! Please specify a cron job or an array of cron jobs';
 
 
 
