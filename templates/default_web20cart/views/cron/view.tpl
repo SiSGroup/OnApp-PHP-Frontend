@@ -35,6 +35,9 @@
                     <span title="">{$cron_jobs_array[$k][5]}</span>
                 </td>
                 <td class="dark_td">
+                    <a href="{$_ALIASES["cron_manager"]}?action=edit&amp;cron_job={urlencode($cron_job)}">
+                        <img alt="{'EDIT_CRON_JOB'|onapp_string}" title="{'EDIT_CRON_JOB'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/edit.png" />
+                    </a>
                     <a href="{$_ALIASES["cron_manager"]}?action=delete&amp;cron_job={urlencode($cron_job)}">
                         <img alt="{'DELETE_CRON_JOB'|onapp_string}" title="{'DELETE_CRON_JOB'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/delete_icon.png" />
                     </a>
