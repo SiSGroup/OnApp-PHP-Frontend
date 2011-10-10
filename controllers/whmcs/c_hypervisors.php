@@ -15,7 +15,7 @@ class Hypervisors
        }
        return $this->factory_instance;
     }
-    
+
     public function view()
     {
         $id = onapp_get_arg('id');
@@ -23,7 +23,10 @@ class Hypervisors
 
         switch ( $action ) {
             case 'hypervisor_details':
-                $this->vm_details($id);
+                $this->vm_details( $id );
+                break;
+            case 'reboot':
+                $this->reboot( $id );
                 break;
             default:
                 $this->show_template_view();
@@ -40,7 +43,7 @@ class Hypervisors
         $onapp = $this->get_factory();
 
         $hypervisor = $onapp->factory('Hypervisor');
-        $hypervisor_obj = $hypervisor->getList( );                                   // print('<pre>');print_r($hypervisor_obj); print('</pre>');die();
+        $hypervisor_obj = $hypervisor->getList( );
 
         $hypervisor_zones = $onapp->factory('HypervisorZone');
         $hypervisor_zones_obj = $hypervisor_zones->getList( );
@@ -48,9 +51,9 @@ class Hypervisors
         $vm = $onapp->factory('VirtualMachine');
         $vm_obj = $vm->getList();
 
-        $hypervisor_vm_count = $this->get_vms_quantity($hypervisor_obj, $vm_obj);    //print('<pre>');print_r($hypervisor_vm_count); print('</pre>');die();
+        $hypervisor_vm_count = $this->get_vms_quantity($hypervisor_obj, $vm_obj);
 
-        $hypervisor_xm_info = $this->get_hv_xm_info($hypervisor_obj);               //print('<pre>');print_r($hypervisor_xm_info); print('</pre>');die();
+        $hypervisor_xm_info = $this->get_hv_xm_info($hypervisor_obj);
 
         $params = array(
             'hypervisor_obj'        =>     $hypervisor_obj,
@@ -58,7 +61,9 @@ class Hypervisors
             'hypervisor_zones_obj'  =>     $hypervisor_zones_obj,
             'hypervisor_xm_info'    =>     $hypervisor_xm_info,
             'vm_obj'                =>     $vm_obj,
-        );                                                          // print('<pre>');print_r($hypervisor_obj); print('</pre>'); die();
+            'info_title'            => onapp_string('HYPERVISORS_'),
+            'info_body'             => onapp_string('HYPERVISORS_INFO'),
+        );
         onapp_show_template( 'hypervisor_view', $params );
     }
 
@@ -102,18 +107,47 @@ class Hypervisors
         return $hypervisor_xm_info;
     }*/
 
+    /**
+     * Reboots Hypervisor
+     *
+     * @global array $_ALIASES menu page aliases
+     * @param integer $id hypervisor id
+     */
+    private function reboot ( $id ) {
+        global $_ALIASES;
 
-  /**
-  *
-  * Checks necessary access to this class
-  *
-  * @return boolean [true|false]
-  *
-  */
+        onapp_debug( __METHOD__ );
 
-     static function  access(){
-        return onapp_has_permission(array('hypervisors', 'hypervisors.read'));
+        onapp_debug('id => ' . $id);
+
+        onapp_permission( array( 'hypervisors_reboot', 'hypervisors') );
+
+        $onapp = $this->get_factory();
+
+        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+        $hypervisor->reboot( $id );
+        onapp_debug('hypervisor_obj => ' . print_r($hypervisor, true));
+
+        if (is_null($hypervisor->error)) {
+            onapp_event_exec( 'hypervisor_reboot', array( $hypervisor->_obj ) );
+            $_SESSION['message'] = 'HYPERVISOR_WILL_BE_REBOOTED_SHORTLY';
+            onapp_redirect( ONAPP_BASE_URL . '/' . $_ALIASES['hypervisors'] );
+        }
+        else {
+            onapp_event_exec( 'hypervisor_reboot_failed', array( $hypervisor->_obj ) );
+            trigger_error ( print_r( $hypervisor->error, true ) );
+            $this->show_template_view( $hypervisor->error );
+        }
     }
 
-
+    /**
+    *
+    * Checks necessary access to this class
+    *
+    * @return boolean [true|false]
+    *
+    */
+    static function  access(){
+       return onapp_has_permission(array('hypervisors', 'hypervisors.read'));
+    }
 }

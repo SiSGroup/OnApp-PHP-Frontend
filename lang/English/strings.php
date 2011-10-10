@@ -724,7 +724,13 @@ $_LANG['THE_SSH2_CONNECTION_COULD_NOT_BE_ESTABLISHED'] = 'The SSH2 connection co
 $_LANG['COULD_NOT_AUTHENTICATE_USER'] = 'Could not authenticate user';
 $_LANG['THERE_IS_NOTHING_TO_EXECUTE'] = 'There is nothing to exececute, no arguments specified';
 $_LANG['NOTING_TO_APPEND'] = 'Nothing to append! Please specify a cron job or an array of cron jobs';
-
-
-
+$_LANG['CRON_JOB_HAS_NOT_BEEN_DELETED'] = 'Cron job has not been deleted';
+$_LANG['COMMAND_FIELD_COULD_NOT_BE_EMPTY'] = 'Command field could not be empty';
+$_LANG['CRON_JOB_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Cron job has been updated successfully';
+$_LANG['EDIT_CRON_JOB_INFO'] = 'Make necessary changes and push the save button';
+$_LANG['EDIT_CRON_JOB'] = 'Edit Cron Job';
+$_LANG['EVERY_FIVE_MINUTE'] = 'Every five minute ( */5 )';
+$_LANG['EDIT_HYPERVISOR'] = 'Edit Hypervisor';
+$_LANG['REBOOT_HYPERVISOR'] = 'Reboot Hypervisor';
+$_LANG['HYPERVISOR_WILL_BE_REBOOTED_SHORTLY'] = 'Hypervisor will be rebooted shortly';
 

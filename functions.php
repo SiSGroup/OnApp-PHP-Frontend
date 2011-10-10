@@ -604,6 +604,8 @@ function onapp_load_event_classes () {
         'group_edit_failed'                  => array('UserGroup'),
         'rebuild_network'                    => array('VirtualMachine'),
         'rebuild_network_failed'             => array('VirtualMachine'),
+        'hypervisor_reboot'                  => array('Hypervisor'),
+        'hypervisor_reboot_failed'           => array('Hypervisor'),
     );
 }
 
@@ -837,16 +839,20 @@ function onapp_send_whmcs_api_request( $username, $password, $url, $action, $pos
     $postfields["action"] = $action;
 
     //print_r($postfields); die();
-   
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_TIMEOUT, 100);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     $data = curl_exec($ch);
     curl_close($ch);
-                                                                         
+
+  //print('<pre>');  print_r($data); die();
+  
     $xml = simplexml_load_string($data);
 
     if ($xml === false) { 
@@ -878,4 +884,10 @@ function onapp_send_whmcs_api_request( $username, $password, $url, $action, $pos
  */
 function onapp_table_display ( $string ) {
     return ( strlen($string) > 15 ) ? substr( $string, 0, 15) . '...' : $string;
+}
+
+function onapp_file_size( $size )
+{
+    $filesizename = array( "MB", " GB", " TB", " PB", " EB", " ZB", " YB");
+    return $size ? round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' .$filesizename[$i] : '0 Bytes';
 }

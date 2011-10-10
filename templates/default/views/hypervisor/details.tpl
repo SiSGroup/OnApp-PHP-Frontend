@@ -3,13 +3,13 @@
      <tr>
         <td class="action_edit">
             
-            <a href="#">
-                Edit Hypervisor
+            <a href="{$_ALIASES["hypervisors"]}?action=edit&amp;id={$hypervisor_id}">
+                {'EDIT_HYPERVISOR'|onapp_string}
             </a>
         </td>
         <td class="action_reboot">
-            <a href="#">
-                Reboot Hypervisor
+            <a href="{$_ALIASES["hypervisors"]}?action=reboot&amp;id={$hypervisor_id}">
+                {'REBOOT_HYPERVISOR'|onapp_string}
             </a>
         </td>
     </tr>

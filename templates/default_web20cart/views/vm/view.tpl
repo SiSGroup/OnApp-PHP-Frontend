@@ -71,7 +71,7 @@
                     {/if}
                 </td>
                 <td>{$v->_total_disk_size} GB</td>
-                <td>{$v->_memory} MB</td>
+                <td>{$v->_memory|onapp_file_size}</td>
                 <td>
                     {if $v->_whmcs_maped > 0}
                         {'YES_'|onapp_string}

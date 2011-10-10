@@ -2,7 +2,7 @@
 <menu>
     <screen class="Base" method="login" alias="login" access="access"/>
     <screen title="PROFILE_" class="Profile" method="view" alias="profile" access="access" />
-   <!-- <screen title="HYPERVISORS_" class="Hypervisors" method="view" alias="hypervisors" access="access" />-->
+    <screen title="HYPERVISORS_" class="Hypervisors" method="view" alias="hypervisors" access="access" />
     <screen title="VIRTUAL_MACHINES" class="Virtual_Machines" method="view" alias="virtual_machines" access="access" />
    <!--  <screen title="TEMPLATES_" class="Templates" method="view" alias="templates" access="access" >
         <screen title="TEMPLATE_LIST" class="Template_List" method="view" alias="template_list" access="access" />

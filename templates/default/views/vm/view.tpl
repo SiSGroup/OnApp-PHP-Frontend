@@ -48,7 +48,7 @@
                 {/if}
                 </td>
                 <td>{$v->_total_disk_size} GB</td>
-                <td>{$v->_memory} MB</td>
+                <td>{$v->_memory|onapp_file_size}</td>
                 <td class="dark_td">
                     <a href="{$_ALIASES["virtual_machines"]}?action=cpu_usage&amp;id={$v->_id}">
                         <img alt="{'CPU_USAGE'|onapp_string}" title="{'CPU_USAGE'|onapp_string}" src="templates/{$smarty.const.ONAPP_TEMPLATE}/images/chart2.png" />
