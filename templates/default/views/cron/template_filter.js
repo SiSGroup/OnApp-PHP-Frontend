@@ -5,6 +5,10 @@ $(document).ready(function() {
        var command = $("#cron_command").val()
 
        $(".button").click()
+
+       $("form select").each( function () {
+           $(this).val('*')
+       })
        
        $("#cron_command").val(command)
        $("#filter option:[id="+ id +"]").attr('selected', 'selected');

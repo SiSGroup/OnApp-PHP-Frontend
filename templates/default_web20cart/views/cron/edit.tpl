@@ -26,7 +26,7 @@
                 <input type="hidden" id="cron_minute_hidden" value='' name="cron[minute]" />
                 <select id="cron_minute" name="cron[minute]">
                     {foreach from=$minute_php key=k item=min}
-                        <option id="min_{$k}" value="{$k}" {if $k == $cron_jobs_array[0]}selected{/if}>{$min}</option>
+                        <option id="min_{$k}" value="{$k}" {if strcmp($k, $cron_jobs_array[0]) == 0}selected{/if}>{$min}</option>
                     {/foreach}
                 </select>
             </dd>
@@ -35,10 +35,11 @@
         <dl style="clear:both;">
             <dt class="label">{'HOUR_'|onapp_string}</dt>
             <dd>
-                <input type="hidden" id="cron_hour_hidden" value='*' name="cron[hour]" /> 
+                <input type="hidden" id="cron_hour_hidden" value='*' name="cron[hour]" />
                 <select id="cron_hour" name="cron[hour]">
                     {foreach from=$hour_php key=k item=hr}
-                        <option id="hr_{$k}" value="{$k}" {if $k == $cron_jobs_array[1]}selected{/if}>{$hr}</option>
+
+                        <option id="hr_{$k}" value="{$k}" {if strcmp($k, $cron_jobs_array[1]) == 0}selected{/if}>{$hr}</option>
                     {/foreach}
                 </select>
             </dd>
@@ -51,7 +52,7 @@
                 <input type="hidden" id="cron_day_hidden" value='*' name="cron[day]" />
                 <select id="cron_day" name="cron[day]">
                     {foreach from=$day_php key=k item=_day}
-                        <option id="d_{$k}" value="{$k}"  {if $k == $cron_jobs_array[2]}selected{/if}>{$_day}</option>
+                        <option id="d_{$k}" value="{$k}"  {if strcmp($k, $cron_jobs_array[2]) == 0}selected{/if}>{$_day}</option>
                     {/foreach}
                 </select>
             </dd>
@@ -64,7 +65,7 @@
                 <input type="hidden" id="cron_month_hidden" value='*' name="cron[month]" />
                 <select id="cron_month" name="cron[month]">
                     {foreach from=$month_php key=k item=_month}
-                        <option id="mon_{$k}" value="{$k}" {if $k == $cron_jobs_array[3]}selected{/if}>{$_month}</option>
+                        <option id="mon_{$k}" value="{$k}" {if strcmp($k, $cron_jobs_array[3]) == 0}selected{/if}>{$_month}</option>
                     {/foreach}
                 </select>
             </dd>
@@ -76,7 +77,7 @@
                 <input type="hidden" id="cron_weekday_hidden" value='*' name="cron[weekday]" />
                  <select name="cron[weekday]">
                     {foreach from=$weekday_php key=k item=_weekday}
-                        <option id="wday_{$k}" value="{$k}" {if $k == $cron_jobs_array[4]}selected{/if}>{$_weekday}</option>
+                        <option id="wday_{$k}" value="{$k}" {if strcmp($k, $cron_jobs_array[4]) == 0}selected{/if}>{$_weekday}</option>
                     {/foreach}
                 </select>
             </dd>
