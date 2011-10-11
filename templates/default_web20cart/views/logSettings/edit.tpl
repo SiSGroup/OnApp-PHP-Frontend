@@ -34,7 +34,7 @@
             <dt class="label">{'LOG_ROTATION_SIZE'|onapp_string} (MB)</dt>
             
             <dd>
-                <input type="text" name="settings[log_rotation_size]" value="{$smarty.const.ONAPP_LOG_ROTATION_SIZE}" />
+                <input type="text" maxlength="21" name="settings[log_rotation_size]" value="{$smarty.const.ONAPP_LOG_ROTATION_SIZE}" />
             </dd>
         </dl>
 

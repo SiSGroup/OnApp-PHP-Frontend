@@ -37,7 +37,7 @@
                     {'LOG_ROTATION_SIZE'|onapp_string}
                 </td>
                 <td>
-                    {$config.log_rotation_size} MB
+                    {$config.log_rotation_size|onapp_file_size}
                 </td>
             </tr>
 
