@@ -733,4 +733,9 @@ $_LANG['EVERY_FIVE_MINUTE'] = 'Every five minute ( */5 )';
 $_LANG['EDIT_HYPERVISOR'] = 'Edit Hypervisor';
 $_LANG['REBOOT_HYPERVISOR'] = 'Reboot Hypervisor';
 $_LANG['HYPERVISOR_WILL_BE_REBOOTED_SHORTLY'] = 'Hypervisor will be rebooted shortly';
+$_LANG['MEMORY_OVERHEAD'] = 'Memory Overhead';
+$_LANG['HYPERVISOR_TYPE'] = 'Hypervisor Type';
+$_LANG['HYPERVISOR_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Hypervisor has been updated successfully';
+
+
 
