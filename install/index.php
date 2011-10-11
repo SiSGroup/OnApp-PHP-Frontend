@@ -141,6 +141,10 @@ require_once ONAPP_PATH .  ONAPP_DS . 'functions.php';
             'whmcs_client_area_url' => '',
             'whmcs_login' =>  '',
             'whmcs_password' => '',
+            'ssh_host'    => '',
+            'ssh_user'  =>  '',
+            'ssh_password' => '',
+            'ssh_port'  => ''
         );
         
         $result = write_config($settings, ONAPP_PATH . ONAPP_DS . 'config.ini');
