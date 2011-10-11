@@ -8,7 +8,7 @@
             <th>Type</th>
             <th>Hypervisor zone</th>
             <th>CPU Cores</th>
-            <th>CPU resources used / available</th> 
+            <th>CPU resources used</th> <!--//TODO  WHEN IS FIXED TICKET#2990  do (IF CPU guarantee CHECKED IN CONFIGS => CPU_CORES_QUANTITY * 100% OTHERWISE UNLIMITED-->
             <th>VMs</th>
             <th>RAM</th>
             <th>CPU Mhz</th>    
@@ -47,7 +47,7 @@
                         {/if}
                     </td>
                     <td>{$v->cpu_cores}</td>
-                    <td>{$v->used_cpu_resources}% / unlimited</td>
+                    <td>{$v->used_cpu_resources}% </td>
                     <td>{$hypervisor_vm_count[$v->_id]}</td>
                     <td>
                         {$v->total_memory|onapp_file_size}

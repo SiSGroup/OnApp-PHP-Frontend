@@ -28,13 +28,20 @@ class Hypervisors
             case 'reboot':
                 $this->reboot( $id );
                 break;
+            case 'edit':
+                $this->edit( $id );
+                break;
             default:
                 $this->show_template_view();
                 break;
         }
     }
 
-    private function show_template_view()
+    /**
+     *
+     *
+     */
+    private function show_template_view( $error = NULL )
     {
         onapp_debug(__CLASS__.' :: '.__FUNCTION__);
 
@@ -63,10 +70,17 @@ class Hypervisors
             'vm_obj'                =>     $vm_obj,
             'info_title'            => onapp_string('HYPERVISORS_'),
             'info_body'             => onapp_string('HYPERVISORS_INFO'),
+            'error'                 => $error,
         );
         onapp_show_template( 'hypervisor_view', $params );
     }
 
+    /**
+     *
+     * @param <type> $hypervisor_obj
+     * @param <type> $vm_obj
+     * @return int
+     */
     private function get_vms_quantity($hypervisor_obj, $vm_obj)
     {
         foreach($hypervisor_obj as $hv)
@@ -80,6 +94,11 @@ class Hypervisors
         return $hypervisor_vms_quatity;
     }
 
+    /**
+     *
+     * @param <type> $hypervisor_obj
+     * @return <type>
+     */
     private function get_hv_xm_info($hypervisor_obj)
     {
         foreach($hypervisor_obj as $key => $value)
@@ -137,6 +156,79 @@ class Hypervisors
             onapp_event_exec( 'hypervisor_reboot_failed', array( $hypervisor->_obj ) );
             trigger_error ( print_r( $hypervisor->error, true ) );
             $this->show_template_view( $hypervisor->error );
+        }
+    }
+
+    /**
+     * Shows hypervisor's params edit page
+     *
+     * @param integer user id
+     * @return void
+     */
+    private function show_template_edit( $id ) {
+        onapp_debug(__METHOD__);
+
+        onapp_debug('id  =>' . $id);
+
+        onapp_permission(array('hypervisors', 'hypervisors.update'));
+
+        $onapp = $this->get_factory();
+
+        $hypervisor = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+
+        $params = array(
+            'hypervisor_id' => $id,
+            'hypervisor_obj' => $hypervisor->load( $id ),
+            'hypervisor_types'=> array ( 'kvm', 'xen'),
+            'title' => onapp_string('EDIT_HYPERVISOR'),
+            'info_title' => onapp_string('EDIT_HYPERVISOR'),
+            'info_body' => onapp_string('EDIT_HYPERVISOR_INFO'),
+        );
+        onapp_show_template('hypervisor_edit', $params);
+    }
+
+    /**
+     * Edits hypervisor's params
+     *
+     * @global array $_ALIASES menu page aliases
+     * @param integer hypervisor id
+     * @return void
+     */
+    private function edit( $id ) {
+        global $_ALIASES;
+
+        onapp_debug(__METHOD__);
+        onapp_debug('id => ' . $id);
+
+        $hypervisor = onapp_get_arg('hypervisor');
+
+        onapp_permission(array('hypervisors.update', 'hypervisors'));
+
+        if ( is_null( $hypervisor ) ) {
+            $this->show_template_edit( $id );
+        } else {
+            $onapp = $this->get_factory();
+
+            $id = onapp_get_arg( 'id' );
+
+            $hypervisor_obj = $onapp->factory('Hypervisor', ONAPP_WRAPPER_LOG_REPORT_ENABLE);
+            foreach ($hypervisor as $key => $value)
+                $hypervisor_obj->$key = $value;
+
+            $hypervisor_obj->_id = $id;
+            $hypervisor_obj->save();
+            onapp_debug( 'hypervisor_obj =>' . print_r( $hypervisor_obj, true ) );
+
+            if ( is_null($hypervisor_obj->error) ) {
+                onapp_event_exec( 'hypervisor_edit', array( $hypervisor_obj->_obj ) );
+                $_SESSION['message'] = 'HYPERVISOR_HAS_BEEN_UPDATED_SUCCESSFULLY';
+                onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['hypervisors'] );
+            }
+            else {
+                onapp_event_exec( 'hypervisor_edit_failed', array( $hypervisor_obj->_obj ) );
+                trigger_error ( print_r( $hypervisor_obj->error, true ) );
+                $this->show_template_view( $hypervisor_obj->error );
+            }
         }
     }
 
