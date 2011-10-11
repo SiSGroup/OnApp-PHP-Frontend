@@ -606,6 +606,8 @@ function onapp_load_event_classes () {
         'rebuild_network_failed'             => array('VirtualMachine'),
         'hypervisor_reboot'                  => array('Hypervisor'),
         'hypervisor_reboot_failed'           => array('Hypervisor'),
+        'hypervisor_edit'                    => array('Hypervisor'),
+        'hypervisor_edit_failed'             => array('Hypervisor')
     );
 }
 
