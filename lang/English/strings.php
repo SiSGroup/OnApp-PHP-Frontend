@@ -736,6 +736,46 @@ $_LANG['HYPERVISOR_WILL_BE_REBOOTED_SHORTLY'] = 'Hypervisor will be rebooted sho
 $_LANG['MEMORY_OVERHEAD'] = 'Memory Overhead';
 $_LANG['HYPERVISOR_TYPE'] = 'Hypervisor Type';
 $_LANG['HYPERVISOR_HAS_BEEN_UPDATED_SUCCESSFULLY'] = 'Hypervisor has been updated successfully';
+$_LANG['LOAD_BALANCERS'] = 'Load balancers';
+$_LANG['LOAD_BALANCERS_INFO'] =
+    'Load balancer helps to distribute requests amongst servers of a cluster
+    evenly, so that no Virtual Machine is overloaded. To view details and manage
+    settings, click a load balancer label. Use the Edit icon on the right, to
+    change load balancer properties.';
+$_LANG['NODES_'] = 'Nodes';
+$_LANG['EDIT_CLUSTER'] = 'Edit Cluster';
+$_LANG['DELETE_CLUSTER'] = 'Delete Cluster';
+$_LANG['ADD_A_NEW_BALANCER'] = 'Add a New Balancer';
+$_LANG['LOAD_BALANCER_DETAILS'] = 'Load balancer cluster details';
+$_LANG['LOAD_BALANCER_DETAILS_INFO'] =
+    'The On/Off buttons change this load balancer’s power status. The Actions 
+    tools let you perform common tasks. The activity log shows load balancer 
+    transactions and lets you cancel pending tasks';
+$_LANG['STARTUP_BALANCER'] = 'Startup Balancer';
+$_LANG['MIGRATE_BALANCER'] = 'Migrate Balancer';
+$_LANG['EDIT_BALANCER'] = 'Edit Balancer';
+$_LANG['REBUILD_BALANCER'] = 'Rebuild Balancer';
+$_LANG['SUSPEND_BALANCER'] = 'Suspend Balancer';
+$_LANG['EDIT_ADMINS_NOTE'] = 'Edit Administrator\'s note';
+$_LANG['DELETE_BALANCER'] = 'Add a New Balancer';
+$_LANG['MONITIS_MONITORS'] = 'Monitis Monitors';
+$_LANG['CLUSTER_NODES'] = 'Cluster Nodes';
+$_LANG['ACTIONS_'] = 'Actions';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

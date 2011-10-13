@@ -498,7 +498,7 @@ th, td, caption
 
 
 .action_edit a, .action_reboot a, .action_off a, .action_rebuild a,
-.action_on a, .action_delete a, .action_build a  
+.action_on a, .action_delete a, .action_build a, .action_monitis a
 {
     margin-top:-3px;
     padding-left:20px;
@@ -541,6 +541,11 @@ th, td, caption
 .action_on
 {
     background:url(../images/action_icons.png) 0 -48px no-repeat;
+}
+
+.action_monitis
+{
+    background:url(../images/action_icons1.png) 0 -452px no-repeat;
 }
 
 .login_icon

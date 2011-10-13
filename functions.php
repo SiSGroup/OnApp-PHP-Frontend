@@ -607,7 +607,9 @@ function onapp_load_event_classes () {
         'hypervisor_reboot'                  => array('Hypervisor'),
         'hypervisor_reboot_failed'           => array('Hypervisor'),
         'hypervisor_edit'                    => array('Hypervisor'),
-        'hypervisor_edit_failed'             => array('Hypervisor')
+        'hypervisor_edit_failed'             => array('Hypervisor'),
+        'load_balancer_startup'              => array('LoadBalancer', 'User'),
+        'load_balancer_startup_failed'       => array('LoadBalancer', 'User'),
     );
 }
 
