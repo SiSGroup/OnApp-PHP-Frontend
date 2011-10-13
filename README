@@ -30,9 +30,11 @@ Where [root] stands for the root address of your installation.
 *********************************************************************************************************************************************************************************************
 
 ***************** I N S T A L L A T I O N ***************************************************************************************************************************************************
-1.Download the latest software version from the OnApp website: www.onapp.com/support/downloads
+1.Download the latest software version from the OnApp website: http://github.com/OnApp/OnApp-PHP-Frontend/downloads
 
 2.Extract the files using a .tar extraction program into a separate empty virtual host directory.
+
+3.Download OnApp-PHP-Wrapper from http://github.com/OnApp/OnApp-PHP-Wrapper/downloads and put it into the root.
 
 3.In your browser enter the URL address of your virtual host to see the installation manager page. It will help you to configure your server before the installation.
 
