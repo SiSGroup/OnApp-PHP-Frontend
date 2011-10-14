@@ -1,5 +1,5 @@
 <?php if ( ! defined('ONAPP_PATH')) die('No direct script access allowed');
-define('ONAPP_FRONTEND_VERSION', '0.3.0 beta');
+ define('ONAPP_FRONTEND_VERSION', '0.3.0 beta');
 
 /**
  * Gets list of directories in specified directory
