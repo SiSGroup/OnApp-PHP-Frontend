@@ -761,6 +761,12 @@ $_LANG['DELETE_BALANCER'] = 'Add a New Balancer';
 $_LANG['MONITIS_MONITORS'] = 'Monitis Monitors';
 $_LANG['CLUSTER_NODES'] = 'Cluster Nodes';
 $_LANG['ACTIONS_'] = 'Actions';
+$_LANG['BALANCER_STARTUP_HAS_BEEN_QUEUED'] = 'Balancer Startup has been queued';
+$_LANG['EDIT_HYPERVISOR_INFO'] =
+    'Change the hypervisor\'s details as required, then click the Save
+    Hypervisor button.';
+
+
 
 
 
