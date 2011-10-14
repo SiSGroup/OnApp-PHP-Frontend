@@ -156,8 +156,8 @@ class Load_Balancers extends Controller {
                 
         if (is_null($load_balancer->error)) {
             onapp_event_exec( 'load_balancer_startup', array( $load_balancer->_obj, $this->load( 'User', array( $load_balancer->_obj->_user_id ) ) ) );
-            $_SESSION['message'] = 'VIRTUAL_MACHINE_STARTUP_HAS_BEEN_QUEUED';
-            onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['virtual_machines'] . '?action=details&id=' . $id);
+            $_SESSION['message'] = 'BALANCER_STARTUP_HAS_BEEN_QUEUED';
+            onapp_redirect(ONAPP_BASE_URL . '/' . $_ALIASES['load_balancers'] . '?action=details&id=' . $id);
         }
         else {
             onapp_event_exec( 'load_balancer_startup_failed', array( $load_balancer->_obj, $this->load( 'User', array( $load_balancer->_obj->_user_id ) ) ) );
