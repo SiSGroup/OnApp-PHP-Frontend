@@ -7,7 +7,7 @@ class Base {
      * @global array $_ALIASES menu page aliases
      * @return void
      */
-	function login( ) {
+	function login( ) { 
 		global $_ALIASES;
 		$login = onapp_get_arg( 'login' );
 		$password = onapp_get_arg( 'password' );
@@ -89,6 +89,7 @@ class Base {
      * @return void
      */
     private function after_logedin_action () {
+        global $_ALIASES;
         onapp_debug('Login successfull!');
 
 				if(
