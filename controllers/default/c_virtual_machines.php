@@ -323,14 +323,6 @@ class Virtual_Machines extends Controller {
         $xaxis = '';
         $yaxis = '';
 
-        $date = array();
-        for ($i = 0; $i < count($list); $i++) {
-            if (isset($date[$list[$i]->_created_at]))
-                $date[$list[$i]->_created_at]++;
-            else
-                $date[$list[$i]->_created_at] = 1;
-        }
-
        $hourly_stat = array();
        foreach ($list as $key => $stat) {
            $hourly_stat[$key]['date'] = strtotime($stat->_created_at);
