@@ -327,7 +327,6 @@ class Virtual_Machines extends Controller {
        foreach ($list as $key => $stat) {
            $hourly_stat[$key]['date'] = strtotime($stat->_created_at);
            $hourly_stat[$key]['usage'] = number_format($stat->_cpu_time / 360 / 100, 2);
-           ;
        }
        $content = '';
        foreach ($hourly_stat as $stat) {
