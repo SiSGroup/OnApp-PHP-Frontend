@@ -323,25 +323,19 @@ class Virtual_Machines extends Controller {
         $xaxis = '';
         $yaxis = '';
 
-        $date = array();
-        for ($i = 0; $i < count($list); $i++) {
-            if (isset($date[$list[$i]->_created_at]))
-                $date[$list[$i]->_created_at]++;
-            else
-                $date[$list[$i]->_created_at] = 1;
-        }
-
-        for ($i = 0; $i < count($list); $i++) {
-            $created_at = str_replace(array('T', 'Z'), ' ', $list[$i]->_stat_time);
-            $xaxis .= "<value xid='$i'>" . $created_at . "</value>";
-            $xaxis .= "<value xid='$i'>" . $created_at . "</value>";
-            if ($date[$list[$i]->_created_at] * 100 != 0) {
-                $usage = $list[$i]->_cpu_time / ($date[$list[$i]->_created_at] * 10) / 100;
-            }
-            else
-                $usage = 0;
-            $yaxis .= "<value xid='$i'>" . number_format($usage, 2) . "</value>";
-        }
+       $hourly_stat = array();
+       foreach ($list as $key => $stat) {
+           $hourly_stat[$key]['date'] = strtotime($stat->_created_at);
+           $hourly_stat[$key]['usage'] = number_format($stat->_cpu_time / 360 / 100, 2);
+       }
+       $content = '';
+       foreach ($hourly_stat as $stat) {
+           $content .= '[' . $stat[date] . ', ' . $stat[usage] . '],';
+       }
+       
+       $data = "[{data: [ " . $content . "], name: 'CPU'";
+       $data = str_replace('],]', ']]', $data);
+   
         $params = array(
             'virtual_machine_id' => $id,
             'xaxis' => $xaxis,
@@ -349,6 +343,7 @@ class Virtual_Machines extends Controller {
             'title' => onapp_string('CPU_USAGE'),
             'info_title' => onapp_string('CPU_USAGE_FOR_THIS_VM'),
             'info_body' => onapp_string('CPU_USAGE_FOR_THIS_VM_INFO'),
+            'data' => $data,
         );
         onapp_show_template('vm_cpuUsage', $params);
     }
